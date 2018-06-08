@@ -1,0 +1,814 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Teranga-Food</title>
+    <link href="{% static 'Materialize/bower_components/Ionicons/css/ionicons.min.css'%}" rel="stylesheet">
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'Materialize/bower_components/materialize/dist/css/materialize.min.css'%}"  media="screen"/>
+    <link rel="icon"  href="{% static 'logo_sen_food.ico' %}" />
+    <link href="{% static 'lumino/css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="{% static 'Materialize/css/app.css'%}">
+      <link href="{% static 'senfood_css/layout_client.css'%}" rel="stylesheet">
+      {% block bloc_css %}
+
+{% endblock %}
+    <!-- endbuild -->
+    </head>
+    <body>
+        <!-- end preloader-->
+
+        <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\Start top bar header\\\\\\\\\\\\\\\\\\\\\\\-->
+        <header id="header" class="top-bar" >
+                       <div class="navbar-fixed" >
+                         <nav class="darken-2" style="background-color: gold;" >
+                             <div class="nav-wrapper" >
+                               <ul class="left">
+                                   <li><h1 class="brand-logo ">
+                                       <a class="brand-logo" href="{% url 'main_acceuil' %}">
+                                           <p class="hidden-xs" style="position: relative;font-size: 1.3em;font-weight: bold"><!--img src="{% static 'teranga_food_logo1.png' %}" height="50"--><span style="color: green">Te</span><span  style="color: yellow">ran</span><span  style="color: red">ga-</span><span style="color:#ffffb3">Food</span></p>
+                                       <p class="hidden-md hidden-lg hidden-sm " style="position: relative;font-size: 1.3em;font-weight: bold;left:-50px;"><span style="color: yellow">Te</span><span  style="color: green">ran</span><span  style="color: red">ga-</span><span style="color:#ffffb3">Food</span><!--img src="{% static 'teranga_food_logo1.png' %}" height="50"--></p>
+                                       </a>
+                                   </h1></li>
+                               </ul>
+                              <ul class="right col s9 m3 nav-right-menu">
+                                  {% if request.user.is_authenticated %}
+                                 <li class=""><a  class="show-on-large img_my_basket"><i style="position: relative;top: 5px;left: -2px;" class="material-icons">shopping_cart</i><span  id="nbr_basket_items"></span></a></li>
+
+
+
+
+
+                                 <li class=""><a data-activates="dropdown2" class="dropdown-button dropdown-right show-on-large"><i style="position: relative;top: 5px;left: -2px;" class="material-icons">notifications_none</i><span  id="nbr_notifications"></span></a></li>
+                                  {% endif %}
+                                   <li class="hidden-xs"><a class='dropdown-button  dropdown-right' href='#' data-activates='dropdown'><i  class="fa fa-user-circle fa-3x"></i></a></li>
+
+                                   <li class="hidden-sm hidden-lg hidden-md"><a class='dropdown-button  dropdown-right' href='#' data-activates='dropdown1'><i style="position: relative;top: 10px;"  class="fa fa-user-circle fa-3x"></i></a></li>
+
+                               </ul>
+                               <!-- Dropdown Structure -->
+                               <ul id='dropdown' class='dropdown-content profile-dropdown' style="z-index: 566">
+                                   {% if request.user.is_authenticated %}
+                                       <!--li><a href="#!">Paramètres</a></li-->
+                                       <li class="divider"></li>
+                                       <li><a href="{% url 'my_logout' %}">Déconnexion</a></li>
+                                   {% else %}
+                                       <li><a href="{%url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                                       <li class="divider"></li>
+                                       <li><a href="{%url 'inscription' %}"><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                                   {% endif %}
+
+                               </ul>
+                                  <ul id='dropdown1' class='dropdown-content profile-dropdown' style="z-index: 566">
+                                   {% if request.user.is_authenticated %}
+                                       <!--li><a href="#!">Paramètres</a></li-->
+                                       <li class="divider"></li>
+                                       <li><a href="{% url 'my_logout' %}">Déconexion</a></li>
+                                   {% else %}
+                                       <li><a href="{%url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                                       <li class="divider"></li>
+                                       <li><a href="{%url 'inscription' %}"><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                                   {% endif %}
+                               </ul>
+                                <ul id='dropdown2' class='dropdown-content profile-dropdown'>
+
+                               </ul>
+
+                             </div>
+                           </nav>
+                       </div>
+        </header>
+        <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\end top bar header\\\\\\\\\\\\\\\\\\\\\\\-->
+
+            <div style="position: fixed;z-index: 9999999999;margin: auto;width: 100%">
+        <p id="msg_flash" class="text-center alert alert-success col-md-4 col-xs-6 col-xs-offset-3 col-md-offset-4 " hidden >sdsdsd</p>
+
+    </div>
+        <!--\\\\\\\\\\\\\\\\\\\ Start left side nav\\\\\\\\\\\\\\\\\\\\\\\\\\\\-->
+        <aside id="slide-out" class="side-nav white fixed"  style="border: solid gold;z-index: 4">
+                      <div class="side-nav-wrapper">
+                            <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion">
+                            <div class="user-info-profile-image">
+                                            <p  class="text-center">
+                                            <img src="{% static 'teranga_food_logo1.png' %}" height="60" width="70">
+                                                <!--img src="{% static 'avatar.jpg' %}" class="user-avatar" id="img_descript"-->
+                                                <!--button  class="btn-flat btn-large tooltipped btn_modif_img" data-position="bottom" data-delay="50" data-tooltip="Modifier profil" style="width: 15px; height: 40px;position: absolute;top: 85px;left:35px;"><img  src="{% static 'photo-camera.png' %}"style="width: 40px; height: 40px;position: relative;left:-20px;"></button-->
+                                            </p>
+
+                                    </div>
+                                <li >
+
+                                  <div class="user-info-wrapper">
+
+                                      {% if request.user.is_authenticated %}
+                                    <div class="user-info"><br>
+                                      <h6 class="username"> {{ request.user.client.personne.nomPersonne|add:" "|add:request.user.client.personne.prenomPersonne }}</h6>
+                                     </div>
+                                     <!--div class="solde"><span>18 pts</span></div-->
+                                  </div>
+                                </li>{% endif %}
+
+                            {% block nav_gauche %}<br>
+                                <li class="my_active" ><a href="{% url 'main_acceuil' %}"><i class="fa fa-home"></i>Acceuil</a></li>
+                                {% if request.user.is_authenticated %}
+                                   <!--li ><a  class="img_my_basket"><i style="position: relative;top: 5px;left: -2px;" class="material-icons">shopping_cart</i> Mon Panier</a></li-->
+                                   <li ><a href="{% url 'mes_commandes' %}"><i  class="material-icons">shopping_basket</i> Mes Commandes <span id="nbr_commande_client" class="badge"style="color: gold">{{ nbrCommande }}</span></a></li>
+                                   <!--li ><a href=""><i  class="fa fa-gift"></i> Mes Cadeaux</a></li-->
+                                {% else %}
+                                   <li ><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                                   <li ><a href="{% url 'inscription' %}"><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                                {% endif %}
+                            {% endblock %}
+
+                                <!--li class="no-padding">
+                                    <a class="collapsible-header waves-effect waves-grey" href="#"><i class="material-icons md-36">style</i>Tickets restaurant</a>
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            <li><a href="consommation-u.html">Consommation</a></li>
+                                            <li><a href="transfert-u.html">Transferer des bons</a></li>
+                                            <li><a href="generer-u.html">Générer un code</a></li>
+                                         </ul>
+                                    </div>
+
+                                </li-->
+
+                                <!--li class="no-padding">
+                                    <a class="collapsible-header waves-effect waves-grey" href="Parametres.html"><i class="material-icons">build</i>Paramètres</a>
+
+                                </li-->
+
+                                <li class="footer center">
+                                    <span class="grey-text">&copy; 2016-2017.<a href="#">Ec-Innov</a></span>
+                                </li>
+                            </ul>
+                      </div>
+                      <div class="clearfix"></div>
+        </aside>
+        <a href="#" data-activates="slide-out" class="button-collapse hide-on-large-only"><i class="material-icons">menuss</i></a>
+        <!--\\\\\\\\\\\\\\\\\\\ ENd left side nav\\\\\\\\\\\\\\\\\\\\\\\\\\\\-->
+
+
+
+        <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\Main content Start\\\\\\\\\\\\\\\\\\\\\\\-->
+
+        <div class="main-content row" >
+<audio id="player_alert"  controls hidden>
+     <source src="{% static 'loop.mp3' %}"/>
+</audio>
+
+
+           <div class="page-content">
+           <div >
+               {% block titre_page_h %}
+
+                   {% endblock %}
+           </div>
+
+                  <div class="panel panel-default margin-b-0" style="" >
+                      {% block main_bloc %}
+
+                {% endblock %}
+                  {% include 'modal_client.html' %}
+                  </div>
+           </div>
+        </div>
+
+        <footer style="position: relative">
+
+            </footer>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="{% static 'Materialize/bower_components/jquery/dist/jquery.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'Materialize/bower_components/materialize/bin/materialize.js'%}"></script>
+    <!-- Charts js -->
+
+    <script type="text/javascript" src="{% static 'Materialize/bower_components/chart.js/dist/Chart.js'%}"></script>
+
+    <!-- App.js -->
+    <script src="{% static 'Materialize/js/app.js'%}"></script>
+    <script src="{% static 'senfood_js/notify.min.js'%}"></script>
+        <script src="{% static 'amplify/amplify.min.js'%}"></script>
+        <script type="text/javascript">
+        var locality=0;
+         function updateNuberItemInBasket(nbr) {
+            if(nbr==0)
+            {
+                $("#nbr_basket_items").text("");
+                $("#nbr_basket_items").removeClass("badge blue");
+                $("#nbr_basket_items").show();
+            }
+            else
+            {
+                $("#nbr_basket_items").text(nbr);
+                $("#nbr_basket_items").addClass("badge blue");
+                $("#nbr_basket_items").show();
+            }
+        }
+         function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            //console.log("yangala"+cookieValue);
+            return cookieValue;
+          }
+           function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img_descript').fadeOut(1000,function () {
+                            $('#img_descript')
+                            .attr('src', e.target.result);
+
+
+                            //.width(150)
+                            //.height(200);
+                            $('#img_descript').fadeIn(1000,function () {
+                                 $("#btn_form_submit").click();
+                            });
+                        });
+
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+
+            }
+            $(function () {
+
+                //notifyMe();
+                //$("#player_alert").get(0).play();
+                //$('#block_alert').modal('open');
+                $("#btn_alert_yes").click(function () {
+                     $('#block_alert').modal('close');
+                     $("#player_alert").get(0).pause();
+                });
+                //$("#player_alert").get(0).play();
+                {% if request.user.is_authenticated %}
+/*---------------------------------------------- notification ----------------------------------------------*/
+                      setInterval(function () {
+                          var csrftoken = getCookie('csrftoken');
+                                  $.ajax({
+                                            //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                                            url :"{% url 'get_notification' %}",
+                                            type : "POST", // http method
+                                            timeout:100000,
+                                            async:true,
+                                            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                                            success : function(json)
+                                            {
+                                               console.log(json);
+                                                var notifications=JSON.parse(String(json));
+                                                 tab_tmp=[];
+                                                 for(i=0;i<notifications.length;i++)
+                                                {
+                                                    _html='<li style="margin: 0px;padding: 0px;border-top: solid 1px gold;">';
+                                                    _html+='<a href="'+notifications[i].fields.url+'">';
+                                                    _html+='<h4 style="margin: 0px;color: gold;">'+notifications[i].fields.titre+'</h4>';
+                                                    _html+=notifications[i].fields.content;
+                                                    _html+='</a><li>';
+                                                    $("#dropdown2").append(_html);
+                                                    $.notify(notifications[i].fields.content, "success");
+                                                        console.log("nouveau "+notifications[i].fields.dateCreation);
+                                                        $("#nbr_notifications").addClass("badge red");
+                                                        if($("#nbr_notifications").text()=="")
+                                                        {
+                                                            $("#nbr_notifications").text(1);
+                                                        }
+                                                        else
+                                                        {
+                                                             $("#nbr_notifications").text(parseInt($("#nbr_notifications").text())+1);
+                                                        }
+                                                        if(parseInt(notifications[i].fields.Notitype)==10)
+                                                        {
+                                                            $("#player_alert").get(0).play();
+                                                            $('#block_alert').modal('open');
+                                                            notifyMe("le livreur est à proximité");
+                                                        }
+                                                }
+                                            }
+                                 });
+
+                      },10000);
+/**-------------------------------------------- end notification-----------------------------------------*/
+                {% endif %}
+                $("#profil_form").submit(function(e) {
+                         e.preventDefault();
+                          var formData = new FormData($(this)[0]);
+                          var csrftoken = getCookie('csrftoken');
+                                     $.ajax({
+                                            url: "{% url 'set_profil_image_profil' %}",
+                                            type: "POST",
+                                            data: formData,
+                                            async: false,
+                                            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                                            success: function (msg) {
+                                                //alert(msg)
+                                                $("#msg_flash").text("profil modifié avec succès");
+                                                $("#msg_flash").show();
+                                                   $("#msg_flash").fadeOut(5000);
+                                            },
+                                            error :
+                                            function(xhr,errmsg,err)
+                                            {
+                                                console.log(xhr);
+                                            },
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false
+                                        });
+
+
+                                    });
+                 $('.btn_modif_img').click(function(e){
+                         e.preventDefault();
+                         $("#logo").trigger('click');
+                     });
+                {% if request.user.is_authenticated %}
+                    tmp_name="commande_"+{{ request.user.username }};
+                     liste=amplify.store(tmp_name);
+                      if(liste)
+                      {
+                             updateNuberItemInBasket(liste.length);
+                       }
+                       else
+                    {
+                        updateNuberItemInBasket(0);
+                    }
+                {% endif %}
+                $("#btn_run_Commande").click(function (e) {
+                    //$('#block_authentif').modal('open');
+                    $('#modal_localite').modal('open');
+                });
+                $("#btn_localite").click(function () {
+                    is_error=0;
+                    if(parseInt($("#selectedLocality").val())==0)
+                    {
+                        is_error++;
+                    }
+                    if(is_error!=0)
+                    {
+                        $("#locality_error").text("veuillez choisir une localité");
+                    }
+                    else
+                    {
+                        locality=parseInt($("#selectedLocality").val());
+                         $("#locality_error").text("");
+                         $('#modal_localite').modal('close');
+                         $('#block_authentif').modal('open');
+
+                    }
+                    //alert($("#selectedLocality").val());
+                });
+                $("#btn_gps_yes").click(function () {
+                  console.log("yangala");
+                    //runCommande();
+                          /* if (navigator.geolocation)
+                           {
+                               position=navigator.geolocation.getCurrentPosition(runCommande);
+
+                               //navigator.geolocation.getCurrentPosition(showPosition);
+                           } else
+                           {
+                               alert("bad");
+                               x.innerHTML = "Geolocation is not supported by this browser.";
+                           }*/
+
+                       });
+                $("#btn_password").click(function () {
+                           if($("#input_password").val()!="")
+                           {
+                               mysecret=$("#input_password").val();
+                               $("#pass_word_error").text("");
+                               $('#block_authentif').modal('close');
+                               $('#block_authentif').modal('close');
+                               $('#block_gps_warning').modal('open');
+                           }
+                           else
+                           {
+                               $("#pass_word_error").text("veuillez remplir ce champs");
+                           }
+                       });
+                          $(".img_my_basket").click(function () {
+                              $("#txtErrorCommande").text("");
+                      _html="";
+                      {% if request.user.is_authenticated %}
+                            tmp_name="commande_"+{{ request.user.username }};
+                            liste=amplify.store(tmp_name);
+                            somme=0;
+
+                             if(liste)
+                               {
+                                   if(liste.length>0)
+                                   {
+                                       $('#block_commande').modal('open');
+                                       console.log("good");
+                                       for(i=0;i<liste.length;i++)
+                                       {
+                                           commande=liste[i];
+                                           tmp=commande.prix*commande.quantite;
+                                           somme=somme+tmp;
+                                           _html+="<tr id=\""+commande.cmd_id+"\" >" +
+                                                        "<td class=\"my_basket_libelle\">"+commande.libelle+"</td>" +
+                                                        "<td class=\"my_basket_p_qte\">"+commande.quantite+"</td>" +
+                                                        "<td>"+commande.prix+" Fcfa</td>" +
+                                                        "<td><span class=\"my_basket_p_somme\">"+tmp+"</span> Fcfa <span class=\"pull-right\"><a title=\"augmenter\" class=\"btn_augmenter btn_to_disabled\"><i class=\"fa fa-plus-circle fa-2x \"></i></a>&nbsp;&nbsp;&nbsp;<a class=\"btn_diminuer btn_to_disabled\" title=\"diminuer\"><i  class=\"fa fa-minus-circle fa-2x\"></i></a>&nbsp;&nbsp; <a title=\"rétirer\" class=\"remove_item_panier btn_to_disabled\" style=\"color:red;\"   ><i class=\"fa fa-trash-o fa-2x\"></i></a><span></td>" +
+                                                   "</tr>";
+                                       }
+                                       _html+="<tr>" +
+                                                        "<td colspan=3>Somme:</td>" +
+
+                                                        "<td id=\"somme_my_basket\" style=\"font-weight: bold;font-size: 1.3em;color:black\">"+somme+" Fcfa</td>" +
+                                                   "</tr>";
+                                       _html+="<tr>" +
+                                                        "<td colspan=3>Livraison:</td>" +
+
+                                                        "<td id=\"somme_my_basket\" style=\"font-weight: bold;font-size: 1.3em;color:black\">"+1000+" Fcfa</td>" +
+                                                   "</tr>";
+                                       tmp=1000+parseInt(somme);
+                                       _html+="<tr style=\"color:red\">" +
+                                                        "<td colspan=3>Total à payer:</td>" +
+
+                                                        "<td id=\"somme_my_basket\" style=\"font-weight: bold;font-size: 1.3em;color:red\">"+tmp+" Fcfa</td>" +
+                                                   "</tr>";
+                                    $("#mon_panier_content").html(_html);
+                                    $("#mon_panier_main_content_empty").hide();
+                                    $("#mon_panier_main_content_fill").show();
+
+                                    console.log(_html);
+/*----------------------------------------------button audmenter----------------------------------------------------*/
+                                    $(".btn_augmenter").click(function () {
+                         currentRow=$(this).parent().parent().parent();
+                         rowQte=currentRow.find(".my_basket_p_qte");
+                         rowSomme=currentRow.find(".my_basket_p_somme");
+                         var tmp_qte=parseInt(rowQte.text());
+                         var produit_Id=currentRow.attr("id");
+                         var csrftoken = getCookie('csrftoken');
+                              tmp_name="commande_"+{{ request.user.username }};
+                              liste=amplify.store(tmp_name);
+                              somme=0;
+                              //alert(produit_Id);
+
+                         if(tmp_qte<10)
+                         {
+                             tmp_qte++;
+                             rowQte.text(tmp_qte);
+                             for(i=0;i<liste.length;i++)
+                               {
+                                   commande=liste[i];
+                                   //alert("id_comm "+commande.cmd_id);
+                                   //alert("id_prod "+produit_Id);
+                                   if(parseInt(commande.cmd_id) == parseInt(produit_Id))
+                                   {
+                                       commande.quantite=commande.quantite+1;
+                                       my_tmp_somme=commande.quantite*commande.prix;
+                                       rowSomme.text(my_tmp_somme);
+                                       tmp=commande.quantite*commande.prix;
+                                       somme=somme+tmp;
+                                   }
+                                   else
+                                   {
+                                       tmp=commande.prix*commande.quantite;
+                                       somme=somme+tmp;
+                                   }
+
+                               }
+                                amplify.store(tmp_name,liste);
+
+                               $("#somme_my_basket").text(somme+" Fcfa");
+                         }
+                      });
+/*----------------------------------------------end button audmenter----------------------------------------------------*/
+/*----------------------------------------------button dimunuer----------------------------------------------------*/
+$(".btn_diminuer").click(function () {
+
+                         currentRow=$(this).parent().parent().parent();
+                         rowQte=currentRow.find(".my_basket_p_qte");
+                         rowSomme=currentRow.find(".my_basket_p_somme");
+                         var tmp_qte=parseInt(rowQte.text());
+                         var produit_Id=currentRow.attr("id");
+                         var csrftoken = getCookie('csrftoken');
+                              tmp_name="commande_"+{{ request.user.username }};
+                              liste=amplify.store(tmp_name);
+                              somme=0;
+                              //alert(produit_Id);
+
+                         if(tmp_qte>1)
+                         {
+                             tmp_qte--;
+                             rowQte.text(tmp_qte);
+                             for(i=0;i<liste.length;i++)
+                               {
+                                   commande=liste[i];
+                                   //alert("id_comm "+commande.cmd_id);
+                                   //alert("id_prod "+produit_Id);
+                                   if(parseInt(commande.cmd_id) == parseInt(produit_Id))
+                                   {
+                                       commande.quantite=commande.quantite-1;
+                                       my_tmp_somme=commande.quantite*commande.prix;
+                                       rowSomme.text(my_tmp_somme);
+                                       tmp=commande.quantite*commande.prix;
+                                       somme=somme+tmp;
+                                   }
+                                   else
+                                   {
+                                       tmp=commande.prix*commande.quantite;
+                                       somme=somme+tmp;
+                                   }
+
+                               }
+                                amplify.store(tmp_name,liste);
+                               $("#somme_my_basket").text(somme+" Fcfa");
+
+                         }
+                      });
+/*----------------------------------------------end button dimunuer----------------------------------------------------*/
+/*----------------------------------------------button delete----------------------------------------------------*/
+$(".remove_item_panier").click(
+    function ()
+    {
+       $("#conf_prod_libel").text($(this).parent().parent().parent().find(".my_basket_libelle").text());
+       trToRemove=$(this).parent().parent().parent();
+       $('#retirer_tilte').text(trToRemove.find(".my_basket_libelle").text());
+       $('#block_confirmation').modal('open');
+                          //$(this).parent().parent().fadeOut(500);
+                                            //alert("good");
+        $("#btn_conf_no").click(
+            function ()
+            {
+                $('#block_commande_vide').modal('close');
+            });
+
+         $("#btn_conf_yes").click(function () {
+                            $('#block_confirmation').modal('close');
+                          var produitId=trToRemove.attr("id");
+                          trToRemove.fadeOut(500,function () {
+                              var csrftoken = getCookie('csrftoken');
+                              tmp_name="commande_"+{{ request.user.username }};
+                              liste=amplify.store(tmp_name);
+                              somme=0;
+                               for(i=0;i<liste.length;i++)
+                               {
+                                   //alert(commande.cmd_id);
+                                   //alert(produitId);
+                                   commande=liste[i];
+                                   if(commande.cmd_id==produitId)
+                                   {
+                                       liste.splice(i,1);
+                                   }
+                                   else
+                                   {
+                                       tmp=commande.prix*commande.quantite;
+                                        somme=somme+tmp;
+                                   }
+                               }
+                               amplify.store(tmp_name,liste);
+                               liste=amplify.store(tmp_name);
+                              updateNuberItemInBasket(liste.length);
+                               $("#somme_my_basket").text(somme+" Fcfa");
+                               if(liste.length==0)
+                               {
+                                    $('#block_commande').modal('close');
+                                   $("#msg_flash").text("votre panier est vide");
+                                   $("#msg_flash").show();
+                                   $("#msg_flash").fadeOut(5000);
+                               }
+
+                          });
+                      });
+
+
+
+
+
+
+
+
+    });
+/*----------------------------------------------end button delete----------------------------------------------------*/
+                                   }
+                                   else
+                                   {
+                                        console.log("bad");
+                                        $('#block_commande_vide').modal('open');
+                                       //$("#mon_panier_main_content_fill").hide();
+                                       //$("#mon_panier_main_content_empty").html("<p class=\"text-center\"> Votre panier est vide</p><p class=\"center-align\" style=\"margin-top: 20px;\"><i style=\"color: gold\" class=\"large material-icons\">warning</i></p>");
+                                       //$("#mon_panier_main_content_empty").show();
+                                   }
+                               }
+                               else
+                               {
+                                    $('#block_commande_vide').modal('open');
+                                   //$("#mon_panier_main_content_fill").hide();
+                                   //$("#mon_panier_main_content_empty").html("<p class=\"text-center\"> Votre panier est vide</p><p class=\"center-align\" style=\"margin-top: 20px;\"><i style=\"color: gold\" class=\"large material-icons\">warning</i></p>");
+                                   //$("#mon_panier_main_content_empty").show();
+
+                               }
+                      {% endif %}
+
+
+                  });
+            });
+         function runCommande(/*position*/)
+             {
+                 var longitude=212323;//position.coords.longitude;
+                 var latitude=212323;//position.coords.latitude;
+                 var csrftoken = getCookie('csrftoken');
+                  {% if request.user.is_authenticated %}
+                      tmp_name="commande_"+{{ request.user.username }};
+                 liste=amplify.store(tmp_name);
+                 ligne_commande='[';
+                 for(i=0;i<liste.length;i++)
+                 {
+                     commande=liste[i];
+                     ligne_commande+='{';
+                     ligne_commande+='"idProduit":"'+commande.id+'",';
+                     ligne_commande+='"quantite":"'+commande.quantite+'"';
+                     if(i==liste.length-1)
+                     {
+                         ligne_commande+='}';
+                     }
+                     else
+                     {
+                         ligne_commande+='},';
+                     }
+                 }
+                 ligne_commande+=']';
+                 json_post='{';
+                 json_post+='"longitude":"'+longitude+'",';
+                 json_post+='"latitude":"'+latitude+'",';
+                 json_post+='"produits":'+ligne_commande+'';
+                 json_post+='}';
+                 console.log(json_post);
+                 $('#block_gps_warning').modal('close');
+                 $("#btn_run_Commande").prop('disabled', true);
+                 $(".btn_to_disabled").prop('disabled', true);
+                 $("#img_loading").show();
+                 // starting ajax request to submit commande
+                 $.ajax({
+                        //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                        url :"{% url 'nouvelle_commande' %}",
+                        type : "POST", // http method
+                        timeout:100000,
+                        data: {client:"{{ request.user.username }}", data:json_post,password:mysecret,idEntite:liste[0].entite,idLocalite:locality},
+                        beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                        success : function(json)
+                        {
+                            console.log(json);
+                            console.log(json);
+                            //alert(json);
+                             $("#btn_run_Commande").prop('disabled', false);
+                             $(".btn_to_disabled").prop('disabled', false);
+                             $("#img_loading").fadeOut(600,function () {
+                                 liste=amplify.store(tmp_name);
+                                 liste=[];
+                                 updateNuberItemInBasket(0);
+                                 amplify.store(tmp_name,liste);
+                                 localStorage.removeItem(tmp_name);
+                                 $('#input_password').text("");
+                                  $("#msg_flash").text("votre commande a été lancée avec succès!");
+                                  $('#block_commande').modal('close');
+                                   $("#msg_flash").show();
+                                   $("#msg_flash").fadeOut(5000);
+
+                             });
+                        },
+                        error :
+                            function(xhr,errmsg,err)
+                            {
+                                if(xhr.status==403)
+                                {
+                                     //alert("Mot de passe in correct");
+                                    $("#pass_word_error").text("mot de passe incorrect");
+                                      $('#block_authentif').modal('open');
+                                }
+                                if(xhr.status==402)
+                                {
+                                    $('#block_authentif').modal('close');
+                                    $('#block_commande').modal('close');
+                                    //alert("bad");
+                                    $("#block_error_text").text(xhr.responseText);
+                                    $("#block_error").modal('open');
+                                     //alert("Mot de passe in correct");
+                                    $("#block_error_close_btn").click(function () {
+                                        $("#block_error").modal('close');
+                                    });
+                                      //$('#block_authentif').modal('open');
+                                }
+                                if(xhr.status==406)
+                                {
+                                    $('#block_authentif').modal('close');
+                                    $('#block_commande').modal('close');
+                                    //alert("bad");
+                                    $("#block_error_text").text(xhr.responseText);
+                                    $("#block_error").modal('open');
+                                     //alert("Mot de passe in correct");
+                                    $("#block_error_close_btn").click(function () {
+                                        $("#block_error").modal('close');
+                                    });
+
+                                }
+                                 if(xhr.status==405)
+                                {
+                                     $('#block_authentif').modal('close');
+                                    $('#block_commande').modal('close');
+                                    //alert("bad");
+                                    $("#block_error_text").text(xhr.responseText);
+                                    $("#block_error").modal('open');
+                                     //alert("Mot de passe in correct");
+                                    $("#block_error_close_btn").click(function () {
+                                        $("#block_error").modal('close');
+                                    });
+                                }
+
+                                 if(xhr.status==409)
+                                {
+                                     $('#block_authentif').modal('close');
+                                    $('#block_commande').modal('close');
+                                    //alert("bad");
+                                    $("#block_error_text").text(xhr.responseText);
+                                    $("#block_error").modal('open');
+                                     //alert("Mot de passe in correct");
+                                    $("#block_error_close_btn").click(function () {
+                                        $("#block_error").modal('close');
+                                    });
+                                }
+                                //$('#block_authentif').modal('open');
+                                console.log(xhr);
+                                //console.log(errmsg);
+                                //console.log(err);
+                                //alert("bad");
+                                $("#btn_run_Commande").prop('disabled', false);
+                             $(".btn_to_disabled").prop('disabled', false);
+                             $("#img_loading").fadeOut(600);
+                            },
+                    });
+                 {% endif %}
+             }
+
+
+        function notifyMe(text) {
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check if the user is okay to get some notification
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+  var options = {
+        body: text,
+        icon: "{% static 'teranga_food_logo1.png' %}",
+        dir : "ltr"
+    };
+  var notification = new Notification("Notification",options);
+  }
+
+  // Otherwise, we need to ask the user for permission
+  // Note, Chrome does not implement the permission static property
+  // So we have to check for NOT 'denied' instead of 'default'
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      // Whatever the user answers, we make sure we store the information
+      if (!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+
+      // If the user is okay, let's create a notification
+      if (permission === "granted") {
+        var options = {
+              body: "This is the body of the notification",
+
+              dir : "ltr"
+          };
+        var notification = new Notification("Hi there",options);
+      }
+    });
+  }
+
+  // At last, if the user already denied any notification, and you
+  // want to be respectful there is no need to bother them any more.
+}
+
+        </script>
+        {% block bloc_script %}
+
+        {% endblock %}
+    <!-- endbuild -->
+  </body>
+ </html>

@@ -1,0 +1,645 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+        {{ entite.nomEntite }}
+    {% endblock %}
+    {% block bloc_css %}
+    <style>
+    .select-dropdown,.caret
+    {
+        display: none;
+    }
+    .restauListeItem
+    {
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+    </style>
+    {% endblock %}
+{% block main_block %}
+    <div class="row">
+     <div style="position: fixed;z-index: 2;background-color: white;" class="container">
+         <div  style="border:solid 1px gold ;height: 90px;">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <a href="{% url 'main_acceuil'  %}" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a>
+                     &nbsp;<img class="img-circle" src="{% static 'man-think.png' %}" width="60" height="60" style="border:solid gold;margin-left: 15px;">
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">Autres...</h5>
+         </div>
+     </div>
+    </div>
+   
+    <div class="row" style="margin-top: 110px">
+        <div style=" padding: 15px;height: 700px;background-color: #fcfbb0" class="col l8 offset-l2">
+            <div style="border:solid gold;border-radius: 10px;cursor: pointer;" class="col l8 offset-l2 m8 offset-m2 s12" id="blocRestaurant">
+                <img src="{% static 'man-think.png' %}" style="height: 70px;width: 70px;border:solid;" id="logoResto">
+               <span style="font-size: 1.5em;" id="nomResto">Choisir un restaurant ...</span><span class="right " style="padding-top: 35px;"><i class="fa fa-caret-down"></i></span> 
+            </div>
+            <form class="col l8 offset-l2 m8 offset-m2 s12" style="margin-top: 30px;">
+            <!-- first content -->
+                  <div id="firstContent" class="row">
+                  <label class="col l8  m8 s8" style="color: black">Libellé</label><label class="col l2 m2 s2 center-align" style="color: black">Qte</label>
+                    <div class="col l8  m8 s8" ><input id="txtFirtsContent" type="text" class="form-control " name="" style="border:solid gold 1px; border-radius:15px;padding-left: 10px;padding-right: 10px;"></div>
+                    <div  class="col l2 m2 s2" > <input id="txtFirtsQte" type="text" class="form-control " name=""  value="1" style="border:solid gold 1px; border-radius:15px;text-align: center;color: black;font-size: 1.5em;" disabled="disabled"></div>
+                     <div style="margin-top: -15px;"  class="col l2 m2 s2">
+                       <button id="btnFirtsPlus" class="btn form-control center-align" style="background-color: gold;margin-bottom: 5px;font-size: 2sem;font-style:bold;">+</button>
+                       <button id="btnFirtsMoins" class="btn form-control" style="background-color: gold;margin-bottom: 5px;font-size: 2em;font-style:bold;">-</button>
+                     </div>
+                     <p style="color: red;position: relative;top: -15px;" class="col l12  m12 s12" id="firstError"></p>
+                     <button id="btnFirstAdd" style="background-color: #ecede6;position: relative;top: -25px;" >+</button>
+                  </div>
+                  
+            <!--end  first content-->
+
+            <!-- second content-->
+                  <div id="secondContent" class="row" hidden="hidden" style="position: relative;top: -30px;">
+                  <label class="col l8  m8 s8" style="color: black">Libellé</label><label class="col l2  m2 s2 center-align" style="color: black">Qte</label>
+                    <div class="col l8  m8 s8" ><input id="txtsecondContent" type="text" class="form-control " name="" style="border:solid gold 1px; border-radius:15px;padding-left: 10px;padding-right: 10px;"></div>
+                    <div  class="col l2 m2 s2" style=""><input id="txtsecondQte" type="text" class="form-control " value="1" min="1" name="" style="border:solid gold 1px; border-radius:15px;text-align: center;color: black;font-size: 1.5em;" disabled="disabled"></div>
+                     <div style="margin-top: -15px;"  class="col l2 m2 s2">
+                       <button id="btnsecondPlus" class="btn form-control center-align" style="background-color: gold;margin-bottom: 5px;font-size: 2sem;font-style:bold;">+</button>
+                       <button id="btnsecondMoins" class="btn form-control" style="background-color: gold;margin-bottom: 5px;font-size: 2em;font-style:bold;">-</button>
+                     </div>
+                     <p style="color: red;position: relative;top: -15px;"  class="col l12  m12 s12" id="secondError"></p>
+                     <button id="btnsecondAdd" style="background-color: #ecede6;position: relative;top: -25px;">+</button>
+                  </div>
+            <!--end  second content-->
+
+            <!-- third content-->
+                  <div id="thirdContent" class="row" hidden="hidden" style="position: relative;top:-60px;">
+                  <label class="col l8  m8 s8" style="color: black">Libellé</label><label class="col l2 center-align" style="color: black">Qte</label>
+                    <div class="col l8  m8 s8" ><input id="txtthirdContent" type="text" class="form-control " name="" style="border:solid gold 1px; border-radius:15px;padding-left: 10px;padding-right: 10px;"></div>
+                    <div  class="col l2 m2 s2" style=""><input id="txtthirdQte" type="text" class="form-control" value="1" name="" style="border:solid gold 1px; border-radius:15px;text-align: center;color: black;font-size: 1.5em;" disabled="disabled"></div>
+                     <div style="margin-top: -15px;"  class="col l2 m2 s2">
+                       <button id="btnthirdPlus" class="btn form-control center-align" style="background-color: gold;margin-bottom: 5px;font-size: 2sem;font-style:bold;">+</button>
+                       <button id="btnthirdMoins" class="btn form-control" style="background-color: gold;margin-bottom: 5px;font-size: 2em;font-style:bold;">-</button>
+                     </div>
+                      <p style="color: red;position: relative;top: -15px;" class="col l12 m12 s12" id="thirdError"></p>
+
+                     <button id="btnthirdAdd" style="background-color: #ecede6;position: relative;top: -25px;">+</button>
+                  </div>
+            <!--third  first content-->
+             <!-- fourth content-->
+                  <div id="fourthContent" class="row" hidden="hidden" style="position: relative;top:-90px;">
+                  <label class="col l8  m8 s8" style="color: black">Libellé</label><label class="col l2 center-align" style="color: black">Qte</label>
+                    <div class="col l8  m8 s8" ><input id="txtfourthContent" type="text" class="form-control " name="" style="border:solid gold 1px; border-radius:15px;padding-left: 10px;padding-right: 10px;"></div>
+                    <div  class="col l2  m2 s2" style=""><input id="txtfourthQte" type="text" class="form-control " value="1" name="" style="border:solid gold 1px; border-radius:15px;text-align: center;color: black;font-size: 1.5em;" disabled="disabled"></div>
+                     <div style="margin-top: -15px;"  class="col l2  m2 s2">
+                       <button id="btnfourthPlus" class="btn form-control center-align" style="background-color: gold;margin-bottom: 5px;font-size: 2sem;font-style:bold;">+</button>
+                       <button id="btnfourthMoins" class="btn form-control" style="background-color: gold;margin-bottom: 5px;font-size: 2em;font-style:bold;">-</button>
+                     </div>
+                  </div>
+            <!--fourth  first content-->
+                <button id="btnCommander" class="btn form-control" style="background-color: gold;margin-bottom: 5px;font-size: 2em;font-style:bold;">Commander</button>
+               </form>
+        </div>
+        <!-- modal  restaurant-->
+        <div class="modal fade" id="modalRestaurant" role="dialog" style="width: 300px;height: 400px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;width: 300px">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle">Choisir un restaurant</h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                {% for entite in listeEntite %}
+                  <div style="border:solid gold;padding: 5px;" class="restauListeItem" id="{{ entite.idEntit }}">
+                   <img src="{{ entite.logoEntite }}" style="height: 70px;width: 70px;"> <span>{{ entite.nomEntite }}</span>
+                 </div>
+                {% endfor %}
+                 
+
+            </div>
+        </div>
+    <!-- end modal  restaurant-->
+
+    <!-- modal error  restaurant-->
+        <div class="modal fade" id="modalBadRestaurant" role="dialog" style="width: 300px;height: 180px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;width: 300px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle">Choisir un restaurant</h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+              <p class="center-align" id="txtWarning">Veuiller sélectionner un restaurant</p>
+              <p class="center-align">
+                <button class="btn-flat " data-dismiss="modal"  style="color: black;background-color: gold;margin-right: 10px;">ok</button>
+              </p>
+            </div>
+        </div>
+    <!-- end modal error  restaurant-->
+     <!-- modal  auth-->
+        <div class="modal fade l8" id="modalAuthNon" role="dialog" style="width: 300px;height: 250px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 300px">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle">Authentification</h5>
+            </div>
+            <div class="modal-body" style="">
+                <p style="margin: 0px;">veuillez entrer votre code secret</p>
+                <form class="form-signin" method="post"  action="{% url 'login' %}">
+                    <input type="password" id="passwordNon" name="password" class="form-control" placeholder="****" required>
+                    <p style="color: red;margin-top:-10px; " id="authErrorNon" ></p>
+
+                </form>
+               <p class="text-center"> </p>
+               <!--p class="text-center"></p-->
+                <p class="text-center" style="margin-top: 20px;"><button class="   " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnAuthNon"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Terminer</button></p>
+            </div>
+        </div>
+    <!-- end modal  position-->
+    <!-- modal  localité-->
+        <div class="modal fade" id="myModalLocality" role="dialog" style="width: 300px;height: 280px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 300px">
+                <button type="button" class="close closeLocality" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="center-align" style="color: red;margin: 0px">Pour l'instant notre service est limité dans certaines zones.</p>
+                 <form class="" >
+                    <select id="locality" class="form-control">
+                        <option value="0">Localité</option>
+                        {% for zone in zones %}
+                            <option value="{{ zone.idLocalite }}">{{ zone.libelle }}</option>
+                        {% endfor %}
+
+
+                    </select>
+                    <p style="color: red;margin-top: 5px; " id="localityError" ></p>
+                </form>
+                <p class="text-center" style="margin-top: 10px;"><button class="closeLocality" data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnLocalityOk"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Valider</button></p>
+            </div>
+        </div>
+    <!-- end modal  localité-->
+    
+    <!-- modal  detailCommande-->
+        <div class="modal fade l8" id="modalPreCommandeNonPart" role="dialog" style="width: 350px;height: 380px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 350px">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="">
+                <p class="text-center" style="color: red;">vous allez lancer une commande dans un retaurant non partenaire.Le prix de la commande vous sera donné à la livraison</p>
+                <table class="table table-responsive" style="margin: 0px;">
+                    <thead>
+                    <tr>
+                        <!--th>Images</th-->
+                        <th>Commande:</th>
+                        <th id="montantCommande">???</th>
+
+                    </tr>
+                    <tr>
+                        <!--th>Images</th-->
+                        <th>TVA:</th>
+                        <th id="montantTva"></th>
+                    </tr>
+                    <tr>
+                        <!--th>Images</th-->
+                        <th>Frais de livraison:</th>
+                         <th id="montantLivraison">1000</th>
+                    </tr>
+                     <tr style="color: red">
+                        <!--th>Images</th-->
+                        <th>Total:</th>
+                        <th id="montantTotal">???</th>
+                    </tr>
+                    </thead>
+                </table>
+               <p class="text-center" style="margin-top: 15px;"><button class="   " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnContinuerNonPart"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Continuer</button></p>
+            </div>
+        </div>
+    <!-- end modal  detailCommande-->
+     <!-- modal  authentification-->
+        <div class="modal fade " id="myModalAuth" role="dialog" style="width: 250px;height: 300px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 250px">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="center-align" id="productDesc">Désolé,Veuillez vous connecter avant de pouvoir éffectuer toute transaction</p>
+                <div style="padding-left: 10px;padding-right:10px;padding-bottom:10px;margin-bottom: 0px;position: relative;" class="row">
+
+                    <!--button id="test" class="btn right"--><p class="text-center" style=""><a id="" href="{% url 'login' %}" class="btn btn-xs" style="background-color: gold;"><i class="" ></i>Se connecter</a> </p><!--/button-->
+                    <!--button id="test" class="btn right"--><p class="text-center"  style=""><a id="" href="{% url 'inscription' %}" class="btn btn-xs" style="background-color: grey;color:black"><i class="" ></i>S'inscrire</a> </p><!--/button-->
+                </div>
+            </div>
+        </div>
+    <!-- end modal  authentification-->
+    <!-- modal  runCommandeError-->
+        <div class="modal fade l8" id="modalRunCmdErrorNon" role="dialog" style="width: 300px;height: 180px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 300px;">
+                <!--button type="button" class="close" data-dismiss="modal">&times;</button-->
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="">
+                <p class="text-center" id="runCommandeErrorNon"></p>
+               <!--p class="text-center"></p-->
+               <p class="text-center"><!--button class="btn-flat " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;">Non</button--><button id="" class="btn-flat " data-dismiss="modal" style="color: black;background-color: gold">Ok</button></p>
+            </div>
+        </div>
+    <!-- end modal  runCommandeError-->
+    <!-- modal  runCommande-->
+        <div class="modal fade l8" id="modalRunCmdNon" role="dialog" style="width: 260px;height: 160px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 260px;">
+                <!--button type="button" class="close" data-dismiss="modal">&times;</button-->
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="">
+                <p class="text-center"><img src="{% static 'refr.gif' %}" width="50"></p>
+                <p class="text-center">commande en cours ...</p>
+               <!--p class="text-center"></p-->
+               <!--p class="text-center"><button class="btn-flat " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;">Non</button><button id="btnRemoveConf" class="btn-flat " style="color: black;background-color: gold">Oui</button></p-->
+            </div>
+        </div>
+    <!-- end modal  runCommande-->
+    </div>
+{% endblock %}
+    {% block bloc_script %}
+     <script type="text/javascript">
+     var selectedRestaurant=null;
+     var selectedLocalityId;
+     var longitude;
+     var latitude;
+     var data;
+       $(function()
+             {
+              $("#btnAuthNon").click(function(){
+                
+                if($("#passwordNon").val()=="")
+                {
+                  $("#authErrorNon").text("veuiller remplir ce champs");
+                }
+                else
+                {
+                  if($("#passwordNon").val().length!=4)
+                  {
+                    $("#authErrorNon").text("code incorrect");
+                  }
+                  else
+                  {
+                     $("#authErrorNon").text("");
+                     $('#modalAuthNon').modal('hide');
+                      $('#modalRunCmdNon').modal('show');
+/****************************************************lancement de la requete ajax************************************************************/
+                    json_post='{"longitude":"'+longitude+'","latitude":"'+latitude+'","produits":'+data+'}'
+                    mpassword=$("#passwordNon").val();
+                    midEntite=selectedRestaurant.attr("id");
+                    var csrftoken = getCookie('csrftoken');
+                     console.log(csrftoken);
+
+                    console.log(json_post);
+                    console.log(mpassword);
+                    console.log(midEntite);
+                    console.log(selectedLocalityId);
+                    
+                   
+                    $.ajax({
+                             url :"{% url 'nouvelle_commande' %}",
+                            type : "POST", // http method
+                            timeout:100000,
+                            data: {client:"{{ request.user.username }}", data:json_post,password:mpassword,idEntite:midEntite,idLocalite:selectedLocalityId},
+                            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                            success : function(json)
+                            {
+                              console.log(json);
+                                $('#modalRunCmdNon').modal('hide');
+                                Materialize.toast('<span>votre commande a été lancée avec succès!<br>vous pouvez dès maintenant suivre en temp réel  de votre commande </span>', 5000);
+                                 setTimeout(function() {
+                                    document.location="{% url 'mes_commandes' %}";
+                                }, 5000);
+                            },
+                            error :
+                                function(xhr,errmsg,err)
+                                {
+                                   $('#modalRunCmdNon').modal('hide');
+                                  console.log(xhr);
+                                     if(xhr.status==403)
+                                    {
+                                        $("#authErrorNon").text("code incorrect");
+                                        $('#modalAuthNon').modal('show');
+                                    }
+                                    else
+                                     {
+                                         //$('#modalRunCmd').modal('hide');
+                                         $('#runCommandeErrorNon').text(xhr.responseText);
+                                         $('#modalRunCmdErrorNon').modal('show');
+                                     }
+                                    //$("#before").hide();
+                                    //$("#txtAfter").text(xhr.responseText);
+                                    //$("#after").show();
+                                }
+                        });
+
+
+
+/****************************************************lancement de la requete ajax************************************************************/
+                  }
+                  
+                }
+               
+              });
+              $("#btnContinuerNonPart").click(function () {
+                $('#modalPreCommandeNonPart').modal('hide');
+                  $("#myModalLocality").modal("show");
+              });
+              $("#btnLocalityOk").click(function(){
+                if($("#locality").val()=="0")
+                    {
+                        $("#localityError").text("Séléctionner une zone");
+                    }
+                    else
+                    {
+                          $("#localityError").text("");
+                          selectedLocalityId=$("#locality").val();
+                          $("#myModalLocality").modal("hide");
+                          $("#modalRunCmdNon").modal("show");
+                          navigator.geolocation.getCurrentPosition(getLocationNon,showError);
+                    }
+
+              });
+              $(".select-dropdown").hide();
+               $(".select-dropdown").css({"border":"none"});
+              $("#btnCommander").click(function(e){
+                e.preventDefault();
+
+                if(selectedRestaurant==null)
+                {
+                  $('#modalBadRestaurant').modal('show');
+                }
+                else
+                {
+                  check=0;
+                  data="[";
+
+                  if($("#txtFirtsContent").val()!="")
+                  {
+                    check++;
+                    data+="{"
+                    data+='"produit":"'+$("#txtFirtsContent").val()+'","quantite":"'+$("#txtFirtsQte").val()+'"';
+                    data+="}"
+                  }
+                   if($("#txtsecondContent").val()!="")
+                  {
+                    if(check==1)
+                    {
+                      data+=",";
+                      check=0;
+                    }
+                    check++;
+                    data+="{"
+                    data+='"produit":"'+$("#txtsecondContent").val()+'","quantite":"'+$("#txtsecondQte").val()+'"';
+                    data+="}"
+                  }
+                   if($("#txtthirdContent").val()!="")
+                  {
+                    if(check==1)
+                    {
+                      data+=",";
+                      check=0;
+                    }
+                    check++;
+                    data+="{"
+                    data+='"produit":"'+$("#txtthirdContent").val()+'","quantite":"'+$("#txtthirdQte").val()+'"';
+                    data+="}"
+                  }
+                  if($("#txtfourthContent").val()!="")
+                  {
+                    if(check==1)
+                    {
+                      data+=",";
+                      check=0;
+                    }
+                    check++;
+                    data+="{"
+                    data+='"produit":"'+$("#txtfourthContent").val()+'","quantite":"'+$("#txtfourthQte").val()+'"';
+                    data+="}"
+                  }
+
+                  {% if request.user.is_authenticated %}
+                      if(data!="[]" && data.length>4)
+                       {
+                        $('#modalPreCommandeNonPart').modal('show');
+                       }
+                       else
+                       {
+                        $("#txtWarning").text("veuillez remplir au moins un champs");
+                        $('#modalBadRestaurant').modal('show');
+                       }
+                       //alert(data);
+                    {% else %}
+                         //alert("bad");
+                         $('#myModalAuth').modal('show');
+                    {% endif %}
+                   data+="]";
+                   
+                }
+                
+              });
+              $("#blocRestaurant").click(function(){
+                $('#modalRestaurant').modal('show');
+              });
+              $(".restauListeItem").click(function(){
+                selectedRestaurant=$(this);
+      
+                $('#modalRestaurant').modal('hide');
+                $("#logoResto").attr("src",selectedRestaurant.find('img').attr("src"));
+                 $("#nomResto").text(selectedRestaurant.find('span').text());
+
+              });
+/********************************************************* firt block **********************************************************/
+              $("#btnFirstAdd").click(function(e){
+                e.preventDefault();
+                if($(this).text()=="+")
+                {
+                  if($("#txtFirtsContent").val()=="")
+                  {
+                    $("#firstError").text("veuillez remplir ce champs avant");
+                  }
+                  else
+                  {
+                    $("#firstError").text("");
+                    $("#secondContent").show();
+                    $("#txtsecondContent").focus();
+                    $(this).text("-");
+                  }
+                }
+                else
+                {
+                  $(this).text("+");
+                  $("#txtfourthContent").val("");
+                  $("#fourthContent").hide();
+                  $("#txtthirdContent").val("");
+                  $("#thirdContent").hide();
+                  $("#txtsecondContent").val("");
+                  $("#secondContent").hide();
+                  $("#btnthirdAdd").text("+");
+                  $("#btnsecondAdd").text("+");
+                }
+              });
+              $("#btnFirtsPlus").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtFirtsQte").val());
+                   tmp++;
+                   $("#txtFirtsQte").val(tmp);
+                   //alert(tmp);
+                  });
+              $("#btnFirtsMoins").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtFirtsQte").val());
+                   if(tmp>1)
+                   {
+                      tmp--;
+                      $("#txtFirtsQte").val(tmp);
+                   }
+                   
+                   //alert(tmp);
+                  });
+/*********************************************************end firt block **********************************************************/
+
+/********************************************************* second block **********************************************************/
+              $("#btnsecondAdd").click(function(e){
+                e.preventDefault();
+                if($(this).text()=="+")
+                {
+                  if($("#txtsecondContent").val()=="")
+                  {
+                    $("#secondError").text("veuillez remplir ce champs avant");
+                  }
+                  else
+                  {
+                    $("#secondError").text("");
+                    $("#thirdContent").show();
+                    $("#txtthirdContent").focus();
+                    $(this).text("-");
+                  }
+                }
+                else
+                {
+                  $(this).text("+");
+                  $("#txtfourthContent").val("");
+                  $("#fourthContent").hide();
+                   $("#txtthirdContent").val("");
+                  $("#thirdContent").hide();
+                  $("#btnthirdAdd").text("+");
+                }
+              });
+              $("#btnsecondPlus").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtsecondQte").val());
+                   tmp++;
+                   $("#txtsecondQte").val(tmp);
+                   //alert(tmp);
+                  });
+              $("#btnsecondMoins").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtsecondQte").val());
+                   if(tmp>1)
+                   {
+                      tmp--;
+                      $("#txtsecondQte").val(tmp);
+                   }
+                   
+                   //alert(tmp);
+                  });
+/*********************************************************end second block **********************************************************/
+
+/********************************************************* third block **********************************************************/
+              $("#btnthirdAdd").click(function(e){
+                e.preventDefault();
+                if($(this).text()=="+")
+                {
+                  if($("#txtthirdContent").val()=="")
+                  {
+                    $("#thirdError").text("veuillez remplir ce champs avant");
+                  }
+                  else
+                  {
+                    $("#thirdError").text("");
+                    $("#fourthContent").show();
+                    $("#txtfourthContent").focus();
+                    $(this).text("-");
+                  }
+                }
+                else
+                {
+                  $(this).text("+");
+                  $("#txtfourthContent").val("");
+                  $("#fourthContent").hide();
+                }
+              });
+              $("#btnthirdPlus").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtthirdQte").val());
+                   tmp++;
+                   $("#txtthirdQte").val(tmp);
+                   //alert(tmp);
+                  });
+              $("#btnthirdMoins").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtthirdQte").val());
+                   if(tmp>1)
+                   {
+                      tmp--;
+                      $("#txtthirdQte").val(tmp);
+                   }
+                   
+                   //alert(tmp);
+                  });
+/*********************************************************end third block **********************************************************/
+
+/********************************************************* fourth block **********************************************************/
+              $("#btnfourthPlus").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtfourthQte").val());
+                   tmp++;
+                   $("#txtfourthQte").val(tmp);
+                   //alert(tmp);
+                  });
+              $("#btnfourthMoins").click(function(e){
+                   e.preventDefault();
+                   tmp=parseInt($("#txtfourthQte").val());
+                   if(tmp>1)
+                   {
+                      tmp--;
+                      $("#txtfourthQte").val(tmp);
+                   }
+                   
+                   //alert(tmp);
+                  });
+/*********************************************************end fourth block **********************************************************/
+              
+             });
+      function showError(error) {
+              value="";
+          switch(error.code) {
+              case error.PERMISSION_DENIED:
+                  $("#block_location_denied").modal('show');
+                  break;
+              case error.POSITION_UNAVAILABLE:
+                  value = "Location information is unavailable."
+                  break;
+              case error.TIMEOUT:
+                  value = "The request to get user location timed out."
+                  break;
+              case error.UNKNOWN_ERROR:
+                  value = "An unknown error occurred."
+                  break;
+          }
+          //console.log(value);
+      }
+         function  getLocationNon(position) {
+              longitude=position.coords.longitude;
+              latitude=position.coords.latitude;
+              console.log(longitude);
+              console.log(latitude);
+              $('#modalRunCmdNon').modal('hide');
+              $('#modalAuthNon').modal('show');
+          }
+     </script>
+    {% endblock %}

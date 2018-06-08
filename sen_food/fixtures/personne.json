@@ -1,0 +1,18 @@
+[
+  {
+    "model": "sen_food.personne",
+    "pk": 0,
+    "fields": {
+      "nomPersonne": "John",
+      "prenomPersonne": "Lennon"
+    }
+  },
+   {
+    "model": "sen_food.personne",
+    "pk": 1,
+    "fields": {
+      "nomPersonne": "John",
+      "prenomPersonne": "Lennon"
+    }
+  }
+]

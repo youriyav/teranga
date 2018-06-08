@@ -1,0 +1,34 @@
+{% extends 'layout_manager_admin.html' %}
+{% load static %}
+{% block block_css %}
+<link href="{% static 'managerAdmin/css/login.css'%}" rel="stylesheet">
+{% endblock %}
+{% block nom_user %}
+{{ utilisateur.personne.nomPersonne }} {{ utilisateur.personne.prenomPersonne }}
+{% endblock %}
+{% block main_bloc %}
+    <div class="container">
+        <div class="card card-container">
+
+                <form class="form-signin" method="post"  action="{% url 'parametre_managerAdmin_fast' %}">
+                {% csrf_token %}
+                    <label>Ancien Mot de passe</label>
+                <input type="password" id="inputEmail" name="old_password" class="form-control" placeholder="******" required autofocus>
+                    <p style="color: red">{{ error_old }}</p>
+                     <label>Nouveau Mot de passe</label>
+                <input type="password" name="new_password" id="inputPassword" class="form-control" placeholder="******" required>
+                    <p style="color: red">{{ error_new }}</p>
+                  <label>confirmer nouveau Mot de passe</label>
+                <input type="password" name="new_password_conf" id="inputPassword" class="form-control" placeholder="******" required>
+                    <p style="color: red">{{ error_new_conf }}</p>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sauvegarder</button>
+                <a class="btn btn-lg  btn-block btn-signin valign-wrapper" href="{% url 'home_managerAdmin_fast' %}" style="background-color: grey;color: black">Annuler</a>
+            </form><!-- /form -->
+
+
+            <!--a href="#" class="forgot-password">
+                Forgot the password?
+            </a-->
+        </div><!-- /card-container -->
+    </div><!-- /container -->
+{% endblock %}

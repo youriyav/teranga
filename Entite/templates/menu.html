@@ -1,0 +1,136 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'entite/profil.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+    <img src="{{ entite.logoEntite }}" width="200" class="" height="100">
+    <p style="color: {{ entite.ColeurEntite }}">{{ entite.nomEntite }}</p>
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li  class="active"><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li  class="active"><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag" hidden  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" ></div>
+ {% endif %}
+    <a href="{% url 'profilEntite' idEntite %}" title="retour au profil"><i class="fa fa-reply fa-2x"></i></a>&nbsp;&nbsp;
+    <a href="{% url 'liste_produit' idEntite 0 %}" title="liste produits"><i class="fa fa-bookmark fa-2x"></i></a>
+    <div class="row" style="margin-top: 30px;">
+    <!-- panel catégorie-->
+        <div class="col-lg-5" >
+        <h3 style="text-align: center;">Liste Catégories</h3>
+                <div class="panel panel-blue" >
+					<div class="panel-heading dark-overlay"><svg class="glyph stroked clipboard-with-paper"><use xlink:href="#stroked-clipboard-with-paper"></use></svg>Catégories<a href="{% url 'creation_categorie' idEntite %}" style="color: white;" class="pull-right"><i class="fa fa-plus-circle fa-2x"></i></a></div>
+					<div class="panel-body" style=" height: 600px;background-color: white;overflow: scroll;">
+						<ul class="todo-list">
+                            {% for categorie in listeCategorie %}
+                               <li class="todo-list-item" style="border-bottom: solid #CBDDF5;">
+								<div class="checkbox" style="">
+                                    <img src="{% static '' %}{{ categorie.logoCat }}" width="80" height="100">
+									<a href=""><label for="checkbox" style="font-size: 1.3em;color: black">{{ categorie.libelleCat }}</label></a>
+								</div>
+								<div class="pull-right action-buttons" style="padding-top: 35px;">
+									<a href="{% url 'editer_categorie' categorie.idCategorie %}"><i class="fa fa-edit fa-2x"></i></a>
+									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+								</div>
+							</li>
+                            {% endfor %}
+						</ul>
+
+					</div>
+				</div>
+        </div>
+        <!--fin  panel catégorie-->
+        <!-- panel formule-->
+        <div class="col-lg-2"></div>
+        <div class="col-lg-5" >
+            <h3 style="text-align: center;">Liste Formules</h3>
+            <div class="panel panel-blue" >
+					<div class="panel-heading dark-overlay"><svg class="glyph stroked clipboard-with-paper"><use xlink:href="#stroked-clipboard-with-paper"></use></svg>Formules<a href="" style="color: white;" class="pull-right"><i class="fa fa-plus-circle fa-2x"></i></a></div>
+					<div class="panel-body" style=" height: 600px;background-color: white;overflow: scroll;">
+						<ul class="todo-list">
+						<li class="todo-list-item">
+								<div class="checkbox" style="">
+                                    <img src="{% static 'images/logo_sen_food.png' %}" width="80" height="100">
+									<label for="checkbox" style="font-size: 1.3em;">Make dsdqsda plan for today</label>
+								</div>
+								<div class="pull-right action-buttons" style="padding-top: 35px;">
+									<a href="#"><i class="fa fa-edit fa-2x"></i></a>
+									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+								</div>
+							</li>
+                            <li class="todo-list-item">
+								<div class="checkbox" style="">
+                                    <img src="{% static 'images/logo_sen_food.png' %}" width="80" height="100">
+									<label for="checkbox" style="font-size: 1.3em;">Make dsdqsda plan for today</label>
+								</div>
+								<div class="pull-right action-buttons" style="padding-top: 35px;">
+									<a href="#"><i class="fa fa-edit fa-2x"></i></a>
+									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+								</div>
+							</li>
+                            <li class="todo-list-item">
+								<div class="checkbox" style="">
+                                    <img src="{% static 'images/logo_sen_food.png' %}" width="80" height="100">
+									<label for="checkbox" style="font-size: 1.3em;">Make dsdqsda plan for today</label>
+								</div>
+								<div class="pull-right action-buttons" style="padding-top: 35px;">
+									<a href="#"><i class="fa fa-edit fa-2x"></i></a>
+									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+								</div>
+							</li>
+                            <li class="todo-list-item">
+								<div class="checkbox" style="">
+                                    <img src="{% static 'images/logo_sen_food.png' %}" width="80" height="100">
+									<label for="checkbox" style="font-size: 1.3em;">Make dsdqsda plan for today</label>
+								</div>
+								<div class="pull-right action-buttons" style="padding-top: 35px;">
+									<a href="#"><i class="fa fa-edit fa-2x"></i></a>
+									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+								</div>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+        </div>
+        <!-- fin panel catégorie-->
+    </div>
+
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+                }
+         );
+    </script>
+
+{% endblock %}

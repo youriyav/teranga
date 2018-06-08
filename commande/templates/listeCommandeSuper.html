@@ -1,0 +1,123 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    liste-client
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'senfood_css/categorie/listeCategorie.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+    LISTE COMMANDES
+{% endblock %}
+
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                         <li ><a href="{% url 'home_administrator' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+
+                        <li ><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li ><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li class="active"><a href="{% url 'liste_client'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Clients</a></li>
+                        <li><a href="{% url 'liste_livreur' %}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Livreurs</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li ><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+
+    <div class="row">
+    Total: {{ listeCommande.count }}<div class="col-md-10 col-md-offset-2" >
+        <form class="form-inline">
+            <label>Restaurant</label>
+            <select style="border: solid 1px #00b8d4;" class="form-control" name="entite">
+                <option value="0">Choisir restaurant</option>
+                {% for restaurant in listeRestaurant %}
+                    <option value="{{ restaurant.idEntit }}">{{ restaurant.nomEntite }}</option>
+                {% endfor %}
+            </select>
+            <label>Livreur</label>
+            <select style="border: solid 1px #00b8d4;" class="form-control" name="livreur">
+                <option value="0">Choisir livreur</option>
+                {% for livreur in listeLivreur %}
+                    <option value="{{ livreur.idLivreur }}">{{ livreur.personne.nomPersonne }} {{ livreur.personne.prenomPersonne }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter" class="btn btn-primary">
+        </form></div>
+        <div class="col-lg-12 col-md-12 ">
+            <table id="tableau_cat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead >
+                <tr>
+                    <th>CLIENT</th>
+                    <th>MONTANT</th>
+                    <th>RESTAURANT</th>
+                    <th>DATE COMMANDE</th>
+                    <th>DATE VALIDATION</th>
+                    <th>DATE LIVRAISON</th>
+                    <th>DUREE</th>
+                    <th>LIVREUR</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for commande in listeCommande %}
+                <tr>
+
+                    <td style="padding-top: 10px">{{ commande.client.personne.numeroPersonne}}</td>
+                    <td style="padding-top: 10px">{{ commande.get_montant}} Fcfa</td>
+                    <td style="padding-top: 10px">{{ commande.entite.nomEntite}}</td>
+                    <td style="padding-top: 10px">{{ commande.dateCreation }}</td>
+                    <td style="padding-top: 10px">{{ commande.dateValidation }}</td>
+                    <td style="padding-top: 10px">{{ commande.dateLivraicon}}</td>
+                    <td style="padding-top: 10px">{{ commande.get_duree }} min</td>
+                    <td style="padding-top: 10px">{{ commande.livreur.personne.nomPersonne }} {{ commande.livreur.personne.prenomPersonne }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+    <span class="step-links">
+        {% if contacts.has_previous %}
+            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+        </span>
+
+        {% if contacts.has_next %}
+            <a href="?page={{ contacts.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+        </div>
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+                     $('#tableau_cat').DataTable({"order": [[ 2, "desc" ]], scrollY: 700,"scrollX": false,
+                         "language": {"url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/French.json"}, "paging":false,
+                         "ordering": false,
+                         "info":     false,searching: false,"pageLength": 3,
+                         }
+
+                     );
+                }
+         );
+    </script>
+
+{% endblock %}

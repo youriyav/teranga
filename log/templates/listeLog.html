@@ -1,0 +1,46 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    Liste-utilisateur
+{% endblock %}
+{% block block_css %}
+<link href="{% static 'utilisateur/liste_user.css'%}" rel="stylesheet">
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+{% endblock %}
+{% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+     <a href="{% url 'vider_log' %}" title="vider les logs" class="pull-right"><i style="color: red;" class="fa fa-trash-o fa-3x"></i></a>
+    <div class="modal fade" role="dialog" id="bloc_confirm">
+        <div class="modal-header">
+            fdsfdsfdsfsdfsdfsf
+        </div>
+    </div>
+    <table class="table" id="table_utilisateur">
+        <thead class="fixed-table-header">
+            <tr class="table-bordered">
+                <th>DATE</th>
+                <th>UTILISATEUR</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for log in listelog %}
+                    <tr >
+                        <td>{{log.dateLog}}</td>
+                        <td>{{ log.utilisateur }}</td>
+                        <td>{{ log.action }}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

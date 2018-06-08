@@ -1,0 +1,22 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block block_css %}
+<link type="text/css" rel="stylesheet" href="{% static 'senfood_css/manager/layout_manager.css' %}">
+{% endblock %}
+{% block nav_gauche_admin %}
+    {% block nav_gauche_manager %}
+        <!--li class="active" ><a href="{% url 'home_manager' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li-->
+        <!--li ><a href="{% url 'liste_livreur_manger' %}"><i class="fa fa-motorcycle"></i> Livreurs</a></li-->
+        <li ><a href="{% url 'home_manager' %}"><i class="fa fa-shopping-basket"></i> Commandes</a></li>
+    {% endblock %}
+{% endblock %}
+
+
+{% block main_bloc %}
+    <div >
+        {% block main_bloc_manager %}
+
+        {% endblock %}
+    </div>
+
+{% endblock %}

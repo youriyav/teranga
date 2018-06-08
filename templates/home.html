@@ -1,0 +1,157 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Admin-Teranga</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'metro/css/metro.css' %}" />
+    <link href="{% static 'Materialize/bower_components/materialize/dist/css/materialize.min.css'%}" rel="stylesheet">
+     <link rel="icon" href="{% static 'teranga_food_logo_192.png' %}" sizes="42x42">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="{% static 'metro/js/jquery.plugins.min.js' %}"></script>
+	<script src="{% static 'metro/js/metro.js' %}"></script>
+	<!--[if lt IE 9]>
+		<script src="js/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="metro-layout horizontal">
+
+		<div class="header">
+            <div class="right" style="padding-right:25px;padding-top: 0px;position: relative;top: -10px;">
+                    <h5 style="display: inline-block;text-decoration: underline">{{ request.user.username }}</h5>
+                    <a href="{% url 'logout_administrator' %}" title="se déconnecter" style="position: relative;top: 3px;"><img class="icon icons8-Logout-Rounded-Up" width="24" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABiElEQVRIS8WVjU0DMQyF2wmADWCCwgQcE8AGPTaACYAN2ICwAUwATEA7AYwAE7Tvq+LqLnVyOaEKS09p8+Pn58S+6WTPNt2z/8lYgjYGFGoDG0NwKqef0fGZxkUNSS3BoZx9CYzYj3ASxyJPieBYJ7/jaaKdJZ6YQwnW3dvbliMgHW/CkRCEeSZM1q6jkkbjTto8AqIh16QjXV9FIm+etKHIVG+2egTvmj8XXoWrJPIcwYv2XQqcveieSQnspfxqE0qIqms5AtQS+UFUsU1VShC0gXw/CPeJc/7mCFhj/53wLLR2NiVAIunJvfMSgan/0PkmR1ByMKTAXa99JRbQ6ABSAiuov6RoqWhI18bGXrJz79upqkvmcqjg6l4T3Xd7FXXAY3EVMGkvKeg3baDGrNB6L8hLEXPkDxKKBpLbqMgjIvIngYqnOBuh149Kzc5ISNejQOuwwwRBa7gRIHGd5xRYpDjBMYVXMtIC0U4nHSIwp8huBQjtm8BTxGEQUJq12i/agIh/JFgDTI9VGYFF/owAAAAASUVORK5CYII="></a>
+                </div>
+            <div style="">
+                <h1>Administration</h1>
+                <div class="controls" style="background-color: gold">
+                    <span class="down" title="Scroll down"></span>
+                    <span class="up" title="Scroll up"></span>
+                    <span class="next" title="Scroll left"></span>
+                    <span class="prev" title="Scroll right"></span>
+                    <span class="toggle-view" title="Toggle layout"></span>
+                </div>
+            </div>
+
+		</div>
+		<div class="content clearfix" style="border: solid 2px gold;">
+			<div class="items">
+				<a class="box" href="#">
+					<span class="text-left">Nouveaux Utilisateur</span>
+					<p><h4 id="newUsers">{{ nbrNewUsers }}</h4></p>
+                    <img class="icon icons8-Add-User-Group-Man-Man" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACeUlEQVRoQ+1XgVHDMAwkG8AEsAEwAWUC6AS0E0AnoJ2AbkCYgDIBdALoBt2AbhD+c3IvCXXk2HG5cvadLk0tW/+SJTnZ0YGP7MDxHyUCfx3BFIEUgUAPpCMU6MDg5SkCwS4M3CBFwObAoiiOMXcHGUEuRO8LzxzykmXZZtdarLvF//eQgcx/4DmDPp+/RpQIAAQBP1eANw2TyBig+NwOrOMaEt41SGLanOidgHj+vQW8wUDw1yYS4vlXC3jzN/VrkYhB4AHWnhQgZnoCQHO+gACBXSnrltAfVHVUAti4qC3ADm1GoP7p4P1tFLDdpRCo2bHZgH7NfgwCTkAMQAOo6ahDJOByhN5AmFVqO2JEgMl57pgDKwAqS2y0JPbIAa8kFhJMaPaAXcOvjHoQYAPjcdCisILOoNnQYI9VZgoxFWnJd7WRuSaRS3JJI8tbSBD8qNnIHI9dTW2bA30SkOPASIxETDQInMRy21WiK4loBLoC8dX/PwRsHuiaxL6erNxeWedZWnkEOViW15AFhH2gdovtvQ/4EJAewJuoAW3bhuDnIDEzCr0TEE+yBNKTZxWhTXrSCD3Ky1npUSmfOX6eOjiBa3kd3/RGAAAI9hEycgBQVSFoNqm1kGcz44eQNhZYM+yFAAyze5bX4oBBj5IMo8GnC4lJMAHlK6orH/aHsZDgMblRNtCPUNsGPYM3pkoScpxYgVpzQo2AjYDj7bFrBIz+ECQWsMF8YnWyjhAC39hVK3u+BDYgcCJRKK/bthFCoNOXV1cmzU/HRKDpgdDbqxaR6BHQAOxr3jsH9gVQs5MIaB6KPZ8iENvD2v4pApqHYs+nCMT2sLb/D7vkFc7h8jg3AAAAAElFTkSuQmCC">
+				</a>
+				<a class="box" href="{% url 'parametre_administrator' %}" style="background: #6b6b6b;">
+					<span>Settings</span>
+					<img class="icon icons8-Settings" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADJ0lEQVRoQ+2ZgXXTQAyG6wnoBqQTQCcgmQCYgDBBywSECWgnIExQmIB0AtoJmm4AE4T/49l9ru076c5nII/oPT+3tU7SL+l00rU62nOq9tz+owOAvx3BohHY7XbfBei5AeqmqqrTUsBLA9h5DBOAYnqLCZL35zL+mweAeBbCsHHyRtkOABr3KAIr/fze6dV3isCFk/ePRSAFwAcBgH80mSnUyu0babuQ4s9trfo+qz3/Su9jp0Vb8a26slgreS/1OtdDNTsVD7xB8gDolsYfkrbWc6nnTa3Ma3jXEIx7y4aW4cgiKjikoY2+LbIBSOhSiz85vTqGDaeEnBCtWMEIyHgE3kUEjzE4Ze1WUTgJLYgBIJzeqpJiUA5vsGoNAqg3Jt7/V4gUO1EkeD+iEIArcVFVcuhei6jxbEAqF5WFijLXQ3V5miNUay4lj/VxAIktQVeeeUBJPkZ8zARBFLbttb0ISAGeJwKpRM3+7XGLRjiJkruOAmiF/EtCuE3Pd0ElRuKn1i9lPDbFU6j5WpdR0HIyxuhegmeW14e+S8fW4aTr2nh4e+Q5ia2cTfZ+y0mWbLNnMgHUKRWbtNy5P5BGVCdkD1H0AGsWeAEEJ62x05XSaJTs/wZAbLNNlUK3iq51QWDfCynC9EOrSJWZchOfCwRte5BizRylkQPN8oJrswXKKP0WemJE7ecA6/VBLAr1Qkt947j3DirJUUg8yEjh10Mn/VArgfE5Q4x7L4xoV1y9ECHNbaXNnJXxZ5KfeyPRc1IohVCAohwi3Ky/7rTTL/Q3Tl4r50M6v0per8UPASD3MeRJDoKJ1vTSJ7iJ+ZC4ySay+UFssCeKnsTObnFq42mlZ0lltLHIGDwQXCrFYrJ6Q0zbY2YvJBAbLWADNsTMy63auga41u+5cy6yGFS42FoityPLbCc8AKgajIo8XC32pqKA8lhqPTihy1SfEVQrnLYAXEyQCcCb4Im30+ag4tVbEoA1XbVtSm49QoBKAphLyeE/NN7UafiKRQCBsfGwbdjYMfSRrFTEMX4BoFI9M2SapTHFpqIRSFFcivcAoJQnc+XsfQR+AX6aTEB42oSqAAAAAElFTkSuQmCC">
+				</a>
+				<a class="box " href="#" style="background: #43b51f;">
+					<span>Téléchargement</span>
+                    <p><h4  id="newPhone">{{ nbrNewTerminal }}</h4></p>
+					<img class="icon icons8-Android-OS" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACDElEQVRoQ+1YgVHDMAxsJoANaDegE1A2gAkIE8AG0A1gAsIEsAFlAtiAdAM2CC/ODm6IY/vtUAr2Xa7XxpL+9bLkazHZ8VXsOP5JJrBtBf+3Ak3TXEGBBZ7boigeQ9SAbYn9Z3juYVuF2Jp7aQUA4BCOXgxnxwCy8gECWyH9ZOydw/bVx7a7JyWBGs4FyPsQEIDfV8SnWyUgwQFGMn5kAFkqcCf4FIXkkSXZlUfKbI5HSk+vZ5AWRahFK6AISBbfqMhfRjMQqFkfUQQUietORkOwLAFe7OmVgsANol+QCKR7XZK2n2ZRBHAGpNYfYgDA9jS0BZvxYglI/cs5iFk1CMxYBzQBNYju2MAdu3N2mMUQqABCJmmKJdO4ZBzFEEhRPhozXUYxBBomYzYbKEBhoYxSAo/19fcJqJuj7jbSLVaSNfw+SgnZ4llLzyUhHJqHtT1sIxLojRdDYCPT+rCNSKA3XiagM5AVsNSCLTGu+eBso91azwpkBTYzkEvINQh93+dDbMsUupD8UbWn3q+RqenId6HeeDGTeAHjSjkof+gy9y0eTcBTGd9St+1rlQ115OxCAwS0MgehQTv71/jeKhvqiyagA9km9QDxoNumi1AmkBUg/41or/euGnO9zwr8AgWCJqdtsruUTj7IjDbaO6k95odsoft/sjPAZi6VXfQcSAWE9ZMJsJlLZfcBEklUQEdWTf4AAAAASUVORK5CYII=">
+				</a>
+				<a class="box width2 height2" href="#">
+					<span>Nouvelle(s) Commande(s)</span>
+                    <p><h4  id="newCmd">{{ nbrNewCommande }}</h4></p>
+                    <img class="icon icons8-Shopping-Bag" width="96" height="96" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAFiElEQVR4Xu2cj1EUMRTGuQqUCoQKlAqECsQKPCtQKhAqECvwrECowKMCoQKvA7EC/D7cHW8Ydt9L3ssly73M7ABzyUvy/TabP99ys51IVRWYVa09Kt8JAJVvggAQACorULn6GAEBoLIClauPERAA9Arc3d29Qe5jXHu4nuN61ZW+xs9bXCtcF7PZ7FIftW7O5kcARKfYnzrhKbomEcYFrhPA4O/NpqYBQHwK/7G723NEpPjngHCWU3gTZZoEAOF5p/9Ye8RYteAj6qjF0dAcAIjP5zrF1z5utHA4GgiBMJpJTQHo7vxfBcTvBSeE/ZZGQjMACjx2hu7yawA4aGUItATgFKJw0t1EOgME1lc9NQGgW2r+VD56rpBvgWsJEVdUsCt/iF/nuF4rVG3mUdQKAAr6ThDuDz4/hujLsXyAQRDcAzwT4n1DLAKrmloB8Fu4+yn+nnby7OYTjo4xCLeIt1tVfVReHQDE4tHCd0EILh9H7/yH5buRwOXsWHqLuBwt1VILABbo/djj5woi8bGSnACB0MbmhC+IzZ12tdQCAEmk9xCJkJITAMxR6OtIwWy4yY0ZKNACAK5++lPNx5rJjdMqp8Pdrprxh1L1PUELAO7GxIX4pjYCQtH4OTfGehlT56yVs3xpgUrHt2oQAIwjLAAICsQIqCzQ1gLodqNc33OjdWgdqpXK0ztY4uJ+IWslJrW7yBzQ7W65/vY2VaT+lPyc1uaJdwXuABSbH+8+bDIeT2CPPCt0BaA81/Fsf41YrscXbgA2YCfWEHuozuzd+cOAngDmCD527tKSgNa28H2jc2sQlvcEwNWCxo3yaHftGG6HeJ4ARs9caivmXb/1jKpvjwsApfkxpsENPjzFxVHEdNj9/dJJuBLxDwDB/I6RFwCaGp8zxbpBRx49jgZYdtAKoVR8l3nACwBtPb65nJMGbUGnZW2p+Je4cbjLNyUvAJKpPtbI3SGzvVvaMrYllYrvYuqbAShcJ0m8UgL19ZaMb54HPADM0VPL+r/UI6IHUDJ+tl/dN84DwALBpJeqxkbBoC+L0SX5xdLo4ucl45tf7vIAwLeZ9zRKjOThaucUF187ZOKGjn+PmfUpVZaKv8L8tZ/SkId5TQC6dzIJYJuT6VzICkDzVttTh2N6u84KgAdSH566wkL/TMfTVgAek+TU+Zle7soG4LRJmrr4ffsH9xpSBy0ADhFcevtYqv+pfJ789nbfcQsALhM39S9FrYM6w3KUeiQnC4AlatsWA0YSNtugsQDYKgNGIpBr0GQBcDBgpP5M8fOseSAXgMWAmaK4mjZnGTS5ACwGjKYzU8yTZdDkArAYMFMUV9PmLIMmGYCDAaPpzFTzJBs0OQDmUMdiwExVXE27kw2aHAALtMRiwGg6MtU8yQZNDgAPA2aqAkvtTjZokgCEASPpf/95kkGTCiCe/zKDJIMmFUAYMDKAJIMmFUAYMDKAJINGDSAMGFn5tRxqgyYFQBjwegbqg7kUAKeoPwwYHQS1QZMCYIm6w4DRAVAbNCkAwoDRiX+fS2vQqACEAZOg/P+sqnlACyCe/+kMVPOAFkAYMOkAVAaNFkAYMOkAVAaNCCAMmHTl10qIBo0GQBjw+QxEo14DYIH6w4DJgyAaNBoAYcDkic9SokGjARAbsHwA4oYsABjE1RSVdsQBQKOiIY8HgBXqf2FowzYXHfyeil4UzQgIGzL/FhLtSQ2APdS/7f+KmotAfENCBMCasRuOw7h0BH6HcR2E2JDpIYgbMPUcsF4nRkLMBzIE8bm/HkL1CHoAgXMCz4f4PQ5hUf4T5woXv4+C367LVaM6JQNQR46MKgUCgEqmcpkCQDltVZEDgEqmcpkCQDltVZEDgEqmcpkCQDltVZEDgEqmcpn+Av8OFn+B3+82AAAAAElFTkSuQmCC">
+				</a>
+				<a class="box" href="{% url 'liste_livreur' %}" style="background: #00aeef;">
+					<span>Livreurs</span>
+                    <p><h4>{{ nbrLivreurs }}</h4></p>
+                    <img class="icon icons8-Scooter" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAC20lEQVRoQ+1XgVHDMAwkEwATUCYAJgAmACagnQA2oGwAExAmgA0oEwAT0E4ATFD+i8IJx3Zk0zbtXXznSwqypNfLklJsrPkq1tz/jQ5A2wx2DHQM/DMCXQr9J4DT6XQf53ew+exhn2JvYb8WRXFg0b00BuAsHTxXztLp4AIAk28mIUskmmQA4EOi2yQ6+/8qAriUFBnhORYmLgTNRP1tE+9vABBlqIrC0hhwww5GmOsEQoc/sY/h9KuJHiXUGgD6ABB9PO7EH4I5AAiCMa+2AWgW6PQ1AAzN3kOwVQDCQoknq1O1dgGCbJhWEADoPRJ6eyZNP/k8gPGRUX4mJr3gRZ25h46+VUcMwDuUWJ2v7I1hfNdqvJIDCIJnQ0tmIQZgmuoI5a31W+sGgBK/dRqZWVgVABwhHpyAme5C65dY7sERnk8OABMLKwFAQLgpy35AFqJ9wQsAOemj1HIlJjCYevFZidgPOCu5i1WN9yO4QgByKhCN3MIgZ56kFQnYM/QxvewAnPae5AiEz2DwMfUQbDL/Q45S3yP03vv01hiAMh44SXVC5DmQjVLOwh5nob7hzFgC9Gfg8wFImtsdw+ZZRj5w6Hw0RRz9tUbpA8BbzxE3d5U4WIKJZ61ARgbqpcMsEk3z/hdTB5uMMvpcn+7I7QMwhOBVrvcLOEcALA7euxUrozc4qOeTBfhWU8moh9j3pmfTNOp2x0WCYJXR85DPVq1IxADoasR87mP3sMnMnmhnxHRVYF6n3h9+D1M3+0dV/Sp7NFNiH4q9Wl+IAdDVaLtq6VI92OhmK2f69IUWevUo8TvINdmzTqPLBmC2FwMwUtTxfSCR07W7sdX7oh1gIMteDIBloEvuvCFAxgHSfolpyPOlpO2bu24CC7ywoUqUVkYroxIZVojfSoD3YerMkwCCzJvtrcwHjRWgK9cByI3cvM51DMwrkrl6OgZyIzevcx0D84pkrp61Z+AbEx8SQNj4zbUAAAAASUVORK5CYII=">
+				</a>
+                <a class="box" href="{% url 'liste_entite' %}" style="background: #640f6c;">
+					<span>Restaurant</span>
+                    <p><h4>{{ nbrEntite }}</h4></p>
+					<img class="icon icons8-Restaurant-Building" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACeUlEQVRoQ+2ZgVHDMAxFmwlgAxgBJqBMAExAuwFswAaUCWg3YAPoBHQDwgYwQfjinJ7j2LHlSO71Lr7zpZc48n+SbJlQzY68VUeufzYBHDqCKhFomuYCYPfotwbwDddNVVU7aWAxAEf0eUBojfuiMKMAEkWHnC4CwwYYKVocJgkgQ/S3SZW1Ubww6+EsYQ2wIhMEGCM6tFiNTVGYHgAmeTbeCi1E24l7T3N3mFwYzPNoC/ABNJEwZ4sO2eXAAKCjORVAXHQuTA7AJTc9EhZq0hATmc9OynAj4BKTMRh+wqXGs3aXSRJk3m0rdFulqTqvYGvjM4K5OinNjoD7AuzR4iavnKLf4TlV1mgz3nzFQDpm+NoatpbuAw0AEnxjJvrB9TqWYg70EOzSjaoGwBcUUBTaFoWACIpYyPM20BYAc/uGBkCNCdyKGoSAgAXGU+qktCIAdgrZorwQAHjHoI5XB0iKAFD60M5x4hHSg3BTIBIG+puBIrZv4ilEliNp0YFgAvRqjgoABwICCMgXLTcYL/D+g3tTDSAVAuNW6Ffc1GnHqwIkQlDBG2pezxcDSICgIb/oa3SqBRSNLXp7hKiH6NQjYHlqgd+h/T5a7EIQxQACkaBjeFv0siCKAjgQ/3s6BFDq0AmUGhuiGICpDTM6jOH3HNcPK72yIYoAOIWtd6I0kcmCUAfwVGUvQC6EKgBHfG46qQHkiM+BUAEYI54LIQ4gIZ4DoQ0QXLBDxwP7mVMneucicQCzm9Cxlz6rJH2RiMEYCKohdBzpNBWAmCDJ5xOApDclbLG/zElMKmljApD0Zo6taARyjB7ynaR/8h1SYGzuCSDmIe3nf+aVMk8VyHRwAAAAAElFTkSuQmCC">
+				</a>
+				<a class="box height2" href="#" style="background: #f58d00;">
+					<span>Montant</span>
+                    <p><h4  id="newMtn">{{ motantTotal }} Fcfa</h4></p>
+                    <img class="icon icons8-Money-Bag-Euro" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADLUlEQVRoQ+2YjXETMRBG7QqACnA6CBXgVABUgFMBSQWYCkgqwKkgoQLsCkIHmApIKjDfY3RwlqXT6sdmPJObubETS6vv7a6klcajI3/GR65/9ATwvyPYNAKbzea5gL7pPdW71vtpPB4v9gnZGgDxU08wAIAANBIkcA/d37VwzQAkbCYxXzIEnbeITjGABL+V2Dd6J0607/kUy7UALlKNUr/XAPyScXK+9DkTwLK0c9evBoDcfl8oYCXxuRELDlUDQOr8KAR4J4C7wr5b3YoBsKJ5MNfHx0whjxJfk3pNARCy1vssA6LJ5K2eA50BRYGV5HMGQLP0YcyqFOpBEIWXRogXSqEHY9tks1YArCjswslH4puM2SyFkor33KCpN/asNWi+CsBVn5QTTGSKNMvDfGEPuFM2rSwdhtoUA0g86z/Ca9Z0YOYCuSkFyQZw5TBVp9XjFm2AXJbszlkABSWzRXy/zZUgLnM6mQEk/oMMXxmNX6vdQmK+99sbHUAfKlXTXmECyKh5HjX41BfeQbgzxK3BCWaIJEDGoOh6FRPPj7JFBImk5TFBDAK4CcsOa1lpdoo09adG4uQ20dulhMVWB7iUQ86GaFMAoUN6zN6W9zO9PaSR1Sk696IAxgn3d2C/xlH/2iNnHyqamkEAt8Ny2kqG21qcyebGkviRNtFUigHMZMh0RXIgALiClwAxALzPxDM/gRSq8Xho3GAUdgDcynNvVu4aHgCAkU78G70QQNYR8YApBMC5xlv0nRsCWKrBa2sEDgzwVeOxr/xb/XyhSiHSJ7vSDKQQG1fObYXFZyuNM00BlE4+fyOba6DcO6MkhO+oUAqVei5USgAx08uNBYUeT01Udi7FqueA57KWxVwoGqYUqgk90WPD2ToHdEoyK9sQwI1sE9HBSVxyXegPttA/SCn/QMNtNr+VPKTgaXIfwLI8NdUHNwc1+VoicqhPsCodqkYnzlvmPaG1YmcPz1/4G1g3luVExp7A7kxUrPefLVh+ygjnAO6P1jGDSYB+R6UWUQGIl7nS3/D4nptyeLebJywAfP/zDonua8oCaOHW1jaeAFp7NNfe0UfgN2FBK0BgTkEfAAAAAElFTkSuQmCC">
+
+				</a>
+
+				<a class="box height2" href="#" style="background: #d32c2c;margin-right: 15px;">
+					<span>Utilisateurs</span>
+                    <p><h4  id="newNbrUser">{{ nbrUsers }}</h4></p>
+					<img class="icon icons8-User-Groups" width="48" height="48" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACN0lEQVRoQ+1YgU3DQAwkEwAblA3oBmwAG1AmoGwAE8AGlA1gAzagI5QJKBOEu+qDXq+ktt+fQNS8hCoUv+3zvc+fVEcjX9XI8z+aAPw1gxMDEwPOChz2EarreoYCPuLvPBRyjd+7qqo2bYW12mvIyWYgJPOBICdJoC3+n6cgrPaa5GnjAfCK/Zcdgd4A4Cp+BgAm+yEAfLVUv4m7AYCzBIDJfggAPCrHHYE+AYD98bvAgMl+CACmI/EfjxArTNVJWfimKnU0sdq+dwYYICjLExMOAZngUpBRtb0GRLYKaZwPYXMYAPqYoIlCsZ/UEz3eKzLQ1wRtkvD61wAwyaX13HvlVQOglwkaMeDyrwHQywSNALj8awCM/giZJm404FSqEpo4e0KLDFgnbo6qWCe6SUaHVhVrPBUDFqeopktVLLFoKwJAQhewuw4XtvjSxnP7govbezJVTapi9Z8C7AQAx3zXZSMuhKqs8Jwv8kycN1SVauX6twDgC3tTcYnZNQDMo4YXVQUAsvyrAMA57+y3UtbJ8weAuNeolte/qEIIUBuT35kDgNhTAWAx/60BRw8gp/qhsmx8fiviNyH2zyz42uCXfcEG5zejXcOXWCrKNYHA2gJ2VC2C2LeYPFVrpfEr2RQBgOSfEYgALGsFEDeWDW22bgBIfhkqn5MLmaDiZa8SAPZdHaTEtgBwKhnte14CQJYkNklppbcLhBuAp3ol9k4ASlTR42NiwFO9EnsnBkpU0eNj9Az8AEiVO0DY4cPbAAAAAElFTkSuQmCC">
+
+				</a>
+				<!--a class="box" href="#" style="background: #3c5b9b;">
+					<span>Facebook</span>
+					<img class="icon" src="images/facebook.png" alt="" />
+				</a>
+				<a class="box" href="#" style="background: #ffc808;">
+					<span>Winamp</span>
+					<img class="icon" src="images/winamp.png" alt="" />
+				</a>
+				<a class="box" href="#" style="background: #00a9ec;">
+					<span>Tasks</span>
+					<img class="icon" src="images/tasks.png" alt="" />
+				</a>
+				<a class="box height2" href="#" style="background: #4c5e51;">
+					<span>DeviantART</span>
+					<img class="icon big" src="images/deviantart.png" alt="" />
+				</a>
+				<a class="box" href="#" style="background: #f874a4;">
+					<span>Dribbble</span>
+					<img class="icon" src="images/dribbble.png" alt="" />
+				</a-->
+			</div>
+		</div>
+	</div>
+<script>
+    var csrftoken= getCookie('csrftoken');
+       setInterval(function () {
+        $.ajax({
+                        //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                        url :"{% url 'update_home_admin'%}",
+                        type : "POST", // http method
+                        timeout:100000,
+                        beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                        success : function(json)
+                        {
+                            var res=JSON.parse(String(json));
+                            $("#newCmd").text(res.commandes);
+                            $("#newUsers").text(res.user);
+                            $("#newPhone").text(res.terminal);
+                            $("#newMtn").text(res.montant);
+                        },
+                        error :
+                            function(xhr,errmsg,err)
+                            {
+                                //console.log(xhr);
+                            }
+                    });
+      /* if(tmp>nbrCommande)
+       {
+           $("#nbrCommande").text(tmp);
+       }
+       if(tmp1>montant)
+       {
+           $("#montant").text(tmp1);
+       }*/
+       //alert("good");
+   },5000);
+       function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+          }
+</script>
+</body>
+</html>

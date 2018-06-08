@@ -1,0 +1,119 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'senfood_css/categorie/listeCategorie.css'%}" rel="stylesheet">
+{% endblock %}
+
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li  style="background-color: gold"><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li  ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag" hidden  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" ></div>
+    {% endif %}
+     <div class="row" style="z-index: 444444;position: fixed;width: 100%;background: lightgoldenrodyellow;height: 150px;">
+     <div style="position: fixed;z-index: 2;background-color: white;border:solid 1px gold ;height: 125px;" class="container">
+         <div  style="">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <a href="{% url 'profilEntite' entite.idEntit %}" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a>
+                     &nbsp;<img class="img-circle" src="{{entite.logoEntite }}" width="60" height="60" >
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">{{ entite.nomEntite }}/Menu</h5>
+         </div>
+          <div class="right" style="">
+           <a href="{% url 'creer_produit' idEntite %}" title="Ajouter" class="text-rigth"><i class="fa fa-plus-circle fa-3x" style="color: gold"></i></a>
+        </div>
+     </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 150px" >
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <table id="tableau_cat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead >
+                <tr>
+                    <th>IMAGES</th>
+                    <th>LIBELLE</th>
+                    <th>DESCRIPTION</th>
+                    <th>CATEGORIE</th>
+                    <th>DATE DE CREATION</th>
+                    <th>PRIX</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for produit in users %}
+                <tr>
+                    <td><img src="{{ produit.logoProduit.saveName  }}" width="60" class="" height="60"></td>
+                    <td style="padding-top: 30px">{{ produit.nomProduit }}</td>
+                    <td style="padding-top: 30px">{{ produit.descriptProduit }}</td>
+                    <td style="padding-top: 30px">{{ produit.categorie.libelleCat }}</td>
+                    <td style="padding-top: 30px">{{ produit.dateCreation }}</td>
+                    <td style="padding-top: 30px">{{ produit.prixProduit|add:" Fcfa" }}</td>
+                    <td style="padding-top: 30px">
+                        <a href="{% url 'modifier_produit' produit.idProduit %}" title="Modifier"><i class="fa fa-edit fa-2x"></i></a>
+                        <a href="{% url 'supprimer_produit' produit.idProduit %}" title="Supprmier" style="color: red;"><i class="fa fa-trash fa-2x"></i></a>
+                        {% if produit.estDesactiver == 0 %}
+                            <a href="{% url 'desactiver_produit' produit.idProduit %}" title="Désactiver" style="color: yellow;"><i class="fa fa-stop fa-2x"></i></a>
+                        {% else %}
+                             <a href="{% url 'activer_produit' produit.idProduit %}" title="Activer" style="color: green;"><i class="fa fa-play fa-2x"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+                <div class="pagination">
+    <span class="step-links">
+        {% if users.has_previous %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" href="?page={{ users.previous_page_number }}">Prec</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ users.number }} / {{ users.paginator.num_pages }}.
+        </span>
+
+        {% if users.has_next %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" class="" href="?page={{ users.next_page_number }}">Suiv</a>
+        {% endif %}
+    </span>
+</div>
+        </div>
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+
+                }
+         );
+    </script>
+
+{% endblock %}

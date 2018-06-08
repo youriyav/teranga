@@ -1,0 +1,72 @@
+{% extends 'layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+    Inscription
+{% endblock %}
+{% block bloc_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'client/css/login.css' %}">
+{% endblock %}
+{% block main_bloc %}
+
+
+
+    <div id="login_client_main"  class="col-md-6 col-md-offset-3 col-sm-10 col-xs-12">
+        <div id="login_content" class="row">
+            <div  class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+
+                    <p class="text-center" style="color: red;"><i class="fa fa-remove fa-4x"></i></p>
+                    <h2 class="text-center">Désolé {{ validation.client.personne.nomPersonne }} </h2>
+                    <p class="p_perso" >&nbsp;Votre code d'activation est déjà expiré. Pour recevoir à nouveau un code d'activation, veuillez cliquez sur le boutton ci-dessous </p>
+                    <form>
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ validation.keyValidation }}">
+                    </form>
+                    <p class="text-center"><button id="btn_regenerer"  style="background-color: gold;color: black;"   class="btn">Continuer</button></p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog" style="z-index:999999999999999;margin-top: 70px;border-radius:0px 0px  10px 10px;">
+
+            <div class="modal-dialog">
+                    <div class="col-md-8 col-xs-10 col-md-offset-2 col-xs-offset-1">
+                        <div class="modal-content" style="border: solid gold;">
+                        <div class="modal-header" style="background-color: gold">
+                            <button type="button" class="close" data-dismiss="modal" hidden>&times;</button>
+                            <h4 class="text-center"  style="color: white;"> Régénération Code de validation</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div  class="row">
+                                <p id="dialog_text" class="text-center">régénération du nouveau code en cours ...</p>
+                                <p id="img_loading" class="col-lg-8 col-lg-offset-2 text-center"><img src="{% static 'refr.gif' %}" width="50"></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+                    <!-- Modal content recompense-->
+
+                </div>
+        </div>
+{% endblock %}
+{% block nav_gauche %}
+                <li class="" ><a href=""></a></li>
+                <li ><a href="{% url 'main_acceuil' %}">Acceuil</a></li>
+                {% if request.user.is_authenticated %}
+                   <li ><a href="" class="img_my_basket"  data-toggle="modal" data-target="#block_mon_panier"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mon Panier</a></li>
+                   <li ><a href=""><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mes Commandes</a></li>
+                   <li ><a href=""><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mes Points de fidélités</a></li>
+                {% else %}
+                   <li ><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                   <li class="my_active"><a href=""><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                {% endif %}
+            {% endblock %}
+{% block bloc_script %}
+    <script>
+        $(function () {
+           $("#btn_regenerer").click(function (e) {
+               e.preventDefault();
+               $("#myModal").modal('toggle');
+           });
+        });
+    </script>
+{% endblock %}

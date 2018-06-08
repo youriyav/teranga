@@ -1,0 +1,103 @@
+{% extends 'layout_manager_admin.html' %}
+{% load static %}
+{% block nom_user %}
+Bienvenue {{ utilisateur.personne.nomPersonne }} {{ utilisateur.personne.prenomPersonne }}
+{% endblock %}
+{% block main_bloc %}
+    <div class="row">
+     <div style="position: fixed;z-index: 2;background-color: white;" class="container">
+         <div  style="border:solid 1px gold ;height: 90px;">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <!--a href="" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a-->
+                     &nbsp;<img class="img-circle" src="{{ utilisateur.entite.logoEntite }}" width="60" height="60" >
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">{{ utilisateur.entite.nomEntite }}</h5>
+         </div>
+     </div>
+    </div>
+    <div class="row" style="margin-top: 110px">
+         <!--div class="col-sm-4 col-md-4" >
+            <div class="thumbnail tile tile-medium tile-green text-center" style="height: 150px;">
+                <img src="{{ utilisateur.entite.logoEntite }}" width="150" height="150">
+                <p style="color: black" class="text-left">{{ utilisateur.entite.nomEntite }}</p>
+            </div>
+
+     </div-->
+    <div class="col-sm-3 col-md-3" >
+        <!--a href="#"-->
+            <div class="thumbnail tile tile-medium tile-green text-center" style="height: 150px;background-color: #f4f441;">
+                <h1 style=""><span id="nbrCommande">{{ nbrCommande }}</span></h1>
+                <i style="color: white" class="fa fa-3x fa-shopping-bag">
+                <span style="font-weight: bold;position: relative;top: 8px;left: -13px;">+</span></i>
+                <p style="font-size: 1.2em" class="text-left">commande(s)</p>
+            </div>
+        <!--/a-->
+     </div>
+    <div class="col-sm-3 col-md-3" >
+        <!--a href="#"-->
+            <div class="thumbnail tile tile-medium tile-green text-center" style="height: 150px;background-color: #42f483;">
+                <h1 style=""><span id="montant">{{ montant }}</span> Fcfa</h1>
+                <i style="color: white" class="fa fa-3x fa-money"></i>
+                <p style="font-size: 1.2em" class="text-left">Montant</p>
+            </div>
+        <!--/a-->
+     </div>
+    </div>
+
+{% endblock %}
+{% block block_js %}
+
+<script>
+function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+          }
+$(function () {
+    var nbrCommande={{ nbrCommande }}
+    var montant={{ montant }}
+    var csrftoken= getCookie('csrftoken');
+   setInterval(function () {
+        $.ajax({
+                        //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                        url :"{% url 'update_home_managerAdmin_fast'%}",
+                        type : "POST", // http method
+                        timeout:100000,
+                        beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                        success : function(json)
+                        {
+                            var res=JSON.parse(String(json));
+                            $("#nbrCommande").text(res.commandes);
+                            $("#montant").text(res.montant);
+                        },
+                        error :
+                            function(xhr,errmsg,err)
+                            {
+                                //console.log(xhr);
+                            }
+                    });
+      /* if(tmp>nbrCommande)
+       {
+           $("#nbrCommande").text(tmp);
+       }
+       if(tmp1>montant)
+       {
+           $("#montant").text(tmp1);
+       }*/
+       //alert("good");
+   },5000);
+});
+</script>
+        {% endblock %}

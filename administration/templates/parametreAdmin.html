@@ -1,0 +1,324 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+Parametres
+{% endblock %}
+{% block block_css %}
+<!--link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap.min.css' %} " /-->
+    <link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap-timepicker.min.css'%}" />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <style>
+        .myAction:hover
+        {
+            color: gold;
+        }
+    </style>
+{% endblock %}
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                        <li><a style="color: black" href="{% url 'liste_image' %}"><i style="margin-right: 10px;" class="fa fa-image"></i> Images</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+<div class="row">
+
+    <div class="col l2" >
+        <div class="panel panel-default" style="height: 210px;">
+          <div class="panel-heading text-center">ETAT</div>
+          <div class="panel-body">
+
+              <div class="row" >
+                  <label class="checkbox-inline">
+                      <input id="toggle-event" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+                    </label>
+              </div>
+          </div>
+           <div class="text-right" style="" >
+               <img src="{% static 'gold-bras.gif' %}" width="40" style="position: relative;top: -8px;" hidden class="img_loader">
+               <i id="btnSaveState" title="sauver" class="fa fa-save fa-2x myAction" style="cursor: pointer;margin-right: 10px" ></i>
+               <i id="btnAnnulerState" title="annuler" class="fa fa-history fa-2x myAction" style="cursor: pointer;margin-right: 10px;margin-bottom: 10px;" ></i>
+               <!--i id="btnResState" title="Restaurer" class="fa fa-undo fa-2x myAction" style="cursor: pointer;margin-right: 10px;margin-bottom: 10px;" ></i-->
+
+           </div>
+        </div>
+    </div>
+
+    <div class="col l4">
+        <div class="panel panel-default" style="height: 210px;">
+          <div class="panel-heading text-center">HORAIRES</div>
+          <div class="panel-body">
+              <div class="form-group col l6" >
+                  <label>Debut</label>
+                  <div class="input-group bootstrap-timepicker timepicker">
+                    <!--input id="timepicker1" type="text" class="form-control input-small"-->
+                      <select id="startTime"  class="form-control input-small"></select>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+              </div>
+              <div class="form-group col l6">
+                  <label>Fin</label>
+                  <div class="input-group bootstrap-timepicker timepicker">
+                     <select id="endTime"  class="form-control input-small"></select>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+              </div>
+
+          </div>
+           <div class="text-right" style="" >
+               <img src="{% static 'gold-bras.gif' %}" width="40" style="position: relative;top: -8px;" hidden class="img_loader">
+               <i id="btnSaveHeure" title="sauver" class="fa fa-save fa-2x myAction" style="cursor: pointer;margin-right: 10px" ></i>
+               <i id="btnAnnulerHeure" title="annuler" class="fa fa-history fa-2x myAction" style="cursor: pointer;margin-right: 10px;margin-bottom: 10px;" ></i>
+           </div>
+        </div>
+    </div>
+
+
+
+    <div class="col l3" >
+        <div class="panel panel-default" style="height: 210px;">
+          <div class="panel-heading text-center">VERSION-BASE</div>
+          <div class="panel-body">
+
+              <div class="row" >
+
+                  <p class="text-center"><span style="color: black;font-size: 1.6em;font-weight: bold;margin-right: 20px;position: relative;top: 4px;" id="versionDb">{{ version_db }}</span><a title="Incrementer" class="btn-flat rigth" id="btn_plus" style="color: black;background-color: gold"><i class="fa fa-plus-circle fa-5x"></i></a></p>
+              </div>
+          </div>
+           <div class="text-right" style="" >
+               <img src="{% static 'gold-bras.gif' %}" width="40" style="position: relative;top: -8px;" hidden class="img_loader">
+               <i id="btnSaveVersionDb" title="sauver" class="fa fa-save fa-2x myAction" style="cursor: pointer;margin-right: 10px" ></i>
+               <i id="btnAnnulerVersionDb" title="annuler" class="fa fa-history fa-2x myAction" style="cursor: pointer;margin-right: 10px;margin-bottom: 10px;" ></i>
+               <i id="btnResVersionDb" title="Restaurer" class="fa fa-undo fa-2x myAction" style="cursor: pointer;margin-right: 10px;margin-bottom: 10px;" ></i>
+
+           </div>
+        </div>
+    </div>
+
+
+
+</div>
+ <!-- modal  position-->
+        <div class="modal fade l8" id="modalConf" role="dialog" style="width: 300px;height: 170px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="" >
+                <p class="text-center">êtes vous sûre de vouloir continuer cette action</p>
+                <p class="text-center" style="margin-top: 15px;"><button class="   " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnContinuer"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Continuer</button></p>
+            </div>
+        </div>
+    <!-- end modal  position-->
+
+
+{% endblock %}
+{% block block_js %}
+    <script type="text/javascript" src="{% static 'myTemplate/js/materialize.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-timepicker/js/bootstrap-timepicker.min.js' %} "></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+    var action=0;
+    var click=0;
+    var state;
+    $(function () {
+        if("{{ state }}"=="0")
+            {
+                $('#toggle-event').bootstrapToggle('off');
+            }
+            else
+            {
+                $('#toggle-event').bootstrapToggle('on');
+            }
+        $('#toggle-event').change(function() {
+         //alert($(this)$('#toggle-event').prop('checked'));
+        });
+        $("#btnAnnulerState").click(function () {
+            if("{{ state }}"=="0")
+            {
+                $('#toggle-event').bootstrapToggle('off');
+            }
+            else
+            {
+                $('#toggle-event').bootstrapToggle('on');
+            }
+        });
+         $("#btnSaveState").click(function () {
+            action=4;
+            if($('#toggle-event').prop('checked')==true)
+            {
+                state="1";
+            }
+            else
+            {
+                state="0";
+            }
+            $('#modalConf').modal('show');
+        });
+        $("#btnSaveVersionDb").click(function () {
+            action=3;
+            $('#modalConf').modal('show');
+        });
+        $("#btnResVersionDb").click(function () {
+            action=2;
+            $('#modalConf').modal('show');
+        });
+        $("#btnAnnulerVersionDb").click(function () {
+             $("#versionDb").text("{{ version_db }}");
+                $("#btn_plus").css("backgroundColor","gold");
+                click=0;
+        });
+        $("#btn_plus").click(function () {
+            if(click==0)
+            {
+                nbrVersion=parseInt($("#versionDb").text());
+                nbrVersion++;
+                $("#versionDb").text(nbrVersion);
+                $(this).css("backgroundColor","gray");
+                click++;
+            }
+        });
+        $("#btnContinuer").click(function () {
+            if(action==1)
+            {
+               $('#modalConf').modal('hide');
+                debut=$("#startTime").val();
+                fin=$("#endTime").val();
+                $(this).prop("disabled",true);
+                updateParam("heure_debut",debut);
+                updateParam("heure_fin",fin);
+                $(this).prop("disabled",false);
+            }
+            if(action==2)
+            {
+                 $('#modalConf').modal('hide');
+                 $("#versionDb").text("1");
+                  updateParam("version","1");
+            }
+            if(action==3)
+            {
+                 $('#modalConf').modal('hide');
+                  updateParam("version",$("#versionDb").text());
+            }
+            if(action==4)
+            {
+                 $('#modalConf').modal('hide');
+                  updateParam("state",state);
+            }
+
+
+        });
+        $("#btnSaveHeure").click(function () {
+            action=1;
+            $('#modalConf').modal('show');
+            //Materialize.toast('<span>votre livreur est à proximité <br>Veuillez sortir pour récuperer votre commande</span>', 5000);
+
+        });
+        $("#btnAnnulerHeure").click(function () {
+            //$("#startTime option").eq(5).prop("selected","selected");
+            for (i=0;i<24;i++)
+            {
+                if($("#startTime option").eq(i).val()=="{{ heure_debut }}")
+                {
+                    $("#startTime option").eq(i).prop("selected","selected");
+                }
+            }
+            for (i=0;i<24;i++)
+            {
+                if($("#endTime option").eq(i).val()=="{{ heure_fin}}")
+                {
+                    $("#endTime option").eq(i).prop("selected","selected");
+                }
+            }
+            //alert($("#startTime").children().size());
+        });
+       for(i=0;i<24;i++)
+       {
+           tmp="";
+           if(i<10)
+           {
+               tmp="0"+i+":00";
+           }
+           else
+           {
+               tmp=i+":00";
+           }
+           if(i=="{{ heure_debut }}")
+           {
+               $("#startTime").append("<option value="+i+" selected>"+tmp+"</option>");
+           }
+           else
+           {
+               $("#startTime").append("<option value="+i+">"+tmp+"</option>");
+           }
+
+       }
+        for(j=0;j<24;j++)
+       {
+           tmp="";
+           if(j<10)
+           {
+               tmp="0"+j+":00";
+           }
+           else
+           {
+               tmp=j+":00";
+           }
+           if(j=="{{ heure_fin }}")
+           {
+               $("#endTime").append("<option value="+j+" selected>"+tmp+"</option>");
+           }
+           else
+           {
+               $("#endTime").append("<option value="+j+">"+tmp+"</option>");
+           }
+
+       }
+    });
+    function updateParam(ukey,uvalue)
+    {
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            url :"{% url 'update_Param' %}",
+            type : "POST", // http method
+            timeout:100000,
+            data: {key:ukey,value:uvalue},
+            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+            success :
+                function(json)
+                {
+                    Materialize.toast('<span> '+ukey+' a été mis à jour</span>', 5000);
+                },
+            error :
+                function(xhr,errmsg,err)
+                {
+                          return false;
+                }
+        });
+    }
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            //console.log("yangala"+cookieValue);
+            return cookieValue;
+          }
+    </script>
+{% endblock %}

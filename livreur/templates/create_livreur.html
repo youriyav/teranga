@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block titre_page %}
+    Liste-entité
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+    <link href="{% static 'entite/creation.css'%}" rel="stylesheet">
+    <!--link rel="stylesheet" href="assets/fonts/font-awesome-4.5.0/css/font-awesome.min.css"-->
+{% endblock %}
+
+{% block nav_gauche_admin %}
+                        <li ><a href="{% url 'home_administrator' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li ><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li ><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                        <li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li>
+                        <li><a href="{% url 'liste_client'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Clients</a></li>
+                        <li class="active"><a href="{% url 'liste_livreur' %}"><i class="fa fa-motorcycle"></i>Livreurs</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+<form enctype="multipart/form-data" class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 creation_form" method="post" action="{% url 'create_livreur' %}" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" class="form-control" name="nom" value="{{ nom }}">
+            <p class="input_error">{{ errer_nom }}</p>
+        </div>
+        <div class="form-group">
+            <label>Prenom</label>
+            <input type="text" class="form-control" name="prenom" value="{{ prenom }}">
+            <p class="input_error">{{ errer_prenom}}</p>
+        </div>
+        <div class="form-group">
+            <label>Numero</label>
+            <input type="text" class="form-control" name="numero" value="{{ numero }}" placeholder="779399425">
+            <p class="input_error">{{ errer_numero }}</p>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" class="" name="save_and" value="1">
+                Enregistrer et Nouveau
+            </label>
+        </div>
+        <div class="form-group">
+           <button class="btn btn-danger col-md-5" href="{% url 'liste_entite' %}"type="reset">Annuler</button>
+           <button class="btn btn-primary col-md-5 col-md-offset-2" type="submit">Enregister</button>
+        </div>
+    </form>
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="border: solid #1bc656;z-index: 1000;color: white;border-radius:10px;background-color:#1fbda5;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag"  style="border: solid #1bc656;z-index: 1000;color: white;border-radius:10px;background-color:#1fbda5;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" hidden></div>
+ {% endif %}
+
+
+{% endblock %}
+{% block titre_module %}
+NOUVEAU-LIVREUR
+{% endblock %}
+
+{% block block_js %}
+    <script src="{% static 'senfood_js/dialog.js'%}"></script>
+    <script>
+        var selectedEntite;
+         $(document).ready(
+             function ()
+                {
+                    $('#flashbag').fadeOut(5000);
+                    /*debut dialogue */
+                    $('a[data-toggle=modal]').click(function () {
+                        $("#dialog_text").html($(this).attr("data-confirm"));
+                        selectedEntite=$(this);
+                    });
+                    $("#btn_dialog").click(function () {
+                        handleDialog(selectedEntite,$("#myModal"),"{% url 'supprimer_Entite' %}");
+                    });
+                    /*fin dialogue */
+                }
+         );
+    </script>
+
+{% endblock %}

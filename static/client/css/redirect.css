@@ -1,0 +1,10 @@
+#main_block
+{
+    border: solid;
+    border-radius: 15px;
+}
+.p_perso
+{
+    font-size: 1.3em;
+    text-align: justify;
+}

@@ -1,0 +1,63 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    Liste-utilisateur
+{% endblock %}
+{% block block_css %}
+<link href="{% static 'utilisateur/liste_user.css'%}" rel="stylesheet">
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+PROFIL-UTILISATEUR
+    <a href="{% url 'nouveau_user' %}" title="Nouveau utilisateur" class="pull-right"><i class="fa fa-plus-circle fa-1x"></i></a>
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li ><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li  ><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+    <div class="col-lg-6 col-lg-offset-3">
+    {% if user.is_superuser == 1 %}
+        <table class="table table-bordered">
+            <tr>
+                <th class="text-center">Login </th> <td  class="text-center">{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th  class="text-center">Rôle </th> <td  class="text-center">Super-Admin</td>
+            </tr>
+        </table>
+        {% else %}
+             <table class="table ">
+             <a  href="{% url 'editer_user' user.utilisateur.idUtilisateur %}" title="modifier" class="pull-right"><i class="fa fa-edit fa-2x"></i></a>
+            <tr>
+                <th class="text-center">Login </th> <td  class="text-center">{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th class="text-center">Nom </th> <td  class="text-center">{{ user.utilisateur.personne.nomPersonne }}</td>
+            </tr>
+            <tr>
+                <th class="text-center">Nom </th> <td  class="text-center">{{ user.utilisateur.personne.prenomPersonne }}</td>
+            </tr>
+            <tr>
+                <th class="text-center">Numero </th> <td  class="text-center">{{ user.utilisateur.personne.numeroPersonne }}</td>
+            </tr>
+            <tr>
+                <th class="text-center">Email </th> <td  class="text-center">{{ user.utilisateur.personne.emailPersonne }}</td>
+            </tr>
+            <tr>
+                <th  class="text-center">Rôle </th> <td  class="text-center">Admin</td>
+            </tr>
+        </table>
+    {% endif %}
+
+    </div>
+{% endblock %}

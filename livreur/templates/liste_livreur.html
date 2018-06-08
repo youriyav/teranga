@@ -1,0 +1,107 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+Parametres
+{% endblock %}
+{% block block_css %}
+<!--link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap.min.css' %} " /-->
+    <link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap-timepicker.min.css'%}" />
+    <style>
+        .myAction:hover
+        {
+            color: gold;
+        }
+
+    </style>
+     <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+{% endblock %}
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+<table class="table">
+        <thead>
+        <tr>
+            <th>NOM</th>
+            <th>PRENOM</th>
+            <th>NUMERO</th>
+            <th>CODE</th>
+            <th>STATUT</th>
+            <th>LAST UPDATE</th>
+            <th>ACTION</th>
+        </tr>
+
+        </thead>
+        <tbody>
+            {% for livreur in listeLivreur %}
+                <tr id="{{ livreur.idLivreur }}">
+                    <td>{{ livreur.personne.nomPersonne }}</td>
+                    <td>{{ livreur.personne.prenomPersonne }}</td>
+                    <td>{{ livreur.personne.numeroPersonne }}</td>
+                    <td>{{ livreur.code}}</td>
+                    <td>en ligne</td>
+                    <td>{{livreue.lastUpdate}}</td>
+                    <td>
+                        <a class="btn" title="Modifier" style="background-color: gold" href="{% url 'editer_livreur' livreur.idLivreur %}"><i class="fa fa-edit fa-2x"></i></a>
+                        {% if livreur.estActif %}
+                            <a  class="btn" title="Desactiver" style="background-color: gold" href="{% url 'desactiver_livreur' livreur.idLivreur %}"><i style="color: yellow" class="fa fa-stop fa-2x"></i></a>
+                            {% else %}
+                            <a style="background-color: gold"  class="btn" title="Activer"   href="{% url 'activer_livreur' livreur.idLivreur %}"><i style="color: green" class="fa fa-play fa-2x"></i></a>
+                        {% endif %}
+                        <a style="background-color: gold" class="btn my_delete" href="{% url 'supprimer_livreur' livreur.idLivreur %}"    title="supprimer"  data-confirm="Etes-vous certain de vouloir  supprimer le livreur <span style='color: black; font-size: 1.3em;' class='badge'>{{ livreur.personne.nomPersonne|add:" "|add:livreur.personne.prenomPersonne}}</span>?"><i style="color: red" class="fa fa-trash-o fa-2x"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="border: solid #1bc656;z-index: 1000;color: white;border-radius:10px;background-color:#1fbda5;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag"  style="border: solid #1bc656;z-index: 1000;color: white;border-radius:10px;background-color:#1fbda5;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" hidden></div>
+ {% endif %}
+
+    <div class="modal fade" id="myModalLivreur" role="dialog" style="margin-top: 70px;border-radius:0px 0px  10px 10px;">
+            <div class="modal-dialog" >
+                <div class="modal-content" style=" border-radius:10px 10px 0px 0px;">
+                    <div class="modal-header"  style="background-color:#2aabd2; border-radius:10px 10px 0px 0px ; ">
+                        <h4 id="dialog_tile" class="text-center" style="color: white">{% block dialog_title %}
+                        Avertissement
+                        {% endblock %}</h4>
+                    </div>
+                    <div class="modal-body" id="c" style="color: black; font-size: 1.3em;text-align: center;" >
+                        <p id="dialog_text"></p>
+                    </div>
+                    <div class="modal-footer" id="dialog_footer">
+                        <button  type="button" class="btn btn-danger" data-dismiss="modal"> Annuler &nbsp;</button>
+                        <a href="" type="button" class="btn btn-primary" id="btn_dialog">Continuer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block block_js %}
+    <script type="text/javascript" src="{% static 'myTemplate/js/materialize.min.js'%}"></script>
+   <script>
+    $('#flashbag').fadeOut(5000);
+                    $(".my_delete").click(function (e) {
+                        e.preventDefault();
+                        $("#dialog_text").html($(this).attr("data-confirm"));
+                        $("#btn_dialog").attr("href",$(this).attr("href"));
+                        $("#myModalLivreur").modal('toggle');
+                    });
+   </script>
+{% endblock %}
+
+
+

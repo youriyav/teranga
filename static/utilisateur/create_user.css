@@ -1,0 +1,14 @@
+.input_error
+{
+    color: red;
+}
+#create_useruform
+{
+    background-color: #9acfea;
+    padding: 25px;
+    border-radius: 10px;
+}
+#btn_modif_img
+{
+    color: white;
+}

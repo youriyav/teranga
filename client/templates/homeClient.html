@@ -1,0 +1,56 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block bloc_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'client/css/homeClient.css' %}">
+{% endblock %}
+{% block main_block %}
+
+    <div class="row" style="padding: 20px;">
+    {% for entite in listeEntite %}
+        <a href="{% url 'home_fast_food' entite.idEntit  %}" class="entite_link">
+            <div class="col s12 m6 l4 xl3" >
+                <div class="card" style="border: solid 1px gold;height: 250px">
+                    <div class="card-content   black-text" style="height: 200px;padding: 0px;" >
+                        <h5 class="card-stats-title text-center " style="height: 60px;margin: 0px;padding-top: 10px;">{{ entite.nomEntite }}</h5>
+                        <p class="text-center" ><img class="img img-responsive"  src="{{ entite.logoEntite }}" style="margin: auto;height: 190px;width: 190px;"></p>
+                    </div>
+                    <div class="card-action  " style="height: 50px;">
+                       <p class=" center" style="color: gold">
+                           <i class="fa fa-star-o"></i>
+                       </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+    {% endfor %}
+    <a href="{% url 'home_fast_food' 0  %}" class="entite_link">
+            <div class="col s12 m6 l4 xl3" >
+                <div class="card" style="border: solid 1px gold;height: 250px">
+                    <div class="card-content   black-text" style="height: 200px;padding: 0px;" >
+                        <h5 class="card-stats-title text-center " style="height: 60px;margin: 0px;padding-top: 10px;">Autres</h5>
+                        <p class="text-center" ><img class="img img-responsive"  src="{% static 'man-think.png' %}" style="margin: auto;height: 100px;width: 100px;"></p>
+                    </div>
+                    <div class="card-action  " style="height: 50px;">
+                       <p class=" center" style="color: gold">
+                           
+                       </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+{% endblock %}
+{% block bloc_script %}
+     <script>
+        $(function () {
+
+           $(".entite_link").hover(function (e) {
+               e.stopPropagation();
+               //$(this).find(".entite_title").css();
+               $(this).find(".entite_title").css({textDecoration:"underline"});
+           },function () {
+                $(this).find(".entite_title").css({textDecoration:"none"});
+           });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+tr th,tr td
+{
+    text-align: center;
+    font-size: 1.1em;
+}
+
+tr th
+{
+    color: white;
+    background-color: gold;
+}
+.not_img
+{
+  color: red;
+    padding-top: 50px;
+}

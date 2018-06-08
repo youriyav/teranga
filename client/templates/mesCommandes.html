@@ -1,0 +1,330 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+        {{ entite.nomEntite }}
+    {% endblock %}
+    {% block bloc_css %}
+        <style>
+            td{
+                font-size: 1.1em;
+                padding: 10px;
+            }
+        .my_th{
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #ffd700;
+        }
+
+        </style>
+    {% endblock %}
+{% block nav_gauche %}
+                                <li  ><a href="{% url 'main_acceuil' %}"><i class="fa fa-home"></i>Acceuil</a></li>
+                                {% if request.user.is_authenticated %}
+                                   <!--li ><a  class="img_my_basket"><i style="position: relative;top: 5px;left: -2px;" class="material-icons">shopping_cart</i> Mon Panier</a></li-->
+                                   <li class="my_active"><a href="{% url 'mes_commandes' %}"><i  class="material-icons">shopping_basket</i> Mes Commandes <span id="nbr_commande_client" class="badge"style="color: gold">{{nbrCommande }}</span></a></li>
+                                   <!--li ><a href=""><i  class="fa fa-gift"></i> Mes Cadeaux</a></li-->
+                                {% else %}
+                                   <li ><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                                   <li ><a href="{% url 'inscription' %}"><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                                {% endif %}
+                            {% endblock %}
+{% block titre_page_h %}
+<h1>Mes commandes</h1>
+{% endblock %}
+{% block main_block %}
+<div class="row" style="padding: 20px;">
+    <div class="container">
+        <table class="highlight centered responsive-table">
+        <thead>
+          <tr>
+              <th class="my_th">Numero </th>
+              <th class="my_th">Montant</th>
+              <th class="my_th">Durée</th>
+              <th class="my_th">Fast-Food</th>
+              <th class="my_th">Etat</th>
+              <th class="my_th">Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="main_tab_content">
+        {% for commande in listeCommande %}
+            <tr>
+            <td>{{ commande.numero }} </td>
+            <td>
+               {% if commande.entite.isPartern == 0 %}
+                    ??? Fcfa
+                {% else %}
+                    {{ commande.get_montant }} Fcfa</p>
+                {% endif %}
+            </td>
+            <td>{% if commande.get_duree <= 2 %}
+            à l'instant{% else %}{{ commande.get_duree }} minutes
+            {% endif %} </td>
+            <td>{{ commande.entite.nomEntite }}</td>
+            <td>
+                {% if  commande.state == 0%}
+                    En cours de  validation ...
+                {% endif %}
+            {% if  commande.state == 1%}
+                    Validée
+                {% endif %}
+            {% if  commande.state == 2%}
+                    En cours de préparation
+                {% endif %}
+            {% if  commande.state == 3%}
+                    En cours de livraison
+                {% endif %}
+
+            </td>
+            <td >
+                <a  style="background-color: gold;margin-right: 10px" class="btnDetailCommande btn-floating btn-large waves-effect waves-light  tooltipped" data-position="bottom" data-delay="50" data-tooltip="détails"><i class="material-icons">view_list</i></a>
+            <img src="{% static 'loading_light_blue.gif' %}" width="55" class="img_relancer" hidden>
+                {% if commande.get_duree >= 10 and commande.state == 0%}
+                    {% if commande.relancer > 0 %}
+                        {% if commande.get_duree_relance >= 5 %}
+                            <!--a class="btn-floating btn-large waves-effect waves-light blue tooltipped btn_relancer_commande" id="{{ commande.idCommande }}" data-position="bottom" data-delay="50" data-tooltip="Relancer"><i class="material-icons">loop</i></a-->
+                            {% else %}
+                            <!--a disabled="disabled" class="btn-floating btn-large waves-effect waves-light blue tooltipped btn_relancer_commande" id="{{ commande.idCommande }}" data-position="bottom" data-delay="50" data-tooltip="Relancer"><i class="material-icons">loop</i></a-->
+
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if commande.relancer > 0 and commande.state == 0%}
+                         {% if commande.get_duree_relance >= 5 %}
+                            <!--a class="btn-floating btn-large waves-effect waves-light blue tooltipped btn_relancer_commande" id="{{ commande.idCommande }}" data-position="bottom" data-delay="50" data-tooltip="Relancer"><i class="material-icons">loop</i></a-->
+                         {% endif %}
+                    {% endif %}
+                {% endif %}
+
+                {% if commande.state == 3 %}
+                    <a  class="btn-floating btn-large waves-effect waves-light green tooltipped" data-position="bottom" data-delay="50" data-tooltip="Suivre livreur"><i class="material-icons">location_on</i></a>
+                {% endif %}
+                <!--a class="btn-floating btn-large waves-effect waves-light red tooltipped" data-position="bottom" data-delay="50" data-tooltip="Annuler"><i class="material-icons">stop</i></a-->
+                <!--a class="btn-floating btn-large waves-effect waves-light green tooltipped" data-position="bottom" data-delay="50" data-tooltip="Suivre livreur"><i class="material-icons">location_on</i></a-->
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+    <!-- modal  my basket-->
+        <div class="modal fade" id="modaBasket" role="dialog" style="width: 350px;height: 400px;" >
+              <!-- Modal content-->
+            <div class="modal-header " style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="height: 230px;overflow: scroll">
+                <table class="table table-responsive" >
+                    <thead class="">
+                    <tr>
+                        <!--th>Images</th-->
+                        <th>Libellé</th>
+                        <th>PU</th>
+                        <th>Qte</th>
+                        <th>Total</th>
+                        <!--th>Actions</th-->
+                    </tr>
+                    </thead>
+                    <tbody id="mon_panier_content">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <p class="text-center">Total:<span style="color: red;font-size: 1.3em;font-weight: bold" class="" id="montantTotalBasket"></span> </p>
+            <p class="text-center"><button class="btn-flat " data-dismiss="modal"  style="color: black;background-color: gold;margin-right: 10px;">Ok</button><!--i style="color: gold;background-color: black;margin-right: 10px" id="btnRunCommande" class="fa fa-telegram fa-4x btn-floating btn-large halfway-fab waves-effect waves-light pulse right"></i--></p>
+
+        </div>
+    <!-- end modal  my basket-->
+{% endblock %}
+{% block aside_nav %}
+                    <li class="bold " style="color: black;"><a href="{% url 'main_acceuil' %}" class="waves-effect waves-cyan"><i class="mdi-action-home"></i> Accueil</a>
+                    {% if  request.user.is_authenticated %}
+                        <li  class="bold  hide-on-med-and-up"><a href="{% url 'mes_commandes' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Se déconnecter</a>
+                        <li class="bold " style="background-color: gold;color: black;" class="bold  "><a href="{% url 'mes_commandes' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Mes Commandes</a>
+                    {% else %}
+                        <li class="bold  hide-on-med-and-up"><a href="{% url 'login' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-in"></i> Se connecter</a>
+                        <li class="bold  hide-on-med-and-up"><a href="{% url 'inscription' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-out"></i> S'inscrire</a>
+                    {% endif %}
+                    {% endblock %}
+
+{% block bloc_script %}
+<script>
+function detailCommande() {
+    {% if request.user.is_authenticated %}
+             tmp_name="listeCommande";
+             liste=amplify.store(tmp_name);
+             _html="";
+             if(liste && liste.length!=0)
+             {
+                 somme=0;
+                 for(i=0;i<liste.length;i++)
+                 {
+                    
+                              if(liste[i].prix!="???")
+                              {
+                                tmp=liste[i].quantite*liste[i].prix;
+                                somme+=tmp;
+                              }
+                              else
+                              {
+                                tmp="???";
+                                somme="???"
+                              }
+                             
+                            _html+='<tr id="'+liste[i].cmd_id+'">' +
+                             '<td>'+liste[i].libelle+'</td>' +
+                             '<td>'+liste[i].prix+' Fcfa</td>' +
+                             '<td class="quantite">'+liste[i].quantite+'</td>' +
+                             '<td class="total">'+tmp+' Fcfa</td>' +
+                             //'<td><button class="btn btnOption" style="background-color:gold"><i class="fa fa-ellipsis-h"></button></i></td>' +
+                             '</tr>';
+                            $("#mon_panier_content").html(_html);
+                            $(".btnOption").click(function () {
+                                selectedRow=$(this).parent().parent();
+                                for(i=0;i<liste.length;i++)
+                                {
+                                    if(liste[i].cmd_id==selectedRow.attr("id"))
+                                    {
+                                        commande=liste[i];
+                                        $("#mUProductTitle").text(commande.libelle);
+                                        $("#updatePrize").text(commande.prix);
+                                        $("#updateQte").text(commande.quantite);
+                                        tmp=commande.prix*commande.quantite;
+                                        $("#update_total").text(tmp);
+                                        $("#modalUpdateQte").modal("show");
+                                    }
+                                }
+                            });
+
+                         
+
+
+                 }
+                 $("#montantTotalBasket").text(somme+" Fcfa");
+                 $('#modaBasket').modal('show');
+             }
+         {% endif %}
+}
+var tab_commande=[];
+    $(function () {
+        listeLigne=amplify.store("listeCommande");
+        listeLigne=[];
+
+      {% for ligne  in listeLigneCommande %}
+      produit={};
+      produit.quantite="{{ligne.quantite}}";
+       produit.libelle="{{ligne.produit.nomProduit}}";
+       console.log("malin");
+       console.log({{commande.entite.isPartern }});
+        {% if commande.entite.isPartern == 1 %}
+          produit.prix="{{ligne.produit.prixProduit}}";
+          {% else %}
+            produit.prix="???";
+          {% endif %}
+        listeLigne.push(produit);
+      {% endfor %}
+      amplify.store("listeCommande",listeLigne);
+    $(".btnDetailCommande").click(function () {
+        detailCommande() ;
+    });
+       setInterval(function () {
+           var csrftoken = getCookie('csrftoken');
+             $.ajax({
+                        //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                        url :"{% url 'update_liste_commande' %}",
+                        type : "POST", // http method
+                        timeout:100000,
+                        beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                        success : function(json)
+                        {
+                          _html="";
+                          if(json.length>2)
+                          {
+                            var commandes=JSON.parse(String(json));
+                            var dure=null;
+                            var my_option=null;
+                             for(i=0;i<commandes.length;i++)
+                            {
+                              
+                              //listLigneCommande=JSON.parse(String());
+                              //console.log(listeLigne[0]);
+                              listeLigne=amplify.store("listeCommande");
+                             _html="";                        
+                              listeLigne=[];
+                                for(j=0;j<commandes[i].listeLigne.length;j++)
+                                {
+                                  //console.log(commandes[i].listeLigne[j]);
+                                   produit={};
+                                   produit.quantite=parseInt(commandes[i].listeLigne[j].quantite);
+                                   produit.libelle=commandes[i].listeLigne[j].libelle;
+                                   produit.prix=commandes[i].listeLigne[j].prix;
+                                   listeLigne.push(produit);
+                                }
+                              amplify.store("listeCommande",listeLigne);
+                             //}
+                                dure="";
+                                my_option="";
+                                if(parseInt(commandes[i].duree)<=2)
+                                {
+                                     dure="à l'instant";
+                                }
+                                else
+                                {
+
+                                    dure=commandes[i].duree+" min";
+                                }
+                                my_option+='<a  style="background-color: gold;margin-right: 10px" class="btnDetailCommande btn-floating btn-large waves-effect waves-light  tooltipped" data-position="bottom" data-delay="50" data-tooltip="Suivre livreur"><i class="material-icons">view_list</i></a>';
+
+                                 if(parseInt(commandes[i].my_state)== 3)
+                                {
+
+                                    my_option+="<a title=\"suivre livreur\" href=\""+'commande/localiser-commande/'+commandes[i].idCommande+"\" class=\"btn-floating btn-large waves-effect waves-light green tooltipped\" data-position=\"bottom\" data-delay=\"50\" data-tooltip=\"Suivre livreur\"><i class=\"material-icons\">location_on</i></a>";
+                                }
+                                else
+                                 {
+                                     my_option+="";
+                                 }
+                                _html+="<tr>" +
+                                    "<td>"+commandes[i].numero+"</td>" +
+                                    "<td>"+commandes[i].montant+" Fcfa</td>" +
+                                    "<td>"+dure+"</td>" +
+                                    "<td>"+commandes[i].entite+"</td>" +
+                                    "<td>"+commandes[i].state+"</td>" +
+                                    "<td class=\"hide-on-small-and-down my_option\">" +
+                                        "<img src=\"{% static 'loading_light_blue.gif' %}\" width=\"55\" id=\"img_relancer\" hidden>" +
+                                        my_option +
+                                    "</td>" +
+                                        "<td class=\"hidden-md hidden-sm hidden-lg my_option\">" +
+                                        "<img src=\"{% static 'loading_light_blue.gif' %}\" width=\"55\" id=\"img_relancer\" hidden>" +
+                                        my_option +
+                                    "</td>" +
+                                    "</tr>";
+                            }
+                            $("#main_tab_content").html(_html);
+                             $(".btnDetailCommande").click(function () {
+                                 detailCommande();
+                                });
+                          }
+                          else
+                          {
+                            $("#main_tab_content").html(_html);
+                          }
+                            
+                        },
+                        error :
+                            function(xhr,errmsg,err)
+                            {
+                            },
+                    });
+           _html="<a class=\"btn-floating  waves-effect waves-light blue \" href=\""+2+"\"><i class=\"material-icons\">loop</i></a> <a class=\"btn-floating  waves-effect waves-light red\"><i class=\"material-icons\">stop</i></a>" +
+               " <a class=\"btn-floating  waves-effect waves-light green\"><i class=\"material-icons\">location_on</i></a>";
+           //$(".my_option").html(_html);
+       },5000);
+    })
+</script>
+{% endblock %}
+

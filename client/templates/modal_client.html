@@ -1,0 +1,241 @@
+{% load static %}
+    <div id="modal1" class="modal modal-fixed-footer " style="height: 400px;width: 300px;">
+    <div class="modal-content" style="padding: 0px">
+      <h4 class="center-align" style="margin: 0px;margin-bottom: 5px ; ">Modal Header</h4>
+      <p class="center-align"><img src="{% static 'images/uploads/tangus/prod_tangus_1.jpg' %}" width="200" height="200"></p>
+      <p class="center-align">A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+         <span class="left" >1000{{ produit.prixProduit|add:" Fcfa" }}</span>
+      <p class="valign-wrapper" style="position: relative;top: -2px;"><a href="#!" class="btn-floating btn-large halfway-fab modal-action modal-close waves-effect waves-green btn-flat pulse"  style="background-color: gold;"><i class="large material-icons">shopping_cart</i></a>
+    </p></div>
+    </div>
+
+<div id="modal_quantite" class="modal modal-fixed-footer " style="height: 300px;width: 250px;">
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Quantité</h2>
+      <h3 class="center-align" id="txt_title_prod"></h3>
+        <div class="row" style="color: black">
+                                <div class="col-lg-4 col-xs-4 col-lg-offset-2 col-xs-offset-2">
+                                    <p id="nbr_qte" style="position: relative;top: 45px;color: black;font-size: 1.6em;font-weight: bold;" class="pull-right"></p>
+                                </div>
+                                <div class="col-lg-4 col-xs-4" >
+                                    <p style=""><a class="btn-flat btn-large" id="btn_plus" style="color: black;background-color: gold"><i class="fa fa-plus-circle fa-5x"></i></a></p>
+                                    <p style=""><a class=" btn-flat btn-large" id="btn_moins" style="color: black;background-color: darkgray"><i class="fa fa-minus-circle fa-5x"></i></a></p>
+                                </div>
+                            </div>
+        <h3 class="center-align" ><span id="txt_prix_prod"></span> Fcfa</h3>
+    </div>
+    <div class="modal-footer " >
+        <div class="row" style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <button  class="btn-large  btn-flat" id="btn_validate"  style="background-color: gold;margin-left: 20px;"><i class="large material-icons">shopping_cart</i>Ajouter au panier</button>
+            <a  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;"><i class="fa fa-reply"></i></a>
+        </div>
+
+
+        <br>
+    </div>
+    </div>
+
+<div id="modal_session" class="modal modal-fixed-footer " style="height: 300px;width: 300px;">
+    <div class="modal-content"  style="padding: 0px">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Avertissement</h2>
+      <p class="center-align" id="txt_title_prod">Vous devriez être connecté avant de pouvoir éffectuer toute transaction</p>
+      <p class="center-align" id="" style="margin-top: 20px;"><i style="color: gold" class="large material-icons">warning</i></p>
+    </div>
+    <div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a href="{% url 'login' %}"  class="btn-large  btn-flat"   style="background-color: gold;margin-left: 10px;">Se connecter</a>
+            <a href="{% url 'inscription' %}" class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;color: white">S'inscrire</a>
+        </div>
+
+
+        <br>
+    </div>
+    </div>
+
+<div id="block_warning_commande" class="modal modal-fixed-footer " style="height: 300px;width: 300px;">
+    <div class="modal-content"  style="padding: 0px">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;;height: 60px;padding-top:10px"><i style="color: white" class="small material-icons">warning</i>Avertissement</h2>
+         <p class="center-align" tyle="color: black;">Vous ne pouvez pas commander dans deux restaurants differents en même temps.</p>
+                                <p class="center-align" tyle="color: black;">Veuillez d'abord lancer l'autre commande ou soit vider votre panier pour de continuer.</p>
+    </div>
+    <div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a class="btn-large  btn-flat" id="btn_validate"  style="background-color: gold;">Ok</a>
+        </div>
+        <br>
+    </div>
+    </div>
+
+<div id="block_commande" class="modal modal-fixed-footer " style="height: 450px;width: 400px;">
+    <h2 class="center-align" style="margin: 0;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px"><span class="center-align">Mon panier</span></h2>
+    <div class="modal-content" style="padding: 0px">
+
+                            <div id="mon_panier_main_content_fill">
+                                <div class="row">
+                                <div style="position: absolute;top:  30%;left: 40%;">
+                                     <p id="img_loading" hidden class="col-lg-8 col-lg-offset-2 text-center"><img src="{% static 'refr.gif' %}" width="50"></p>
+                                </div>
+                            </div>
+                                <table class="table table-responsive" >
+                                    <thead>
+                                        <tr>
+                                            <!--th>Images</th-->
+                                            <th>Libellé</th>
+                                            <th>Qte</th>
+                                            <th>PU</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mon_panier_content">
+
+                                    </tbody>
+                                </table>
+                                <p id="txtErrorCommande" style="color: red;"></p>
+
+        </div>
+
+    </div>
+    <div class="modal-footer" >
+ <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+          <button  class="btn  halfway-fab waves-effect waves-light" id="btn_run_Commande"  style="background-color: gold;margin-left: 20px;"><i class="fa fa-send fa-2x" ></i>Commander</button>
+            <!--a  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;"><i class="fa fa-reply"></i></a-->
+ </div>
+        <br>
+    </div>
+    </div>
+
+
+<div id="block_commande_vide" class="modal" style="height: 300px;width: 300px;">
+    <div class="modal-content" style="padding: 0px">
+        <h2 class="center-align" style="margin: 0;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px"><span class="center-align">Mon panier</span></h2>
+        <div id="mon_panier_main_content_empty" hidden></div>
+
+                                <div class="row">
+                               <p class="text-center"> Votre panier est vide</p><p class="center-align" style="margin-top: 20px;"><i style="color: gold" class="large material-icons">warning</i></p>
+                            </div>
+
+
+    </div>
+    </div>
+<div id="block_confirmation" class="modal modal-fixed-footer "  style="height: 300px;width: 300px;">
+    <div class="modal-content"  style="padding: 0px">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Avertissement</h2>
+      <p class="center-align" id="txt_title_prod">êtes vous certains de vouloir rétirer <span class="text-primary" id="retirer_tilte"></span> de votre panier</p>
+      <p class="center-align" id="" style="margin-top: 20px;"><i style="color: red" class="large material-icons">delete</i></p>
+    </div>
+    <div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a  class="btn-large  btn-flat" id="btn_conf_yes"  style="background-color: gold;margin-left: 10px;">Oui</a>
+            <a id="btn_conf_no" class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;color: white">Non</a>
+        </div>
+
+
+        <br>
+    </div>
+    </div>
+
+<div id="block_authentif" class="modal modal-fixed-footer col l8"  style="height: 250px;width: 300px;" >
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Authentification</h2>
+        <div class="row">
+            <div class="col l8 s10 offset-l2 offset-s1 form-group" style="padding: 20px">
+                <label style="font-size: 1.2em;">Mot de passe</label>
+                <div class="input-group">
+             <input  style="font-size: 1em;" id="input_password" type="password" class="form-control" name="password" placeholder="****">
+             <span class="input-group-addon" id="show_password"><a title="afficher mot de passe" ><i class="glyphicon glyphicon-eye-open" style="color: gold"></i></a></span>
+              </div>
+              <p style="color: red;" id="pass_word_error"></p>
+            </div>
+        </div>
+        </div>
+<div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a id="btn_password" class="btn-large  btn-flat" id="btn_conf_yes"  style="background-color: gold;margin-left: 10px;">Continuer</a>
+            <a  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;color: white">Annuler</a>
+        </div>
+        <br>
+    </div>
+    </div>
+
+
+<div id="block_gps_warning" class="modal modal-fixed-footer col l8"  style="height: 300px;width: 300px;" >
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Authentification</h2>
+        <div class="row">
+              <p class="col l8 s10 offset-l2 offset-s1 center-align" style="color: black;" id="">Pour mieux faciliter la livraison, senfood doit utiliser votre position</p>
+                  <p class="center-align" id="" style="margin-top: 10px;"><i style="color: gold" class="large material-icons">location_on</i></p>
+
+        </div>
+        </div>
+<div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a id="btn_gps_yes" class="btn-large  btn-flat" id="btn_conf_yes"  style="background-color: gold;margin-left: 10px;">Oui</a>
+            <a id="btn_gps_no"  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;color: white">Non</a>
+        </div>
+        <br>
+    </div>
+    </div>
+
+
+
+<div id="block_alert" class="modal  col l8"  style="height: 350px;width: 350px;" >
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <!--h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Authentification</h2-->
+        <div class="row">
+                  <p class="center-align" id="" ><img src="{% static 'livreur_app.jpg' %}" width="300"></p>
+                  <p class="center-align" id="" ><a id="btn_alert_yes" class="btn-large " id="btn_conf_yes"  style="background-color: gold;color: white;">Ok</a></p>
+
+        </div>
+        </div>
+<!--div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a id="btn_gps_yes" class="btn-large  btn-flat" id="btn_conf_yes"  style="background-color: gold;margin-left: 10px;">Oui</a>
+            <a id="btn_gps_no"  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;color: white">Non</a>
+        </div>
+        <br>
+    </div-->
+    </div>
+
+
+<div id="block_error" class="modal modal-fixed-footer col l8"  style="height: 250px;width: 300px;" >
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px"></h2>
+        <div class="row">
+            <p class="center-align" id="" style=""><a id="block_error_text"   style="color: red;">Désolé, vous avez une commande en cours<br>ll</a></p>
+        </div>
+        </div>
+<div class="modal-footer " >
+        <div class="row"  style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <a  class="btn-large  btn-flat" id="block_error_close_btn"  style="background-color: gold;margin-left: 10px;">ok</a>
+
+        </div>
+        <br>
+    </div>
+    </div>
+
+<div id="modal_localite" class="modal modal-fixed-footer " style="height: 350px;width: 300px;">
+    <div class="modal-content"  style="padding: 0px;overflow: hidden">
+      <h2 class="center-align" style="margin: 0px;margin-bottom: 15px;background-color:gold;color:white;height: 60px;padding-top:10px">Localité</h2>
+      <p class="center-align" style="color: red;">Pour l'instant nos services sont limités aux certaines zones</p>
+        <form class="col-lg-8 col-lg-offset-2">
+            <select class="form-control" name="selectedLocality" id="selectedLocality">
+                <option value="0">Choisir localité....</option>
+                {% for localite in listelocalite %}
+                <option value="{{ localite.idLocalite }}">{{ localite.libelle }}</option>
+                {% endfor %}
+            </select>
+            <p id="locality_error" style="color: red"></p>
+        </form>
+    </div>
+    <div class="modal-footer " >
+        <div class="row" style="position: absolute;margin: auto;top: -5px;width: 100%;">
+           <button  class="btn-large  btn-flat" id="btn_localite"  style="background-color: gold;margin-left: 20px;">continuer</button>
+            <a  class="btn-large  modal-close waves-effect btn-flat "  style="background-color: darkgray;"><i class="fa fa-reply"></i></a>
+        </div>
+
+
+        <br>
+    </div>
+    </div>

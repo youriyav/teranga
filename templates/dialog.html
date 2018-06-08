@@ -1,0 +1,20 @@
+{% load static %}
+<div class="modal fade" id="myModal" role="dialog" style="z-index:999999999999999;margin-top: 70px;border-radius:0px 0px  10px 10px;">
+            <div class="modal-dialog" >
+                <div class="modal-content" style=" border-radius:10px 10px 0px 0px;">
+                    <div class="modal-header"  style="background-color:#2aabd2; border-radius:10px 10px 0px 0px ; ">
+                        <h4 id="dialog_tile" class="text-center" style="color: white">{% block dialog_title %}
+                        Avertissement
+                        {% endblock %}</h4>
+                    </div>
+                    <div class="modal-body" id="dialog_body" style="color: black; font-size: 1.3em;text-align: center;" >
+                        <p id="dialog_text"></p>
+                        <img hidden id="dialog_img_loader" src="{% static 'images/loader.gif' %}" >
+                    </div>
+                    <div class="modal-footer" id="dialog_footer">
+                        <button  type="button" class="btn btn-danger" data-dismiss="modal"> Annuler &nbsp;</button>
+                        <button  type="button" class="btn btn-primary" id="btn_dialog">Continuer</button>
+                    </div>
+                </div>
+            </div>
+        </div>

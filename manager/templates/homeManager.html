@@ -1,0 +1,93 @@
+{% extends 'layout_manager.html' %}
+{% load static %}
+{% block titre_page %}
+    Acceuil
+{% endblock %}
+{% block block_css %}
+
+    <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+    <!--link rel="stylesheet" href="assets/fonts/font-awesome-4.5.0/css/font-awesome.min.css"-->
+{% endblock %}
+{% block main_bloc_manager %}
+<div class="row">
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-blue panel-widget ">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked bag"><use xlink:href="#stroked-bag"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">120</div>
+							<div class="text-muted">Commande en cours de validation</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-orange panel-widget">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked empty-message"><use xlink:href="#stroked-empty-message"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">52</div>
+							<div class="text-muted">Comments</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-teal panel-widget">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">24</div>
+							<div class="text-muted">New Users</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-red panel-widget">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">25.2k</div>
+							<div class="text-muted">Page Views</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+{% block block_js %}
+    <script>
+        var selectedEntite;
+         $(document).ready(
+             function ()
+                {
+                    $('#flashbag').fadeOut(5000);
+                    $(".my_delete").click(function (e) {
+                        e.preventDefault();
+                        $("#dialog_text").html($(this).attr("data-confirm"));
+                        $("#btn_dialog").attr("href",$(this).attr("href"));
+                        $("#myModalLivreur").modal('toggle');
+                    });
+                }
+         );
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

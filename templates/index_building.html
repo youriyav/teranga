@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="utf-8">
+        <title style="counter-reset: red;">Teranga-Food</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:400,700'>
+        <link rel="stylesheet" href=" {% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="{% static 'teranga_food_logo_192.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'assets/ico/apple-touch-icon-144-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'assets/ico/apple-touch-icon-114-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'assets/ico/apple-touch-icon-72-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" href="{% static 'assets/ico/apple-touch-icon-57-precomposed.png' %}">
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+        <div class="container">
+            <div class="header row">
+
+                <div class="span1">
+                    <img src="{% static 'teranga_food_logo_192.png' %}">
+                </div>
+                <div class="logo span5">
+                    <h1><a href=""><span style="color: yellow">Te</span><span  style="color: green">ran</span><span  style="color: red">ga-</span></a> <span></span><span style="color:red">Food</span></h1>
+                </div>
+                <div class="call-us span6">
+                    <p>Tel: <span>778399425</span> | mail: <span>terrangafood@gmail.com</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon -->
+        <div class="coming-soon">
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <h2 style="color: green">Dans bientôt</h2>
+                            <!--p>We are working very hard on the new version of our site. It will bring a lot of new features. Stay tuned!</p-->
+                            <div class="timer">
+                                <div class="days-wrapper">
+                                    <span class="days"></span> <br>jour(s)
+                                </div>
+                                <div class="hours-wrapper">
+                                    <span class="hours"></span> <br>heure(s)
+                                </div>
+                                <div class="minutes-wrapper">
+                                    <span class="minutes"></span> <br>minute(s)
+                                </div>
+                                <div class="seconds-wrapper">
+                                    <span class="seconds"></span> <br>seconde(s)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="container">
+            <div class="row">
+                <div class="span12 subscribe">
+                    <h3>Abonnez vous à notre newsletter</h3>
+                    <p>inscrivez vous à notre newsletter et soyez l'un des premiers à être informé au lancement de l'application</p>
+                    <form class="form-inline" action="{% url 'inscription_new_letter' %}" method="post">
+                        {% csrf_token %}
+                        <img src="{% static 'gold-bras.gif' %}" width="50" hidden id="loading_img"><input type="text" id="email_input" name="email" placeholder="Entrer votre email..." style="border: solid 1px gold">
+                        <button type="submit" class="" style="background-color: gold" id="btn_submit">S'abonner</button>
+                        <p style="color: red" id="txtError"></p>
+                    </form>
+
+                    <div class="alert-success" style="font-size: 1.3em" hidden id="succes_msg">félicitation, votre inscription a été éffectuée avec succès</div>
+                    <div class="alert-danger" style="font-size: 1.3em" hidden id="error_msg">#error</div>
+                    <div class="error-message" ></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12 social">
+                    <a href="" class="facebook" rel="tooltip" data-placement="top" data-original-title="Facebook"></a>
+                    <!--a href="" class="twitter" rel="tooltip" data-placement="top" data-original-title="Twitter"></a>
+                    <a href="" class="dribbble" rel="tooltip" data-placement="top" data-original-title="Dribbble"></a>
+                    <a href="" class="googleplus" rel="tooltip" data-placement="top" data-original-title="Google Plus"></a>
+                    <a href="" class="pinterest" rel="tooltip" data-placement="top" data-original-title="Pinterest"></a>
+                    <a href="" class="flickr" rel="tooltip" data-placement="top" data-original-title="Flickr"></a-->
+                </div>
+            </div>
+        </div>
+
+        <!-- Javascript -->
+        <script src="{% static 'assets/js/jquery-1.8.2.min.js' %}"></script>
+        <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'assets/js/jquery.backstretch.min.js' %}"></script>
+        <script src="{% static 'assets/js/jquery.countdown.js' %}"></script>
+        <script >
+
+jQuery(document).ready(function() {
+
+    /*
+        Background slideshow
+    */
+    $('.coming-soon').backstretch([
+      "{% static 'assets/img/backgrounds/back.gif' %} "
+    , "{% static 'assets/img/backgrounds/2.jpg' %}"
+    , "{% static 'assets/img/backgrounds/3.jpg' %}"
+    ], {duration: 5000, fade: 750});
+
+    /*
+        Countdown initializer
+    */
+    var now = new Date();
+
+    console.log("{{ diff.hour }}");
+
+    var countTo = {{ diff.days|add:1 }} * 24 * 60 * 60 * 1000 + now.valueOf();
+    $('.timer').countdown(countTo, function(event) {
+        var $this = $(this);
+        switch(event.type) {
+            case "seconds":
+            case "minutes":
+            case "hours":
+            case "days":
+            case "weeks":
+            case "daysLeft":
+                $this.find('span.'+event.type).html(event.value);
+                break;
+            case "finished":
+                $this.hide();
+                break;
+        }
+    });
+
+    /*
+        Tooltips
+    */
+    $('.social a.facebook').tooltip();
+    $('.social a.twitter').tooltip();
+    $('.social a.dribbble').tooltip();
+    $('.social a.googleplus').tooltip();
+    $('.social a.pinterest').tooltip();
+    $('.social a.flickr').tooltip();
+
+    /*
+        Subscription form
+    */
+    $('.success-message').hide();
+    $('.error-message').hide();
+
+    $('#btn_submit').click(function(e) {
+        e.preventDefault();
+        is_error=0;
+        if($("#email_input").val().toString()=="")
+        {
+            is_error++;
+            $("#txtError").text("veuillez entrer votre email");
+        }
+        else
+        {
+            if(validateEmail($("#email_input").val().toString()))
+            {
+               $("#txtError").text("");
+            }
+            else
+            {
+                is_error++;
+                $("#txtError").text("email invalid");
+            }
+
+        }
+        if(is_error==0)
+        {
+            $('#btn_submit').prop('disabled', true);
+            $("#loading_img").show();
+            var postdata = $('.subscribe form').serialize();
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'inscription_new_letter' %}",
+            data: postdata,
+            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+             success: function(json) {
+                    $('#succes_msg').show();
+                    $("#loading_img").hide();
+                   $('#succes_msg').fadeOut(5000);
+                    $("#email_input").val("");
+                    $('#btn_submit').prop('disabled', false);
+            },
+            error: function(error) {
+                    $('#error_msg').show();
+                    $("#loading_img").hide();
+                    $('#error_msg').text(error.responseText);
+                    $('#error_msg').fadeOut(5000);
+                    $('#btn_submit').prop('disabled', false);
+            }
+
+        });
+        }
+        return false;
+    });
+
+});
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+   function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+          }
+        </script>
+
+    </body>
+
+</html>
+

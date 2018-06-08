@@ -1,0 +1,8 @@
+#main_block
+{
+    border: solid #b2dba1;
+    height: 350px;
+    border-radius: 15px;
+    position: relative;
+    top: 150px;
+}

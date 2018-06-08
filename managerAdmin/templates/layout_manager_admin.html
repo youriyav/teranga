@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="margin-bottom: 50px;">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titre_page %}
+
+{% endblock %}</title>
+<link href="{% static 'lumino/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'lumino/css/datepicker3.css'%}" rel="stylesheet">
+<link href="{% static 'lumino/css/styles.css'%}" rel="stylesheet">
+<link href="{% static 'dataTables/media/css/dataTables.bootstrap.min.css'%}" rel="stylesheet">
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+{% block block_css %}
+
+{% endblock %}
+<!--Icons-->
+<script src="{% static 'lumino/js/lumino.glyphs.js'%}"></script>
+
+<!--[if lt IE 9]>
+<script src="{% static 'lumino/js/html5shiv.min.js'%}"></script>
+<script src="{% static 'lumino/js/respond.min.js'%}"></script>
+<![endif]-->
+
+</head>
+<body >
+<div class="navbar-fixed-top">
+    <nav class="navbar navbar-inverse" role="navigation">
+		<div class="container-fluid" style="background-color: #ffd700">
+
+			<div class="navbar-header" >
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><img src="{% static 'teranga_food_logo_192.png' %}" width="70" style="position: relative;top: -8px;"></a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg><span class="caret"></span></a>
+                        {% if request.user.username != "" %}
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{% url 'logout_managerAdmin_fast'%}"><i class="fa fa-sign-out"></i>  Se déconnecter </a></li>
+                                <li><a href="{% url 'parametre_managerAdmin_fast'%}"><i class="fa fa-cog"></i>  Paramètre</a></li>
+                                <!--li><a href="{% url 'profil_user' request.user.username %}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Logout</a></li-->
+                                <!--li><a href="{% url 'parametre_user' request.user.username %}"><svg class="glyph stroked gear"><use xlink:href="#stroked-gear"></use></svg> Settings</a></li-->
+                            </ul>
+                            {% else %}
+                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{% url 'login'%}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                            </ul>
+                        {% endif %}
+					</li>
+				</ul>
+            <!--p class="pull-right"></p--><a  style="padding: 15px;" id="img_my_basket" data-toggle="modal" data-target="#block_mon_panier" hidden><i class="fa fa-shopping-cart fa-3x"></i></a>
+
+			</div>
+
+		</div><!-- /.container-fluid -->
+	</nav>
+<div id="msg_flash" class="alert alert-success text-center" style="z-index: 5000000000000000000000000000;margin: auto;" hidden>
+        </div>
+</div>
+
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<!--form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form--><br>
+    <h4>{% block nom_user %}
+    
+    {% endblock %}</h4>
+		<ul class="nav menu">
+
+        <li><a href="{% url 'home_administrator' %}"> </a></li>
+                {% block nav_gauche_admin %}
+                        <li class="active"><a href="{% url 'home_managerAdmin_fast' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                        <!--li ><a href="{% url 'liste_users'%}"><i class="fa fa-shopping-bag"></i> Commandes</a></li-->
+                {% endblock %}
+		</ul>
+
+	</div><!--/.sidebar-->
+
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<!--div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Icons</li>
+			</ol>
+		</div><!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">{% block titre_module %}
+
+				{% endblock %}</h1>
+			</div>
+		</div><!--/.row-->
+    <div class="row" style="">
+        {% block main_bloc %}
+
+        {% endblock %}
+    </div>
+	</div>	<!--/.main-->
+	<script src="{% static 'lumino/js/jquery-1.11.1.min.js'%}"></script>
+	<script src="{% static 'lumino/js/bootstrap.min.js'%}"></script>
+	<!--script src="{% static 'lumino/js/chart.min.js'%}"></script>
+	<script src="{% static 'lumino/js/chart-data.js'%}"></script>
+	<script src="{% static 'lumino/js/easypiechart.js'%}"></script>
+	<script src="{% static 'lumino/js/easypiechart-data.js'%}"></script-->
+	<script src="{% static 'lumino/js/bootstrap-datepicker.js'%}"></script>
+	<script src="{% static 'dataTables/media/js/jquery.dataTables.js'%}"></script>
+	<script src="{% static 'dataTables/media/js/dataTables.bootstrap.min.js'%}"></script>
+<!--script src="{% static 'notify.min.js'%}"></script-->
+	<script>
+		$('#calendar').datepicker({
+		});
+
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+		        $(this).find('em:first').toggleClass("glyphicon-minus");
+		    });
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>
+{% block block_js %}
+
+        {% endblock %}
+</body>
+
+</html>

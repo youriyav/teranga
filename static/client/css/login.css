@@ -1,0 +1,44 @@
+ body{background-color:#ffffb3;}
+#login_client_main
+{
+    padding: 15px;
+
+}
+#login_content
+{
+    padding: 25px;
+
+    border-radius: 15px;
+    background-color: #ffffe6;
+    height: 400px;
+}
+#login_content_ins
+{
+    padding: 25px;
+
+    border-radius: 15px;
+    background-color: #ffffe6;
+    height: 800px;
+}
+label{font-size: 1.1em;}
+#login_content h3
+{
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px;
+}
+#login_btn_submit
+{
+    background-color: #ffff33;
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.login_input
+{
+    height: 40px;
+    border: solid 1px yellow;
+}
+#login_error{
+    color: red;
+}

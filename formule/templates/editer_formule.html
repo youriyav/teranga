@@ -1,0 +1,127 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'senfood_css/categorie/creerCategorie.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+    <img src="{% static '' %}{{ entite.logoEntite }}" width="200" class="" height="70">
+    <p style="color: {{ entite.ColeurEntite }}">{{ entite.nomEntite }}</p>
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li  class="active"><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li  class="active"><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag" hidden  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" ></div>
+    {% endif %}
+    <p><a href="{% url 'liste_formule' forlmule.entite.idEntit%}" title="retour au profil"><i class="fa fa-reply fa-2x"></i></a>&nbsp;&nbsp;</p>
+     <div class="col-lg-10 col-lg-offset-1">
+                 <h1 class="text-center text-primary">Modifier Formule</h1>
+     </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <form enctype="multipart/form-data" class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 creation_form" method="post" action="{% url 'modifier_formule' forlmule.idFormule%}" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Libellé</label>
+            <input type="text" class="form-control" name="libelle" value="{{ libelle }}">
+            <p class="input_error">{{ error_libelle }}</p>
+        </div>
+        <div class="form-group">
+            <label>Prix</label>
+            <input type="text" class="form-control" name="prix" value="{{ prix }}">
+            <p class="input_error">{{ error_prix }}</p>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="descript" class="form-control">{{ descript }}</textarea>
+            <p class="input_error">{{ error_descript }}</p>
+        </div>
+
+         <div >
+            <div class="col-lg-8 col-lg-offset-2" style="border: solid;border-radius: 10px;">
+                <p hidden id="img_loader"><img src="{% static 'images/loader_linear.gif' %}" width="100" style="position: absolute;top: 60px;left: 50px;"></p>
+                <a class="pull-right btn " style="color: white;" id="btn_modif_img"><i class="fa fa-picture-o fa-2x"></i></a>
+                <img src="{% static ''%}{{ forlmule.logoFormule }}" width="150" class="img img-responsive" id="img_descript">
+            </div>
+            <input type="file"  class="form-control" id="logo" name="logo" style="opacity: 0" onchange="readURL(this);" >
+        </div>
+        <div class="form-group">
+           <a class="btn btn-danger col-md-5" href="{% url 'liste_formule' forlmule.entite.idEntit%}"type="reset">Annuler</a>
+           <button class="btn btn-primary col-md-5 col-md-offset-2" type="submit">Enregister</button>
+        </div>
+    </form>
+        </div>
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+   <script>
+             function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#img_loader").show();
+                        $('#img_descript').fadeOut(1000,function () {
+                            $('#img_descript')
+                            .attr('src', e.target.result);
+                            //.width(150)
+                            //.height(200);
+                            $('#img_descript').fadeIn(1000,function () {
+                                $("#img_loader").hide();
+                            });
+
+                        });
+
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+
+                     $('#btn_modif_img').click(function(e){
+                         e.preventDefault();
+                         $("#logo").trigger('click');
+                     });
+                     /*$("#logo").change(function () {
+                         //$("#img_loader").show();
+                         //$("#img_descript").fadeOut(1000,function () {
+                             m_input=$(this);
+                             readURL(m_input);
+                         //});
+
+                     });*/
+                }
+         );
+
+
+    </script>
+
+
+{% endblock %}

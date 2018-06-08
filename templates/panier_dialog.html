@@ -1,0 +1,172 @@
+{% load static %}
+<div class="modal fade" id="block_detail" role="dialog" style="margin-top: 70px;">
+                <div class="modal-dialog">
+
+                    <!-- Modal content recompense-->
+                    <div class="modal-content" >
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h2 class="text-center" id="detail_titre" style="color: #4cae4c;"></h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <img src="" width="200" height="200"  class="col-xs-6 col-xs-offset-3" id="detail_img" >
+                            </div>
+                            <div class="row">
+                                <p style="" class="text-center" id="detail_text"></p>
+                            </div>
+                            <div class="row" >
+                              <p  style="color: {{ entite.ColeurEntite }}"><span class="pull-left " id="detail_prix" style="font-weight: bold;font-size: 1.3em;"></span><span class="pull-right" style="position: relative;top: -10px;"><a id="{{ produit.idProduit }}" class="btn btn_add"  style="color: {{ entite.ColeurEntite }}"><i class="fa fa-shopping-cart fa-3x " ></i></a></span></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+
+
+        <div class="modal fade" id="block_quantite" role="dialog" style="margin-top: 140px;">
+                <div class="modal-dialog">
+                    <!-- Modal content recompense-->
+                    <div class="modal-content" >
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h2 class="text-center"  style="color: {{ entite.ColeurEntite }}">Quantité</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p id="preview_prize" style="color: {{ entite.ColeurEntite }}; font-size: 1.5em;">1222 Fcfa</p>
+                            <div class="row" style="color: {{ entite.ColeurEntite }}">
+                                <div class="col-lg-4 col-xs-4 col-lg-offset-2 col-xs-offset-2">
+                                    <p id="nbr_qte" style="position: relative;top: 45px;color: {{ entite.ColeurEntite }};font-size: 1.6em;font-weight: bold;" class="pull-right"></p>
+                                </div>
+                                <div class="col-lg-4 col-xs-4" >
+                                    <p ><a class="btn " id="btn_plus" style="color: {{ entite.ColeurEntite }}"><i class="fa fa-plus-circle fa-3x"></i></a></p>
+                                    <p ><a class="btn " id="btn_moins" style="color: {{ entite.ColeurEntite }}"><i class="fa fa-minus-circle fa-3x"></i></a></p>
+                                </div>
+                            </div>
+                             <div class="row" >
+                              <p  style="color: white;" class="text-center"><button id="btn_validate"  class="btn"   style="background-color: {{ entite.ColeurEntite }}"><i class="fa fa-shopping-cart fa-2x" ></i> Ajouter au panier</button></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+
+        <div class="modal fade" id="block_mon_panier" role="dialog" style="margin-top: 100px;">
+                <div class="modal-dialog">
+                    <!-- Modal content recompense-->
+                    <div class="modal-content" >
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h2 class="text-center"  style="color:  #4cae4c;">Mon Panier</h2>
+                        </div>
+                        <div class="modal-body" >
+                            <div class="row">
+                                <div style="position: absolute;top:  30%;left: 40%;">
+                                     <p id="img_loading" hidden class="col-lg-8 col-lg-offset-2 text-center"><img src="{% static 'refresh.gif' %}" width="50"></p>
+                                </div>
+                            </div>
+
+                                <table class="table table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <!--th>Images</th-->
+                                            <th>Libellé</th>
+                                            <th>Qte</th>
+                                            <th>PU</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mon_panier_content">
+
+                                    </tbody>
+                                </table>
+                            <div class="row " >
+                              <p  style="color: white;" class="text-center"><button id="btn_run_Commande"  class="btn" data-toggle="modal" data-target="#block_pass_word"   style="background-color: {{ entite.ColeurEntite }};font-weight: bold;"><i class="fa fa-send fa-2x" ></i> Commander</button></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+
+
+
+    <div class="modal fade" id="block_confirmation" role="dialog" style="margin-top: 140px;">
+                <div class="modal-dialog">
+                    <div class="col-lg-6 col-xs-10 col-lg-offset-3 col-xs-offset-1">
+                        <div class="modal-content" >
+                        <div class="modal-header" style="background-color: {{ entite.ColeurEntite }}">
+                            <button type="button" class="close" data-dismiss="modal" hidden>&times;</button>
+                            <h2 class="text-center"  style="color: white;">Avertissement</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div id="msg_conf_content" class="text-center">
+                                êtes vous certains de vouloir rétirer <span id="conf_prod_libel"></span> de votre panier?
+                            </div>
+                             <div class="row" >
+                              <p  style="color: white;" class="text-center"><button id="btn_conf_no"  class="btn"   style="color: white;background-color:#737373;">Non</button>&nbsp;<button id="btn_conf_yes"  class="btn"   style="background-color: {{ entite.ColeurEntite }};color: white;">Oui</button></p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- Modal content recompense-->
+
+                </div>
+        </div>
+
+        <div class="modal fade" id="block_gps_warning" role="dialog" style="margin-top: 140px;">
+                <div class="modal-dialog">
+                    <div class="col-lg-6 col-xs-10 col-lg-offset-3 col-xs-offset-1">
+                        <div class="modal-content" >
+                        <div class="modal-header" style="background-color: {{ entite.ColeurEntite }}">
+                            <button type="button" class="close" data-dismiss="modal" hidden>&times;</button>
+                            <h2 class="text-center"  style="color: white;">Avertissement</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div id="msg_conf_content" class="text-center">
+                                Pour mieux faciliter la livraison, voulez vous nous autoriser à utiliser votre position?
+                            </div>
+                             <div class="row" >
+                              <p  style="color: white;" class="text-center"><button id="btn_gps_no"  class="btn"   style="color: white;background-color:#737373;">Non</button>&nbsp;<button id="btn_gps_yes"  class="btn"   style="background-color: {{ entite.ColeurEntite }};color: white;">Oui</button></p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- Modal content recompense-->
+
+                </div>
+        </div>
+
+         <div class="modal fade" id="block_pass_word" role="dialog" style="margin-top: 140px;">
+                <div class="modal-dialog">
+                    <div class="col-lg-6 col-xs-10 col-lg-offset-3 col-xs-offset-1">
+                        <div class="modal-content" >
+                        <div class="modal-header" style="background-color: {{ entite.ColeurEntite }}">
+                            <button type="button" class="close" data-dismiss="modal" hidden>&times;</button>
+                            <h2 class="text-center"  style="color: white;">Mot de passe</h2>
+                        </div>
+                        <div class="modal-body" >
+                            <div class="row">
+
+                                    <div style="" class="input-group">
+                                        <input id="input_password" type="password" class="form-control" name="password" placeholder="****">
+                                        <span class="input-group-addon" id="show_password"><a title="afficher mot de passe" ><i class="glyphicon glyphicon-eye-open"></i></a></span>
+                                    </div>
+                                    <p style="color: red;" id="pass_word_error"></p>
+
+                            </div>
+                            <div class="row " >
+                                <p  style="color: white;" class="text-center"><button id="btn_password"  class="btn"    style="background-color: {{ entite.ColeurEntite }};font-weight: bold;"> Continuer</button></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+                    <!-- Modal content recompense-->
+
+                </div>
+        </div>

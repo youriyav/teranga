@@ -1,0 +1,26 @@
+body{
+    background-color: white;
+}
+#main_layout_baner
+{
+    background-color: gold;
+}
+.my_active
+{
+    background-color: gold;
+}
+.nav li a
+{
+    color: black;
+
+}
+#main_footer
+{
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    text-align: center;
+    background-color: gold;
+    border-radius:  50px 50px 0px 0px;
+    z-index: 5555555555;
+}

@@ -1,0 +1,126 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'senfood_css/categorie/creerCategorie.css'%}" rel="stylesheet">
+{% endblock %}
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li  style="background-color: gold"><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li  ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag" hidden  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" ></div>
+    {% endif %}
+     <div class="row">
+     <div style="position: fixed;z-index: 2;background-color: white;border:solid 1px gold ;height: 120px;" class="container">
+         <div  style="">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <a href="{% url 'liste_categorie' entite.idEntit %}" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a>
+                     &nbsp;<img class="img-circle" src="{{entite.logoEntite }}" width="60" height="60" >
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">{{ entite.nomEntite }}/Nouvelle catégorie</h5>
+         </div>
+     </div>
+    </div>
+
+    <div class="row" style="margin-top: 150px">
+        <div class="col-lg-10 col-lg-offset-1">
+            <form style="border: solid 2px gold;padding: 10px;background-color: #ffffb3" enctype="multipart/form-data" class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 creation_form" method="post" action="{% url 'editer_categorie' categorie.idCategorie%}" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Libellé</label>
+            <input type="text" class="form-control" name="libelle" value="{{ libelle }}">
+            <p class="input_error">{{ error_libelle }}</p>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="descript" class="form-control">{{ descript }}</textarea>
+            <p class="input_error">{{ error_descript }}</p>
+        </div>
+
+        <div >
+            <div class="col-lg-8 col-lg-offset-2" style="border: solid;border-radius: 10px;">
+                <p hidden id="img_loader"><img src="{% static 'images/loader_linear.gif' %}" width="100" style="position: absolute;top: 60px;left: 50px;"></p>
+                <a class="pull-right btn " style="color: white;" id="btn_modif_img"><i class="fa fa-picture-o fa-2x"></i></a>
+                <img src="{{ categorie.logoCat }}" width="150" class="img img-responsive" id="img_descript">
+            </div>
+            <input type="file"  class="form-control" id="logo" name="logo" style="opacity: 0" onchange="readURL(this);" >
+        </div>
+        <div class="form-group">
+           <a style="background-color: darkgray;color: black;" class="btn btn-danger col-md-6" href="{% url 'liste_categorie' entite.idEntit %}"type="reset">Annuler</a>
+           <button style="background-color: gold;color: black;" class="btn btn-primary col-md-6 " id="btn_submit" type="submit">Enregister</button>
+        </div>
+    </form>
+        </div>
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+             function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img_descript').fadeOut(1000,function () {
+                            $('#img_descript')
+                            .attr('src', e.target.result);
+                            //.width(150)
+                            //.height(200);
+                            $('#img_descript').fadeIn(1000);
+                        });
+
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+                     $('#tableau_cat').DataTable({"order": [[ 2, "desc" ]], scrollY: 400,"scrollX": false,
+                         "language": {"url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/French.json"}, "paging":false,
+                         "ordering": false,
+                         "info":     false,searching: false,"pageLength": 10,
+                         }
+
+                     );
+                     $('#btn_modif_img').click(function(e){
+                         e.preventDefault();
+                         $("#logo").trigger('click');
+                     });
+                     /*$("#logo").change(function () {
+                         //$("#img_loader").show();
+                         //$("#img_descript").fadeOut(1000,function () {
+                             m_input=$(this);
+                             readURL(m_input);
+                         //});
+
+                     });*/
+                }
+         );
+
+
+    </script>
+
+{% endblock %}

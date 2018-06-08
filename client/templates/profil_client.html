@@ -1,0 +1,62 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    Nouveau-utilisateur
+{% endblock %}
+{% block block_css %}
+<link href="{% static 'utilisateur/create_user.css'%}" rel="stylesheet">
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+PROFIL CLIENT
+{% endblock %}
+{% block nav_gauche %}
+                <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                {% if request.user.is_superuser == 1 %}
+                 <li><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+             {% endif %}
+                <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+    			<li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li class="active"><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li  class="active"><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+{% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+        {% else %}
+        <div id="flashbag" hidden  style="position: absolute;top: 20px; border: solid #d6e9c6;z-index: 1000;color: #468847;border-radius:10px;background-color:#dff0d8;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4" ></div>
+    {% endif %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(8000);
+                     $('#tableau_cat').DataTable({"order": [[ 2, "desc" ]], scrollY: 700,"scrollX": false,
+                         "language": {"url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/French.json"}, "paging":false,
+                         "ordering": false,
+                         "info":     false,searching: false,"pageLength": 3,
+                         }
+                     );
+                }
+         );
+    </script>
+
+{% endblock %}

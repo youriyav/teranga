@@ -1,0 +1,325 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+    Inscription
+{% endblock %}
+{% block bloc_css %}
+    <link href="{% static 'managerAdmin/css/login.css'%}" rel="stylesheet">
+{% endblock %}
+{% block main_block %}
+   <div class="container">
+        <div class="card card-container">
+            <h4 class="text-center" style="margin: 0px;">Inscription</h4>
+            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+            <!--img id="profile-img" class="profile-img-card" src="{% static 'teranga_food_logo_192.png' %}" /-->
+            <form class="form-signin" id="registration_form" method="post"  action="{% url 'inscription' %}">
+                {% csrf_token %}
+                <div class="form-group" style="margin: 0px;">
+                     <label style="color: black">Nom</label>
+                    <div class="input-group">
+                        <input type="text" id="nom" name="nom" class="form-control" value="{{ nom }}"    placeholder="entrer votre nom">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                 <p style="color: red;">{{ errer_nom}}</p>
+                </div>
+
+                <div class="form-group" style="margin: 0px;">
+                     <label style="color: black">Prenom</label>
+                    <div class="input-group">
+                        <input type="text"  id="prenom" name="prenom" class="form-control" value="{{ prenom }}" placeholder="entrer votre prenom">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                 <p style="color: red;">{{ errer_prenom}}</p>
+                </div>
+                <div class="form-group" style="margin: 0px;">
+                     <label style="color: black">Email</label>
+                    <div class="input-group">
+                        <input type="text"  id="email" name="email" class="form-control" value="{{ email }}"    placeholder="contact@teranga.com">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                 <p style="color: red;">{{ error_email}}</p>
+                </div>
+
+                <div class="form-group" style="margin: 0px;">
+                    <label style="color: black">Numero</label>
+                    <div class="input-group">
+                        <input type="text"  id="numero" name="numero" class="form-control" value="{{ numero }}"   placeholder="778399425">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                 <p style="color: red;">{{ error_numero}}</p>
+                </div>
+                <div class="form-group" style="margin: 0px;">
+                    <label style="color: black">Code secret<span style="color: red">&nbsp;(code à 4 chiffres)</span></label>
+
+                    <div class="input-group">
+
+                        <input  maxlength="4" type="password"  id="password" name="password" class="form-control  login_input" placeholder="****">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                   <p style="color: red;">{{ login_message }}</p>
+                </div>
+                <div class="form-group" style="margin: 0px;">
+                    <label style="color: black">Confirmer Code secret</label>
+                    <div class="input-group">
+
+                        <input maxlength="4" type="password"  id="password2" name="password2" class="form-control input-sm login_input" placeholder="****">
+                        <span  class="input-group-addon" id="" style="background-color: transparent;border: none"><i   class="fa-2x txt_state" ></i></span>
+                    </div>
+                   <p style="color: red;">{{ login_message }}</p>
+                </div>
+
+                <input class="btn btn-lg btn-primary btn-block btn-signin" type="submit"  id="login_btn_submit" value="Je m'inscris">
+                 <p class="text-center"><a href="{% url 'login' %}" >J'ai déjà un compte</a></p>
+            </form><!-- /form -->
+            <!--a href="#" class="forgot-password">
+                Forgot the password?
+            </a-->
+        </div><!-- /card-container -->
+    </div>
+
+
+    <!-- modal  warning entite-->
+        <div class="modal fade" id="myModal" role="dialog" style="width: 350px;height: 230px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 350px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center " id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="text-center" id="dialog_text" ></p>
+                <p class="text-center" style="margin-top: 10px;"><button id="btn_modif" data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Modifier</button><button id="btn_continuer"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Continuer</button></p>
+            </div>
+        </div>
+    <!-- end modal  warning entite-->
+
+
+{% endblock %}
+{% block aside_nav %}
+                    <li class="bold " ><a href="{% url 'main_acceuil' %}" class="waves-effect waves-cyan"><i class="mdi-action-home"></i> Accueil</a>
+                    {% if request.user.is_authenticated %}
+                        <li class="bold active hide-on-med-and-up"><a href="{% url 'my_logout' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Se déconnecter</a>
+                        <li class="bold active hide-on-med-and-up"><a href="{% url 'mes_commandes' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Mes Commandes</a>
+                    {% else %}
+                        <li  class="bold "><a href="{% url 'login' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-in"></i> Se connecter</a>
+                        <li class="bold " style="background-color: gold;color: black;"><a href="{% url 'inscription' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-out"></i> S'inscrire</a>
+                    {% endif %}
+{% endblock %}
+
+{% block  bloc_script%}
+    <script>
+        $(function () {
+
+            $("#login_btn_submit").click(function (e) {
+
+                is_error=0;
+                is_error+=checkValidInput($("#nom"));
+                is_error+=checkValidInput($("#prenom"));
+                is_error+=checkValidInput($("#email"));
+                is_error+=checkValidInput($("#numero"));
+                is_error+=checkValidInput($("#password"));
+                is_error+=checkValidInput($("#password2"));
+                if(is_error!=0)
+                {
+                     e.preventDefault();
+                }
+                else
+                {
+                     $("#dialog_text").html("Une fois votre compte créé, " +
+                    "vous aller recevoir votre code de validation sur le  numero <span class=\"\" style=\"background-color:gold;color:black;\">"+$("#numero").val()+"</span> \nVoulez vous continuer avec ce numero?");
+
+                $("#myModal").modal('show');
+
+                    //$("#dialog_text").text("vous allez recevoir votre code de validation sur numero "+$("#numero").val()+".\nEst vous sûre de continuer ")
+                     //$("#block_confirmation_num").modal('toggle');
+                    e.preventDefault();
+                }
+            });
+            $("#btn_modif").click(function () {
+                //$("#myModal .close").click();
+                $("#numero").focus();
+            });
+            $("#btn_continuer").click(function () {
+                $("#myModal").modal("hide");
+                $("#registration_form").unbind('submit').submit()
+            });
+
+
+        });
+        function checkValidInput(input)
+        {
+            txtState=input.parent().find(".txt_state");
+            txtError=input.parent().parent().find("p");
+            var res=0;
+            if(input.val()=="")
+            {
+                txtState.removeClass("fa fa-check");
+                txtState.addClass("fa fa-remove");
+                txtState.css({color:"red"});
+                txtError.text("veuiller remplir ce champs");
+                res=1;
+            }
+            else
+            {
+                txtError.text("");
+                if(input.attr("id")=="email")
+                {
+                    if(validateEmail(input.val()))
+                    {
+                        txtState.removeClass("fa fa-remove");
+                        txtState.addClass("fa fa-check");
+                        txtState.css({color:"green"});
+                    }
+                    else
+                    {
+                         txtState.removeClass("fa fa-check");
+                         txtState.addClass("fa fa-remove");
+                         txtState.css({color:"red"});
+                         res=1;
+                    }
+                }
+                else if(input.attr("id")=="numero")
+                {
+                     if(phonenumber(input.val()))
+                    {
+                        txtState.removeClass("fa fa-remove");
+                        txtState.addClass("fa fa-check");
+                        txtState.css({color:"green"});
+                    }
+                    else
+                    {
+                         txtState.removeClass("fa fa-check");
+                         txtState.addClass("fa fa-remove");
+                         txtState.css({color:"red"});
+                         res=1;
+                    }
+                }
+                else if(input.attr("id")=="password")
+                {
+                    if(checkCode(input))
+                    {
+                        txtState.removeClass("fa fa-remove");
+                        txtState.addClass("fa fa-check");
+                        txtState.css({color:"green"});
+                    }
+                    else
+                    {
+                        txtState.removeClass("fa fa-check");
+                         txtState.addClass("fa fa-remove");
+                         txtState.css({color:"red"});
+                         res=1;
+                    }
+                }
+                else if(input.attr("id")=="password2")
+                {
+                    if(checkCode2(input))
+                    {
+                        txtState.removeClass("fa fa-remove");
+                        txtState.addClass("fa fa-check");
+                        txtState.css({color:"green"});
+                    }
+                    else
+                    {
+                        txtState.removeClass("fa fa-check");
+                         txtState.addClass("fa fa-remove");
+                         txtState.css({color:"red"});
+                         res=1;
+                    }
+                }
+                else
+                {
+                    txtState.removeClass("fa fa-remove");
+                    txtState.addClass("fa fa-check");
+                    txtState.css({color:"green"});
+                }
+
+            }
+            return res;
+        }
+        function validateEmail(email)
+        {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+        function phonenumber(_val)
+        {
+            if(!isNaN(_val))
+            {
+                //alert(_val);
+                //alert(String(_val).length);
+                //alert(_val.length);
+                 if(String(_val).length==9)
+                {
+                    tmp=String(_val)[0]+String(_val)[1];
+                    if(tmp=="77" ||tmp=="70" || tmp=="78" || tmp=="76")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        function  checkCode(input) {
+            txtError=input.parent().parent().find("p");
+            if(String(input.val()).length==4)
+            {
+                if(isNaN(input.val()))
+                {
+                    txtError.text("chiffre uniquement")
+                    return false;
+                }
+                else
+                {
+                    txtError.text("")
+                    return true;
+                }
+            }
+            else
+            {
+                txtError.text("4 chiffres au max")
+                return false;
+            }
+        }
+        function  checkCode2(input) {
+            txtError=input.parent().parent().find("p");
+            if(String(input.val()).length==4)
+            {
+                if(isNaN(input.val()))
+                {
+                    txtError.text("chiffre uniquement")
+                    return false;
+                }
+                else
+                {
+
+                    if(input.val()==$("#password").val())
+                    {
+                        txtError.text("")
+                        return true;
+                    }
+                    else
+                    {
+                        txtError.text("les deux codes ne sont pas indentiques");
+                        return false;
+                    }
+
+                }
+            }
+            else
+            {
+                txtError.text("4 chiffres au max")
+                return false;
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,368 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+        {{ entite.nomEntite }}
+    {% endblock %}
+    {% block bloc_css %}
+    <style>
+    .select-dropdown
+    {
+        display: none;
+    }
+    </style>
+    {% endblock %}
+{% block main_block %}
+    <div class="row">
+     <div style="position: fixed;z-index: 2;background-color: white;" class="container">
+         <div  style="border:solid 1px gold ;height: 90px;">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <a href="{% url 'home_fast_food' entite.idEntit %}" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a>
+                     &nbsp;<img class="img-circle" src="{{entite.logoEntite }}" width="60" height="60" >
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">{{ entite.nomEntite }}/{{ categorie.libelleCat }}</h5>
+         </div>
+     </div>
+    </div>
+    <div class="row" style="margin-top: 110px">
+     {% for produit in listeProduit %}
+         <div class="col s12 m6 l4">
+                <div class="card bloc_produit" id="{{ produit.idProduit }}" style="border: solid 1px gold;height: 300px;">
+                    <p hidden class="descript">{{ produit.descriptProduit }}</p>
+                    <div class="card-content  black-text" style="height: 200px;padding: 0px;" >
+                        <h5 id="" class="card-stats-title text-center producLibelle" style="height: 60px;margin: 0px;padding-top: 10px;">{{ produit.nomProduit }}</h5>
+                        <p class="text-center" ><img src="{{ produit.logoProduit.saveName }}" alt="{{ produit.nomProduit }}" style="margin: auto;height: 185px;width: 195px;"></p>
+                    </div>
+                    <div class="card-action"  style="position: relative;top: 50px;">
+                        <h5 class="left" style="position: relative;top: -30px;border: solid;background-color: #BF0710;color: white;padding: 5px;" id="prix" ><span class="product_prize">{{ produit.prixProduit}}</span> Fcfa</h5>
+                        <p style="position: relative;top: -40px;width: 100%;height: 10px;"><a class="btn-floating btn-large halfway-fab waves-effect waves-light pulse right" style="background-color: gold;"><i class="fa fa-shopping-cart" ></i></a></p>
+                    </div>
+                </div>
+         </div>
+     {% endfor %}
+</div>
+
+    <!-- modal detail produit large-->
+    <div class="modal fade " id="myModal" role="dialog" style="width: 340px;height: 470px;background-color: white;" >
+              <!-- Modal content-->
+        <div class="modal-header" style="background-color: gold;margin-bottom: 0px;width: 340px;margin-bottom:0px;">
+            <button type="button" class="close" data-dismiss="modal" style="color: black;font-size: 1.5em;">&times;</button>
+            <h5 class="modal-title center" id="productTitle" style="margin-top: 15px;">r</h5>
+        </div>
+        <div class="modal-body" style="margin-bottom: 0px;margin-top: 0px;">
+            <p class="center-align" style="position: relative;top: -15px"><img style="height: 220px;width: 230px;" src="" id="productImgDesc"></p>
+            <p class="" id="productDesc" style="text-align: center;position: relative;top: -15px"></p>
+            <div style="padding-left: 10px;padding-right:10px;position: relative;">
+                <h3 id="productPrize" class="badge" style="background-color: #BF0710;color: white;font-size: 1.5em;" ></h3>
+                <!--button id="test" class="btn right"--><button id="btnAddInBasket" class="btn-floating btn-large halfway-fab waves-effect waves-light pulse right" style="background-color: gold;position: relative;top:-10px;"><i class="fa fa-shopping-cart" ></i></button><!--/button-->
+            </div>
+        </div>
+    </div>
+    <!--end modal detail produit-->
+
+    <!-- modal  authentification-->
+        <div class="modal fade " id="myModalAuth" role="dialog" style="width: 250px;height: 300px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="center-align" id="productDesc">Désolé,Veuillez vous connecter avant de pouvoir éffectuer toute transaction</p>
+                <div style="padding-left: 10px;padding-right:10px;padding-bottom:10px;margin-bottom: 0px;position: relative;" class="row">
+
+                    <!--button id="test" class="btn right"--><p class="text-center" style=""><a id="" href="{% url 'login' %}" class="btn btn-xs" style="background-color: gold;"><i class="" ></i>Se connecter</a> </p><!--/button-->
+                    <!--button id="test" class="btn right"--><p class="text-center"  style=""><a id="" href="{% url 'inscription' %}" class="btn btn-xs" style="background-color: grey;color:black"><i class="" ></i>S'inscrire</a> </p><!--/button-->
+                </div>
+            </div>
+        </div>
+    <!-- end modal  authentification-->
+
+     <!-- modal  quantite-->
+        <div class="modal fade" id="myModalQte" role="dialog" style="width: 250px;height: 320px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle">Quantité</h5>
+            </div>
+            <!--h5 class="center-align" id="txt_title_prod"></h5-->
+             <div class="row" style="color: black;margin-top: 10px">
+                                <div class="col-lg-4 col-xs-4 col-lg-offset-2 col-xs-offset-2">
+                                    <p id="nbr_qte" style="position: relative;top: 45px;color: black;font-size: 1.6em;font-weight: bold;" class="pull-right"></p>
+                                </div>
+                                <div class="col-lg-4 col-xs-4" >
+                                    <p style=""><a class="btn-flat btn-large" id="btn_plus" style="color: black;background-color: gold"><i class="fa fa-plus-circle fa-5x"></i></a></p>
+                                    <p style=""><a class=" btn-flat btn-large" id="btn_moins" style="color: black;background-color: darkgray"><i class="fa fa-minus-circle fa-5x"></i></a></p>
+                                </div>
+                            </div>
+        <h6 class="center-align" ><span id="txt_prix_prod"></span> Fcfa</h6>
+        <p class="text-center" style="margin-top: 10px;"><button id="btnAddInBasketConf" class="btn-floating btn-large halfway-fab waves-effect waves-light pulse" style="background-color: gold;position: relative;top:-10px;"><i class="large material-icons " >shopping_cart</i></button></p>
+        </div>
+    <!-- end modal  quantite-->
+
+
+    <!-- modal  warning entite-->
+        <div class="modal fade" id="myModalWarningEntite" role="dialog" style="width: 250px;height: 300px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center " id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="text-center" style="color: black;">Vous ne pouvez pas commander dans deux restaurants differents en même temps.</p>
+                                <p class="text-center" style="color: black;">Veuillez d'abord lancer l'autre commande ou soit vider votre panier avant de continuer.</p>
+                <p class="text-center" ><button class="btn-flat btn-large" data-dismiss="modal"  style="color: black;background-color: gold">Ok</button></p>
+
+            </div>
+        </div>
+    <!-- end modal  warning entite-->
+
+
+
+    <!-- modal  localité-->
+        <div class="modal fade" id="myModalLocality" role="dialog" style="width: 300px;height: 280px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close closeLocality" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                <p class="center-align" style="color: red;margin: 0px">Pour l'instant notre service est limité dans certaines zones.</p>
+                 <form class="" >
+                    <select id="locality" class="form-control">
+                        <option value="0">Localité</option>
+                        {% for zone in zones %}
+                            <option value="{{ zone.idLocalite }}">{{ zone.libelle }}</option>
+                        {% endfor %}
+
+
+                    </select>
+                    <p style="color: red;margin-top: 5px; " id="localityError" ></p>
+                </form>
+                <p class="text-center" style="margin-top: 10px;"><button class="closeLocality" data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnLocalityOk"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Valider</button></p>
+            </div>
+        </div>
+    <!-- end modal  localité-->
+
+
+   <!-- modal  newZone-->
+        <div class="modal fade" id="myModalZone" role="dialog" style="width: 300px;height: 180px;" >
+              <!-- Modal content-->
+            <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title center" id="productTitle"></h5>
+            </div>
+            <div class="modal-body" style="margin-bottom: 0px;">
+                 <form class="" >
+                   <input type="text" id="suggestZone" class="form-control" placeholder="entrer votre zone">
+                    <p style="color: red;margin-top:-10px; " id="zoneError" ></p>
+                    <p style="margin-top:-10px; " id="zoneWaiting" hidden>envoie en cours ...</p>
+                </form>
+                <p class="text-center" style="margin-top: 10px;"><button class="   " data-dismiss="modal"  style="color: black;background-color: gray;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Annuler</button><button id="btnSuggestZone"  style="color: black;background-color: gold;margin-right: 10px;width: 100px;padding: 5px;border-radius: 5px">Envoyer</button></p>
+            </div>
+        </div>
+    <!-- end modal  v-->
+
+{% endblock %}
+    {% block bloc_script %}
+         <!--script type="text/javascript" src="{% static 'Materialize/bower_components/jquery/dist/jquery.min.js'%}"></script-->
+        <!--script src="{% static 'senfood_js/dialog.js'%}"></script-->
+        <script>
+       var selectedProduct=null;
+             $(function()
+             {
+                 var next=1;
+                  $(".closeLocality").click(function (e) {
+                      $("#myModalQte").hide();
+                  });
+                  $("#btnSuggestZone").click(function (e) {
+                      if($("#suggestZone").val()=="")
+                      {
+                          $("#zoneError").text("veuillez entrer votre zone")
+                      }
+                      else
+                      {
+                          $("#zoneError").text("");
+                          $("#zoneWaiting").show();
+                          $("#btnSuggestZone").prop('disabled', true);
+                          zone=$("#suggestZone").val();
+                          var csrftoken = getCookie('csrftoken');
+                          $.ajax({
+                            //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                             url :"{% url 'suggerer_localite' %}",
+                            type : "POST", // http method
+                            timeout:100000,
+                            data: { libelle:zone},
+                            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                            success : function(json)
+                            {
+                                $("#myModalZone").modal("hide");
+                                $("#myModalLocality").modal("hide");
+                                $("#myModalQte").modal("hide");
+                                $("#myModal").modal("hide");
+                                $("#zoneWaiting").show()
+                                $("#btnSuggestZone").prop('disabled', false);
+                                Materialize.toast('<span class="">Merci, votre suggèssion a été envoyée avec succès!<br>Nous espérons être bientôt opérationnels dans votre zone </span>', 5000);
+                                 //$("#txtAfter").html("<p class=\"center-align\" id=\"txtAfter\">Votre nouveau code de validation vous envoyé par sms sur le numero <span class=\"text-primary\" id=\"_email\">{{ client.personne.numeroPersonne }}</span><p>");
+                                 //$("#after").show();
+                                 //token=json;
+
+                            },
+                            error :
+                                function(xhr,errmsg,err)
+                                {
+
+                                    //$("#before").hide();
+                                    //$("#txtAfter").text(xhr.responseText);
+                                    //$("#after").show();
+                                }
+                        });
+                      }
+                  });
+                  $("#btnLocalityOk").click(function (e) {
+                      if($("#locality").val()=="0")
+                      {
+                          $("#localityError").text("Séléctionner une zone");
+                      }
+                      else
+                      {
+                          amplify.store("locality",$("#locality").val());
+                          $("#myModalLocality").modal("hide");
+                          $("#localityError").text("");
+                      }
+                  });
+                  $("#btnSuggestLocality").click(function (e) {
+                      $("#myModalZone").modal("show");
+                  });
+                  $(".bloc_produit").click(function (e) {
+                        selectedProduct=$(this);
+                        productTitle=selectedProduct.find(".producLibelle").text();
+                        productImgDesc=selectedProduct.find("img").attr("src");
+                        productTxtDesc=selectedProduct.find(".descript").text();
+                        productPrize=selectedProduct.find(".product_prize").text();
+                        $("#productTitle").text(productTitle);
+                        $("#productDesc").text(productTxtDesc);
+                        $("#productPrize").text(productPrize+" Fcfa");
+                        $("#productImgDesc").attr("src",productImgDesc);
+                        //alert(productPrize);
+                        $("#btnAddInBasket").click(function (e)
+                        {
+                             {% if request.user.is_authenticated %}
+
+                                  $('#myModalQte').modal('show');
+                                  $(".select-dropdown").hide();
+                                  $(".caret").hide();
+                                  $(".select-wrapper").css("borderColor","white");
+
+                                  /*mlocality=amplify.store("locality");
+                                  if(mlocality==null || mlocality=="")
+                                    {
+                                        $('#myModalLocality').modal('show');
+                                    }*/
+                                  $('#txt_title_prod').text(productTitle);
+                                  $('#txt_prix_prod').text(productPrize);
+                                  $('#nbr_qte').text("1");
+                                  currentQte=1;
+                                 {% else %}
+                                  $('#myModalAuth').modal('show');
+
+                            {% if request.user.is_authenticated %}
+                      {% endif %}
+                             {% endif %}
+
+                         });
+
+
+                      $('#myModal').modal('show');
+
+                });
+
+                  $("#btn_plus").click(function () {
+                                     currentQte=parseInt($("#nbr_qte").text());
+                                     productPrize=selectedProduct.find(".product_prize").text();
+                                     //selectedProductPrize
+                                     if(currentQte<10)
+                                     {
+                                         currentQte++;
+                                         $("#nbr_qte").text(currentQte);
+                                         tmp=currentQte*productPrize;
+                                         $("#txt_prix_prod").text(tmp);
+                                     }
+                                 });
+
+                                  $("#btn_moins").click(function () {
+                                     currentQte=parseInt($("#nbr_qte").text());
+                                     productPrize=selectedProduct.find(".product_prize").text();
+                                     //selectedProductPrize
+                                     if(currentQte>1)
+                                     {
+                                         currentQte--;
+                                         $("#nbr_qte").text(currentQte);
+                                         tmp=currentQte*productPrize;
+                                         $("#txt_prix_prod").text(tmp);
+                                     }
+                                 });
+             $("#btnAddInBasketConf").click(function (e) {
+                {% if request.user.is_authenticated %}
+                          tmp_name="commande_"+{{ request.user.username }};
+                          liste=amplify.store(tmp_name);
+                          mcontitue=0;
+                          if(liste==null || liste.length==0)
+                         {
+                             tabCommande=[];
+                             commande={};
+                             commande.cmd_id=1;
+                             commande.id=selectedProduct.attr("id");
+                             commande.quantite=parseInt(currentQte);
+                             commande.entite={{ entite.idEntit }};
+                             commande.isStart=0;
+                             commande.libelle=selectedProduct.find(".producLibelle").text();
+                             commande.prix=selectedProduct.find(".product_prize").text();
+                             tabCommande.push(commande);
+                             amplify.store(tmp_name,tabCommande);
+                         }
+                          else
+                         {
+                             if(liste[0].entite=={{ entite.idEntit }})
+                             {
+                                 commande={};
+                                 commande.cmd_id=liste.length+1;
+                                 commande.id=selectedProduct.attr("id");
+                                 commande.quantite=parseInt(currentQte);
+                                 commande.entite={{ entite.idEntit }};
+                                 commande.isStart=0;
+                                 commande.libelle=selectedProduct.find(".producLibelle").text();
+                                 commande.prix=selectedProduct.find(".product_prize").text();
+                                 liste.push(commande);
+                                 amplify.store(tmp_name,liste);
+                             }
+                             else
+                             {
+                                 $("#myModalWarningEntite").modal('show');
+                             }
+                         }
+                         updateNuberItemInBasket();
+                         $('#myModalQte').modal('hide');
+                         $('#myModal').modal('hide');
+                      {% endif %}
+             });
+
+             });
+             function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+          }
+        </script>
+    {% endblock %}

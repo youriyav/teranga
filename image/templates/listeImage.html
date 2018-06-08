@@ -1,0 +1,104 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+
+    <link href="{% static 'senfood_css/categorie/listeCategorie.css'%}" rel="stylesheet">
+{% endblock %}{% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_image' %}"><i style="margin-right: 10px;" class="fa fa-image"></i> Images</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+    <div class="row">
+
+
+<div class="right" style="padding-right:25px;padding-top: 0px;position: relative;top: -10px;">
+   <a href="{% url 'new_image' %}" title="uploader" class="text-rigth"><i class="fa fa-upload fa-3x" style="color: gold"></i></a>
+</div>
+
+ <table class="table" id="table_utilisateur">
+        <thead class="fixed-table-header">
+            <tr class="table-bordered">
+                <th>IMAGE</th>
+                <th>LIBELLE</th>
+                <th>TYPE</th>
+                <th>DESCRIPTION</th>
+                <th>DATE CREATION</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for image in users %}
+            <tr class="table-bordered">
+                <td ><img src="{{ image.saveName }}" class="myimg" width="50" height="50"></td>
+                <td>{{ image.libelle }}</td>
+                <td>
+                {% if image.type == 2 %}
+                        Logo Catégorie
+                    {% endif %}
+                {% if image.type == 3 %}
+                        Logo Produit
+                    {% endif %}
+                </td>
+                <td>{{ image.description }}</td>
+                <td>{{ image.dateCreation }}</td>
+                <td>
+                    <a href="{% url 'modifierImage' image.idImage %}" title="Modifier"><i class="fa fa-edit fa-2x"></i></a>
+                    <a href="{% url 'supprimerImage' image.idImage %}" title="supprimer"><i style="color: red" class="fa fa-trash fa-2x"></i></a>
+                </td>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+                    <div class="pagination">
+    <span class="step-links">
+        {% if users.has_previous %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" href="?page={{ users.previous_page_number }}">Prec</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ users.number }} / {{ users.paginator.num_pages }}.
+        </span>
+
+        {% if users.has_next %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" class="" href="?page={{ users.next_page_number }}">Suiv</a>
+        {% endif %}
+    </span>
+</div>
+<!-- modal detail produit-->
+    <div class="modal fade" id="myModal" role="dialog" style="width: 350px;height: 300px;" >
+              <!-- Modal content-->
+        <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body" style="margin-bottom: 0px;">
+            <p class="center-align"><img style="height: 200px;width: 200px;" src="" id="productImgDesc"></p>
+            <p class="center-align" id="productDesc"></p>
+        </div>
+    </div>
+    <!--end modal detail produit-->
+    </div>
+{% endblock %}
+{% block block_js %}
+<script>
+ $(function()
+    {
+        $(".myimg").click(function () {
+           productImgDesc=$(this).attr("src");
+            $("#productImgDesc").attr("src",productImgDesc);
+             $('#myModal').modal('show');
+        });
+    });
+</script>
+{% endblock %}

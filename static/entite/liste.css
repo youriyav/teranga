@@ -1,0 +1,10 @@
+th,td {
+    text-align: center;
+}
+a:hover{
+   cursor: hand;
+}
+td button
+{
+    background-color: white;
+}

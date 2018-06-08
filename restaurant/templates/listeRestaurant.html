@@ -1,0 +1,104 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    Liste-utilisateur
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+LISTE-RESTAURANTS
+    <a href="{% url 'nouveau_restaurant'  %}" title="Nouvelle entité" class="pull-right"><i class="fa fa-plus-circle fa-1x"></i></a>
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+               {% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li ><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                        <li class="active"><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li class="active"><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+            {% endif %}
+{% block main_bloc %}
+    <div class="modal fade test"  id="bloc_confirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    ccdsqfsdf
+                </div>
+                <div class="modal-body">
+                    fgdfgdfgdf
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table" id="table_utilisateur">
+        <thead class="fixed-table-header">
+            <tr class="table-bordered">
+                <th>IMAGE</th>
+                <th>NOM</th>
+                <th>ENTITE</th>
+                <th>NUMERO</th>
+                <th>EMAIL</th>
+                <th>QUARTIER</th>
+                <th>DATE CREATION</th>
+                <th>HORAIRES</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for entite in listeEntite %}
+                    <tr >
+                        <td ><img src="{% static '/'%}{{ entite.logoEntite }}" width="100" height="50"></td>
+                        <td  style="padding-top: 20px;"><div style="background-color: {{ entite.ColeurEntite }};height: 20px;width: 80px;"></div></td>
+                        <td  style="padding-top: 20px;">{{ entite.nomEntite }}</td>
+                        <td  style="padding-top: 20px;">{{ entite.numeroEntite }}</td>
+                        <td style="padding-top: 20px;">{{ entite.emailEntite }}</td>
+                        <td style="padding-top: 20px;">{{ entite.sloganEntite}}</td>
+                        <td style="padding-top: 20px;">{{ entite.dateCreation}}</td>
+                        <td style="padding-top: 20px;">
+                        <a href="{% url 'profilEntite' entite.idEntit %}" title="détail"><i class="fa fa-home fa-2x"></i></a>
+                            <a href="{% url 'editer_entite' entite.idEntit %}" title="Modifier"><i class="fa fa-edit fa-2x"></i></a>
+                            {% if entite.estDesactiver == 1 %}
+                                 <a href="{% url 'activer_Entite' entite.idEntit %}" title="activer" style="color: green;"><i class="fa fa-play fa-2x"></i></a>
+                            {% else %}
+                                <a href="{% url 'desactiver_Entite' entite.idEntit%}" title="desactiver" style="color: green;" data-toggle="modal" target="#bloc_confirm"><i class="fa fa-stop fa-2x"></i></a>
+                            {% endif %}
+                        <a href="{% url 'ajouterManagerEntite' entite.idEntit%}" title="ajouter manager" style="color: #aa7700;" ><i class="fa fa-user fa-2x"></i></a>
+                                <!--a href="" title="desactiver" style="color: yellow;"><i class="fa fa-stop fa-2x"></i></a>
+
+                                <a href="" title="activer" style="color: yellow;"><i class="fa fa-play fa-2x"></i></a-->
+                            &nbsp;&nbsp;<a href="{% url 'supprimer_Entite' entite.idEntit %}" title="supprimer" style="color: red;" data-confirm="Etes-vous certain de vouloir  supprimer l'utilisateur <span class='badge'>{{ utilisateur.personne.nomPersonne }}</span>?" ><i class="fa fa-trash fa-2x"></i></a>
+                            &nbsp;&nbsp;<a href="" title="supprimer" style="color: #843534;"  ><i class="fa fa-map-marker fa-2x"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    {% if messages%}
+      {% for message in messages %}
+          <div id="flashbag"  style="border: solid #1bc656;z-index: 1000;color: white;border-radius:10px;background-color:#1fbda5;padding: 10px;text-align: center" class="col-lg-4 col-lg-offset-4">{{ message}}</div>
+      {% endfor %}
+ {% endif %}
+{% endblock %}
+{% block block_js %}
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                    $('#flashbag').fadeOut(5000);
+                }
+         );
+    </script>
+
+{% endblock %}

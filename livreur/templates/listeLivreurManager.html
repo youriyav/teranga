@@ -1,0 +1,235 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+Parametres
+{% endblock %}
+{% block block_css %}
+<!--link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap.min.css' %} " /-->
+    <link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap-timepicker.min.css'%}" />
+    <style>
+        .myAction:hover
+        {
+            color: gold;
+        }
+
+    </style>
+     <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+{% endblock %}
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+
+<div class="row">
+     <div class="col-lg-10 col-lg-offset-1">
+                 <h1 class="text-center text-primary">Liste des Livreurs</h1>
+     </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <table id="tableau_cat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead >
+                <tr>
+                    <th>NOM</th>
+                    <th>PRENOM</th>
+                    <th>NUMERO</th>
+                    <th>STATUT</th>
+                    <th>LAST UPDATE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for livreur in listeLivreur %}
+                <tr>
+                    <td>{{ livreur.personne.nomPersonne  }}</td>
+                    <td>{{ livreur.personne.prenomPersonne  }}</td>
+                    <td>{{ livreur.personne.numeroPersonne  }}</td>
+                    <td >en ligne</td>
+                    <td >en ligne</td>
+                    <td ></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+{% endblock %}
+{% block block_js %}
+    <script type="text/javascript" src="{% static 'myTemplate/js/materialize.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-timepicker/js/bootstrap-timepicker.min.js' %} "></script>
+    <script>
+    var action=0;
+    var click=0;
+    $(function () {
+        $("#btnSaveVersionDb").click(function () {
+            action=3;
+            $('#modalConf').modal('show');
+        });
+        $("#btnResVersionDb").click(function () {
+            action=2;
+            $('#modalConf').modal('show');
+        });
+        $("#btnAnnulerVersionDb").click(function () {
+             $("#versionDb").text("{{ version_db }}");
+                $("#btn_plus").css("backgroundColor","gold");
+                click=0;
+        });
+        $("#btn_plus").click(function () {
+            if(click==0)
+            {
+                nbrVersion=parseInt($("#versionDb").text());
+                nbrVersion++;
+                $("#versionDb").text(nbrVersion);
+                $(this).css("backgroundColor","gray");
+                click++;
+            }
+        });
+        $("#btnContinuer").click(function () {
+            if(action==1)
+            {
+               $('#modalConf').modal('hide');
+                debut=$("#startTime").val();
+                fin=$("#endTime").val();
+                $(this).prop("disabled",true);
+                updateParam("heure_debut",debut);
+                updateParam("heure_fin",fin);
+                $(this).prop("disabled",false);
+            }
+            if(action==2)
+            {
+                 $('#modalConf').modal('hide');
+                 $("#versionDb").text("1");
+                  updateParam("version","0");
+            }
+            if(action==3)
+            {
+                 $('#modalConf').modal('hide');
+                  updateParam("version",$("#versionDb").text());
+            }
+
+        });
+        $("#btnSaveHeure").click(function () {
+            action=1;
+            $('#modalConf').modal('show');
+            //Materialize.toast('<span>votre livreur est à proximité <br>Veuillez sortir pour récuperer votre commande</span>', 5000);
+
+        });
+        $("#btnAnnulerHeure").click(function () {
+            //$("#startTime option").eq(5).prop("selected","selected");
+            for (i=0;i<24;i++)
+            {
+                if($("#startTime option").eq(i).val()=="{{ heure_debut }}")
+                {
+                    $("#startTime option").eq(i).prop("selected","selected");
+                }
+            }
+            for (i=0;i<24;i++)
+            {
+                if($("#endTime option").eq(i).val()=="{{ heure_fin}}")
+                {
+                    $("#endTime option").eq(i).prop("selected","selected");
+                }
+            }
+            //alert($("#startTime").children().size());
+        });
+       for(i=0;i<24;i++)
+       {
+           tmp="";
+           if(i<10)
+           {
+               tmp="0"+i+":00";
+           }
+           else
+           {
+               tmp=i+":00";
+           }
+           if(tmp=="{{ heure_debut }}")
+           {
+               $("#startTime").append("<option value="+tmp+" selected>"+tmp+"</option>");
+           }
+           else
+           {
+               $("#startTime").append("<option value="+tmp+">"+tmp+"</option>");
+           }
+
+       }
+        for(j=0;j<24;j++)
+       {
+           tmp="";
+           if(j<10)
+           {
+               tmp="0"+j+":00";
+           }
+           else
+           {
+               tmp=j+":00";
+           }
+           if(tmp=="{{ heure_fin }}")
+           {
+               $("#endTime").append("<option value="+tmp+" selected>"+tmp+"</option>");
+           }
+           else
+           {
+               $("#endTime").append("<option value="+tmp+">"+tmp+"</option>");
+           }
+
+       }
+    });
+    function updateParam(ukey,uvalue)
+    {
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            url :"{% url 'update_Param' %}",
+            type : "POST", // http method
+            timeout:100000,
+            data: {key:ukey,value:uvalue},
+            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+            success :
+                function(json)
+                {
+                    Materialize.toast('<span> '+ukey+' a été mis à jour</span>', 5000);
+                },
+            error :
+                function(xhr,errmsg,err)
+                {
+                          return false;
+                }
+        });
+    }
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            //console.log("yangala"+cookieValue);
+            return cookieValue;
+          }
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,188 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+    Inscription
+{% endblock %}
+{% block bloc_css %}
+    <!--link rel="stylesheet" type="text/css" href="{% static 'client/css/login.css' %}"-->
+
+{% endblock %}
+{% block main_block %}
+
+    <div class="container">
+        <div class="row" style="padding: 10px;">
+            <div  class="col s12 m6 l6 offset-l3 offset-m3" style="border: solid 1px gold;border-radius: 10px;">
+                <p class="text-center" style="color: #1bc656;"><i class="fa fa-check fa-4x"></i></p>
+                    <h5 class="text-center">Félicitation {{ client.personne.nomPersonne }}</h5>
+                 <p class="p_perso" >&nbsp;votre compte a été crée avec succès.Un code de validation vous a été envoyé par sms sur le numero <span class="text-primary" id="_email">{{ client.personne.numeroPersonne }}</span> </p>
+                    <p class="p_perso"> &nbsp;&nbsp;&nbsp; Pour continuer et valider votre  inscription, veuillez entrer le code dans le champs ci-dessous.</p>
+                    <form class="col l6 offset-l3 s8 offset-s2">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input  style="background-color: white;border: solid 1px gold;" id="txtValidation" type="text" name="keyValidation" placeholder="XXXXXX" class="form-control">
+                            <p style="color: red;" id="txtError">{{ code_erreur}}</p>
+                        </div>
+                         <div class="">
+                            <p class=""><input id="btnValidation" style="background-color: gold;color: black;"  type="submit" class="btn" value="Valider mon compte"></p>
+                             <p class="text-center"><button   style="background-color: grey;color: white;"   class="btn btn_regenerer">Je n'ai rien reçu</button></p>
+
+                        </div>
+                        <div class="form-group">
+                        </div>
+                    </form>
+                    <div style="margin: 0px;" id="block_validation" hidden>
+                        <img src="{% static 'refr.gif' %}" width="30">
+                        <p class="center-align">Validation en cours ...</p>
+                         <!--p class="center-align">Veuillez patienter</p-->
+                    </div>
+            </div>
+
+            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+
+        </div><!-- /card-container -->
+    </div><!-- /container -->
+
+    <!-- modal validation-->
+    <div class="modal fade" id="modalValidation" role="dialog" style="width: 350px;height: 200px;" >
+              <!-- Modal content-->
+        <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+            <h5 class="modal-title center" id="productTitle"></h5>
+        </div>
+        <div class="modal-body" style="margin-bottom: 0px;">
+            <p class="center-align">Veuillez patienter</p>
+            <p id="img_loading" class="col-lg-8 col-lg-offset-2 text-center"><img src="{% static 'refr.gif' %}" width="50"></p>
+            <p class="center-align">Validation en cours ...</p>
+        </div>
+    </div>
+    <!--end modal validation-->
+
+
+    <!-- modal Regenaration-->
+    <div class="modal fade" id="modalRegenaration" role="dialog" style="width: 350px;height: 230px;" >
+              <!-- Modal content-->
+        <div class="modal-header" style="background-color: gold;margin-bottom: 0px;">
+            <h5 class="modal-title center" id="productTitle"></h5>
+        </div>
+        <div class="modal-body" style="margin-bottom: 0px;">
+            <div id="before">
+                <p class="center-align">Veuillez patienter</p>
+                <p id="img_loading" class="col-lg-8 col-lg-offset-2 text-center"><img src="{% static 'refr.gif' %}" width="50"></p>
+                <p class="center-align">Regénération du code en cours ...</p>
+            </div>
+            <div id="after" class="center-align" hidden>
+                <p class="center-align" id="txtAfter"></p>
+                <p class="center-align"><button class="btn" type="button"  data-dismiss="modal" style="background-color: gold">Ok</button></p>
+            </div>
+
+
+        </div>
+    </div>
+    <!--end modal Regenaration-->
+{% endblock %}
+{% block nav_gauche %}
+                <li class="" ><a href=""></a></li>
+                <li ><a href="{% url 'main_acceuil' %}">Acceuil</a></li>
+                {% if request.user.is_authenticated %}
+                   <li ><a href="" class="img_my_basket"  data-toggle="modal" data-target="#block_mon_panier"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mon Panier</a></li>
+                   <li ><a href=""><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mes Commandes</a></li>
+                   <li ><a href=""><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Mes Points de fidélités</a></li>
+                {% else %}
+                   <li ><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                   <li class="my_active"><a href=""><i class="fa fa-sign-out"></i> S'inscrire</a></li>
+                {% endif %}
+            {% endblock %}
+{% block bloc_script %}
+
+    <script>
+        $(function () {
+            var token="{{ validation.keyValidation }}";
+            $("#btnValidation").click(function (e) {
+                e.preventDefault();
+                is_error=0;
+                input=$("#txtValidation").val();
+                if(input=="")
+                {
+                    is_error=1;
+                }
+                if(is_error==1)
+                {
+                    $("#txtError").text("Veuillez remplir ce champs");
+                }
+                else
+                {
+                    $("#txtError").text("");
+                    $('#modalValidation').modal('show');
+                    //$('#block_validation').show();
+                    var csrftoken = getCookie('csrftoken');
+                    $.ajax({
+                            url :"{% url 'validation_compte_client' %}",
+                            type : "POST", // http method
+                            timeout:100000,
+                            data: {keyValidation:$("#txtValidation").val()},
+                            beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                            success : function(json)
+                            {
+                                document.location.href="{% url 'main_acceuil' %}";
+                            },
+                            error :
+                                function(xhr,errmsg,err)
+                                {
+                                    //$('#block_validation').hide();
+                                    $('#modalValidation').modal('hide');
+                                    $("#txtError").text(xhr.responseText);
+                                }
+                        });
+                    }
+
+            });
+           $(".btn_regenerer").click(function (e) {
+               e.preventDefault();
+               $("#before").show();
+               $("#after").hide();
+              $('#modalRegenaration').modal('show');
+                var csrftoken = getCookie('csrftoken');
+               $.ajax({
+                        //url : "http://192.168.2.128/CARTALINK%20API/bank/creerCompteMinimal",
+                        url :"{% url 'regenerer_token_webservice' %}",
+                        type : "POST", // http method
+                        timeout:100000,
+                        data: {keyValidation:token},
+                        beforeSend: function(xhr){xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+                        success : function(json)
+                        {
+                            console.log(json);
+                             $("#before").hide();
+                             $("#txtAfter").html("<p class=\"center-align\" id=\"txtAfter\">Votre nouveau code de validation vous a été envoyé par sms sur le numero <span class=\"text-primary\" id=\"_email\">{{ client.personne.numeroPersonne }}</span><p>");
+                             $("#after").show();
+                             token=json;
+
+                        },
+                        error :
+                            function(xhr,errmsg,err)
+                            {
+                                console.log(xhr);
+                                $("#before").hide();
+                                $("#txtAfter").text(xhr.responseText);
+                                $("#after").show();
+                            }
+                    });
+           });
+        });
+         function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            //console.log("yangala"+cookieValue);
+            return cookieValue;
+          }
+    </script>
+{% endblock %}

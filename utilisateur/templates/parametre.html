@@ -1,0 +1,38 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    Liste-utilisateur
+{% endblock %}
+{% block block_css %}
+<link href="{% static 'utilisateur/liste_user.css'%}" rel="stylesheet">
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+{% endblock %}
+{% block titre_module %}
+PARAMETRE-UTILISATEUR
+    <a href="{% url 'nouveau_user' %}" title="Nouveau utilisateur" class="pull-right"><i class="fa fa-plus-circle fa-1x"></i></a>
+{% endblock %}
+{% if request.user.is_superuser == 1 %}
+                {% block nav_gauche_admin %}
+                        <li ><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li><a href="{% url 'liste_users'%}"><i class="glyphicon glyphicon-user"></i> Utilisateurs</a></li>
+                        <li ><a href="{% url 'liste_log'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                        <li><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Logs</a></li>
+                 {% endblock %}
+        {% else %}
+                {% block nav_gauche_user %}
+                        <li><a href="{% url 'tohome' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+                        <li  ><a href="{% url 'liste_entite'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Entités</a></li>
+                 {% endblock %}
+            {% endif %}
+{% block main_bloc %}
+    <div class="col-lg-6 col-lg-offset-3">
+        <table class="table table-bordered">
+            <tr>
+                <th ><a href="{% url 'editer_user_pass' request.user.username %}" title="midifier mot de passe">modifier mot de passe <i class="fa fa-gear pull-right"></i></a> </th>
+            </tr>
+
+        </table>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    liste-client
+{% endblock %}
+{% block block_css %}
+
+<link href="{% static 'font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'senfood_css/categorie/listeCategorie.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+
+    <div class="row">
+    <div class="col-md-12 " >
+        <form class="form-inline pull-right">
+          <div class="form-group">
+            <input type="text" style="height: 40px;position: relative;top: 10px;" class="form-control" id="numero" placeholder="numero">
+          </div>
+          <!--div class="form-group text-center">
+            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+          </div-->
+          <button style="background-color: gold" type="submit" class="btn btn-sm btn-default"><i class="fa fa-search "></i></button>
+        </form>
+    </div>
+        <div class="col-lg-12 col-md-12 ">
+            <table id="tableau_cat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead >
+                <tr>
+                    <th>NOM{{ diff1 }}</th>
+                    <th>PRENOM</th>
+                    <th>SPEUDO</th>
+                    <th>NUMERO</th>
+                    <th>EMAIL</th>
+                    <th>DATE DE CREATION</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for client in users %}
+                <tr>
+
+                    <td >{{ client.personne.nomPersonne}}</td>
+                    <td >{{ client.personne.prenomPersonne}}</td>
+                    <td >{{ client.user.username }}</td>
+                    <td >{{ client.personne.numeroPersonne }}</td>
+                    <td >{{ client.personne.emailPersonne }}</td>
+                    <td >{{ client.personne.dateCreation }}</td>
+                    <td >
+                           {% if client.estBloquer == 1 %}
+                                <a href="{% url 'debloquer_client' client.idclient %}" title="activer" style="color: green;"><i class="fa fa-play fa-2x"></i></a>
+                            {% else %}
+                                <a href="{% url 'bloquer_client' client.idclient  %}" title="bloquer" style="color: yellow;"><i class="fa fa-stop fa-2x"></i></a>
+                            {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+    <span class="step-links">
+        {% if users.has_previous %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" href="?page={{ users.previous_page_number }}">Prec</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ users.number }} / {{ users.paginator.num_pages }}.
+        </span>
+
+        {% if users.has_next %}
+            <a style="width: 40px;background-color: gold;padding: 10px;color: black;border-radius: 8px;font-size: 1.2em" class="" href="?page={{ users.next_page_number }}">Suiv</a>
+        {% endif %}
+    </span>
+</div>
+        </div>
+
+    </div>
+   {% include 'dialog.html' %}
+{% endblock %}
+{% block block_js %}
+
+    <script>
+
+         $(document).ready(
+             function ()
+                {
+                     $('#flashbag').fadeOut(5000);
+
+                }
+         );
+    </script>
+
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+        {{ entite.nomEntite }}
+    {% endblock %}
+    {% block bloc_css %}
+
+    {% endblock %}
+{% block titre_page_h %}
+
+{% endblock %}
+{% block main_block %}
+    <div class="row">
+     <div style="position: fixed;z-index: 2;background-color: white;" class="container">
+         <div  style="border:solid 1px gold ;height: 90px;">
+             <div class="row" style="">
+                 <div class="col-lg-12 " >
+                    <a href="{% url 'main_acceuil'  %}" title="Retour" style="color: gold;position: relative;top: 15px;left: 10px;margin-right: 10px;"><i class="fa fa-arrow-left fa-3x" ></i></a>
+                     &nbsp;<img class="img-circle" src="{{ entite.logoEntite }}" width="60" height="60" >
+                 </div>
+             </div>
+             <h5 class="col-lg-6 " style="position: relative;top: -15px;">{{ entite.nomEntite }}</h5>
+         </div>
+     </div>
+    </div>
+<div class="row" style="margin-top: 110px" >
+{% for categorie in listeCategorie %}
+
+    <!--a href="{% url 'liste_produit_cat' entite.idEntit categorie.idCategorie %}" class="entite_link">
+            <div class="col s12 m6 l4 xl3" >
+                <div class="card" style="border: solid 1px gold;height: 200px">
+                    <div class="card-content   black-text" style="height: 150px;padding: 0px;" >
+                        <h5 class="card-stats-title text-center " style="height: 60px;margin: 0px;padding-top: 10px;">{{ entite.nomEntite }}</h5>
+                        <p class="text-center" ><img class="img img-responsive"  src="{{ categorie.logoCat }}" style="margin: auto"></p>
+                    </div>
+                    <div class="card-action  " style="height: 50px;">
+                       <p class=" center" style="color: gold">
+                           <i class="fa fa-star-o"></i>
+                       </p>
+                    </div>
+                </div>
+            </div>
+        </a-->
+
+
+
+
+<a href="{% url 'liste_produit_cat' entite.idEntit categorie.idCategorie %}" class="entite_link">
+            <div class="col s12 m6 l4" >
+                <div class="card" style="border: solid 1px gold;height: 300px;">
+                    <div class="card-content   black-text" style="height: 200px;padding: 0px;">
+                        <h5 class="card-stats-title center"style="height: 60px;margin: 0px;padding-top: 10px;">{{ categorie.libelleCat }}</h5>
+                        <p class="text-center" style="margin: 0px;"><img class="img img-responsive"  src="{{ categorie.logoCat.saveName }}"style="margin: auto;height: 195px;width: 195px;"></p>
+                    </div>
+                    
+                </div>
+            </div>
+        </a>
+ {% endfor %}
+        </div>
+
+{% endblock %}
+
+    {% block bloc_script %}
+        <script src="{% static 'senfood_js/dialog.js'%}"></script>
+
+        <script>
+        var selectedProduct;
+        var selectedProductPrize=0;
+        var selectedProductId=0;
+        var currentQte=0;
+        var selected_item_title;
+        var selected_item_prix;
+        var selectedMenu;
+        var trToRemove;
+        var mysecret=""
+             $(function()
+             {
+                 //%$("#block_error").modal('open');
+                  /*$('#modal_quantite').modal({
+                      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                      opacity: .5, // Opacity of modal background
+                      inDuration: 300, // Transition in duration
+                      outDuration: 200, // Transition out duration
+                      startingTop: '1%', // Starting top style attribute
+                      endingTop: '8%', // Ending top style attribute
+                      ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                        alert("Ready");
+                        console.log(modal, trigger);
+                      },
+                      complete: function() { alert('Closed'); } // Callback for Modal close
+                    }
+                  );*/
+ var next=1;
+                  //$("#tabs-swipe-demo").find("li").eq(3).fadeOut(5000);
+                 $("#btn_next").click(function (e) {
+                     e.preventDefault();
+                     //alert("good");
+                     if(next<6)
+                     {
+                         //$("#tabs-swipe-demo").find("li").eq(next-1).hide();
+                         next++;
+                         $('ul.tabs').tabs('select_tab', next);
+
+                     }//$("#tabs-swipe-demo").children(0).fadeOut(5000);
+
+                 });
+                 $("#btn_prev").click(function (e) {
+                     e.preventDefault();
+                     //alert("good");
+                     if(next>1)
+                     {
+                         next--;
+                         $('ul.tabs').tabs('select_tab', next);
+
+                     }
+
+                 });
+
+                  $('#tabs-swipe-demo').tabs({ 'swipeable': true });
+                 //$("#img_my_basket").fadeOut(2000);
+                 //$("#msg_flash").fadeOut(4000);
+                 selectedMenu=$(".my_tab_cat :first");
+                 selectedMenu.css({"opacity":"0.8","border":"solid 1px white","font-size":"1.6em"});
+                 $(".my_tab_cat").click(function () {
+                     selectedMenu.css({"opacity":"1","border":"none","font-size":"inherit"});
+                     selectedMenu=$(this);
+                     selectedMenu.css({"opacity":"0.8","border":"solid 1px white;","font-size":"1.6em"});
+                 });
+                  $(".bloc_produit").click(function (e) {
+                        selectedProduct=$(this);
+                        selectedProductId=$(this).attr("id")[1];
+                    selected_item_title=$(this).find("h6");
+                    selected_item_img=$(this).find("img");
+                    selected_item_descript=$(this).find(".descript");
+                    selected_item_prix=$(this).find("#prix");
+                        _html_content="" +
+                            "<h4 class=\"center-align\" style=\"margin: 0px;margin-bottom: 5px;background-color:gold;color:white;height: 60px;padding-top:10px;\">"+selected_item_title.text()+"</h4>" +
+                            "<p class=\"center-align\"><img src=\""+selected_item_img.attr("src")+"\" width=\"200\" height=\"200\"></p>"+
+                            "<p class=\"center-align\">"+selected_item_descript.text()+"</p>";
+                        _html_footer="<span class=\"left\" style=\"font-size=1.3em;background-color:gold;font-weight:bold;padding:5px;\" >"+selected_item_prix.text()+"</span>"+
+                                "<p class=\"valign-wrapper\" style=\"position: relative;top: -2px;\"><a id=\"btn_add\"  class=\"btn-floating btn-large halfway-fab modal-action  waves-effect waves-green btn-flat pulse\"  style=\"background-color: gold;\"><i class=\"large material-icons\">shopping_cart</i></a> </p>";
+                        $('#modal1').find(".modal-content").html(_html_content);
+                        $('#modal1').find(".modal-footer").html(_html_footer);
+                        $("#btn_add").click(function (e)
+                        {
+                            e.preventDefault();
+                                  //alert("good");
+                                 //addInBasket(selectedProduct);
+                             currentQte=1;
+                             $("#nbr_qte").text(currentQte);
+                             $("#txt_title_prod").text(selected_item_title.text());
+                             selectedProductPrize=parseInt(selected_item_prix.text().split(" ")[0]);
+                             $("#txt_prix_prod").text(selected_item_prix.text().split(" ")[0]);
+                             $("#modal_quantite").modal('open');
+
+                         });
+
+                      $('#modal1').modal('open');
+                });
+
+                  $("#btn_plus").click(function () {
+                     currentQte=parseInt($("#nbr_qte").text());
+                     //selectedProductPrize
+                     if(currentQte<10)
+                     {
+                         currentQte++;
+                         $("#nbr_qte").text(currentQte);
+                         tmp=currentQte*selectedProductPrize;
+                         $("#txt_prix_prod").text(tmp);
+                     }
+                 });
+
+                  $("#btn_moins").click(function () {
+                     currentQte=parseInt($("#nbr_qte").text());
+                     //selectedProductPrize
+                     if(currentQte>1)
+                     {
+                         currentQte--;
+                         $("#nbr_qte").text(currentQte);
+                         tmp=currentQte*selectedProductPrize;
+                         $("#txt_prix_prod").text(tmp);
+                     }
+                 });
+
+                  $("#btn_validate").click(function (e) {
+                     //alert("good");
+                      {% if request.user.is_authenticated %}
+                          tmp_name="commande_"+{{ request.user.username }};
+                          console.log(tmp_name);
+                          liste=amplify.store(tmp_name);
+                          mcontitue=0;
+                          console.log({{ entite.idEntit }});
+                          if(liste==null || liste.length==0)
+                         {
+                             tabCommande=[];
+                             commande={};
+                             commande.cmd_id=1;
+                             commande.id=selectedProductId;
+                             commande.quantite=parseInt(currentQte);
+                             commande.entite={{ entite.idEntit }};
+                             commande.libelle=selected_item_title.text();
+                             commande.prix=parseInt(selected_item_prix.text());
+                             tabCommande.push(commande);
+                             amplify.store(tmp_name,tabCommande);
+                             updateNuberItemInBasket(1);
+                         }
+                          else
+                         {
+                             if(liste[0].entite=={{ entite.idEntit }})
+                             {
+                                 commande={};
+                                 commande.cmd_id=liste.length+1;
+                                 commande.id=selectedProductId;
+                                 commande.quantite=parseInt(currentQte);
+                                 commande.libelle=selected_item_title.text();
+                                 commande.entite={{ entite.idEntit }};
+                                 commande.prix=parseInt(selected_item_prix.text());
+                                 liste.push(commande);
+                                 amplify.store(tmp_name,liste);
+                             }
+                             else
+                             {
+                                 $("#block_warning_commande").modal('toggle');
+                                 mcontitue=1;
+                             }
+                         }
+
+                         if(mcontitue==0)
+                         {
+                             liste=amplify.store(tmp_name);
+                              updateNuberItemInBasket(liste.length);
+                             $("#modal_quantite").modal('close');
+                             $("#modal1").modal('close');
+                             $("#msg_flash").text("ajouté avec succès!");
+                            $("#msg_flash").show();
+                                   $("#msg_flash").fadeOut(5000);
+                         }
+
+                       {% else %}
+                          $('#modal_session').modal('open');
+                      {% endif %}
+                      //alert(1+" "+csrftoken);
+                      ///alert(mcsrftoken)
+
+                 });
+
+
+
+
+
+
+             });
+
+             function addInBasket(produit) {
+                 currentQte=1;
+                 $("#nbr_qte").text(currentQte);
+                 //$("#preview_prize").text(selectedProductPrize+" Fcfa");
+                 $("#block_quantite").modal('toggle');
+             }
+
+        </script>
+
+    {% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+    {{ entite.nomEntite }}
+{% endblock %}
+{% block block_css %}
+<link href="{% static 'senfood_css/categorie/creerCategorie.css'%}" rel="stylesheet">
+
+{% endblock %}{% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_image' %}"><i style="margin-right: 10px;" class="fa fa-image"></i> Images</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <h4 class="center">Upload Image</h4>
+            <form style="border: solid 2px gold;padding: 10px;background-color: #ffffb3" enctype="multipart/form-data" class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 creation_form" method="post" action="{% url 'new_image' %}" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Libellé</label>
+            <input type="text" class="form-control" name="libelle" value="{{ libelle }}">
+            <p class="input_error">{{ error_libelle }}</p>
+        </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select name="type" class="form-control">
+                <option value="0">Choisir un type</option>
+                <option value="2">Logo-Catégorie</option>
+                <option value="3">Logo-Produit</option>
+            </select>
+            <p class="input_error">{{ error_type}}</p>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="descript" class="form-control">{{ descript }}</textarea>
+            <p class="input_error">{{ error_descript }}</p>
+        </div>
+        <div class="form-group">
+            <label>Image</label>
+            <input type="file"  class="form-control" name="image"  >
+            <p class="input_error">{{ error_logo }}</p>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" class="form-control checkbox-inline" name="save_and" value="1" style="border: solid gold;color: gold">
+                Enregistrer et Nouveau{{ logo_name }}
+            </label>
+        </div>
+        <div class="form-group">
+           <a style="background-color: darkgray;color: black;" class="btn btn-danger col-md-6" href="{% url 'liste_image'%}"type="reset">Annuler</a>
+           <button style="background-color: gold;color: black;" class="btn btn-primary col-md-6 " type="submit">Enregister</button>
+        </div>
+    </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'main_layout_client.html' %}
+{% load static %}
+{% block titre_page %}
+    Se connecter
+{% endblock %}
+{% block bloc_css %}
+     <!--link href="{% static 'lumino/css/bootstrap.min.css' %}" rel="stylesheet"-->
+
+      <link href="{% static 'managerAdmin/css/login.css'%}" rel="stylesheet">
+{% endblock %}
+{% block main_block %}
+     <div class="container">
+        <div class="card card-container">
+            <h4 class="text-center">Se connecter à Teranga-food</h4>
+            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+            <img id="profile-img" class="profile-img-card" src="{% static 'teranga_food_logo_192.png' %}" />
+            <p id="profile-name" class="profile-name-card"></p>
+            <form class="form-signin" method="post"  action="{% url 'login' %}">
+                {% csrf_token %}
+                <span id="reauth-email" class="reauth-email"></span>
+                <input type="text" id="username" name="username" class="form-control" required autofocus placeholder="778399425">
+                <input type="password" id="password" name="password" class="form-control" placeholder="****" required>
+                <p style="color: red;">{{ login_message }}</p>
+                <!--div id="remember" class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div-->
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" style="color: black">Se connecter</button>
+                 <p class="text-center"><a href="{% url 'inscription' %}" >S'inscrire</a></p>
+            </form><!-- /form -->
+            <!--a href="#" class="forgot-password">
+                Forgot the password?
+            </a-->
+        </div><!-- /card-container -->
+    </div>
+    <!--div id="login_client_main"  class="col-md-6 col-md-offset-3 col-sm-10 col-xs-12">
+        <div id="login_content" >
+            <h3 class="text-center">Se connecter à Teranga-food</h3>
+            <form action="{% url 'login' %}" method="post" class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text"  id="username" name="username" class="form-control input-sm login_input" placeholder="Numero de tel">
+                </div>
+                <div class="form-group">
+                    <input type="password"  id="password" name="password" class="form-control input-sm login_input" placeholder="****">
+                   <p style="color: red;">{{ login_message }}</p>
+                </div>
+                <div class="form-group">
+                    <p class="text-center"><input type="submit" style=""  id="login_btn_submit"  class="btn" value="Se connecter"></p>
+                    <p class="text-center">ou</p>
+                    <p class="text-center"><a href="{% url 'inscription' %}" >S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+    </div-->
+{% endblock %}
+{% block aside_nav %}
+                    <li class="bold " ><a href="{% url 'main_acceuil' %}" class="waves-effect waves-cyan"><i class="mdi-action-home"></i> Accueil</a>
+                    {% if request.user.is_authenticated %}
+                        <li class="bold active hide-on-med-and-up"><a href="{% url 'my_logout' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Se déconnecter</a>
+                        <li class="bold active hide-on-med-and-up"><a href="{% url 'mes_commandes' %}" class="waves-effect waves-cyan"><i class="fa fa-close"></i> Mes Commandes</a>
+                    {% else %}
+                        <li style="background-color: gold;color: black;" class="bold "><a href="{% url 'login' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-in"></i> Se connecter</a>
+                        <li class="bold "><a href="{% url 'inscription' %}" class="waves-effect waves-cyan"><i class="fa fa-sign-out"></i> S'inscrire</a>
+                    {% endif %}
+{% endblock %}

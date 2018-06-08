@@ -1,0 +1,76 @@
+{% extends 'layout_admin.html' %}
+{% load static %}
+{% block titre_page %}
+Localités
+{% endblock %}
+{% block block_css %}
+<!--link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap.min.css' %} " /-->
+    <link type="text/css" href="{% static 'bootstrap-timepicker/css/bootstrap-timepicker.min.css'%}" />
+    <style>
+        .myAction:hover
+        {
+            color: gold;
+        }
+
+    </style>
+     <link href="{% static 'entite/liste.css'%}" rel="stylesheet">
+{% endblock %}
+ {% block nav_gauche_admin %}
+                        <li ><a style="color: black" href="{% url 'home_administrator' %}"><i style="margin-right: 10px;" class="fa fa-dashboard" aria-hidden="true"></i> Dashboard</a></li>
+                        <li ><a style="color: black" href="{% url 'parametre_administrator' %}"> <i style="margin-right: 10px;" class="fa fa-cogs" aria-hidden="true"></i> Paramètres</a></li>
+                        <li style="background-color: gold"><a style="color: black" href="{% url 'liste_users'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Administrateurs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_log'%}"><i style="margin-right: 10px;" class="fa fa-file-archive-o"></i> Logs</a></li>
+                        <li ><a style="color: black" href="{% url 'liste_entite'%}"><i style="margin-right: 10px;" class="fa fa-institution"></i> Entités</a></li>
+                        <!--li><a href="{% url 'liste_restaurant'%}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Restaurants</a></li-->
+                        <li><a style="color: black" href="{% url 'liste_client'%}"><i style="margin-right: 10px;" class="fa fa-users"></i> Clients</a></li>
+                        <li><a style="color: black" href="{% url 'liste_livreur' %}"><i style="margin-right: 10px;" class="fa fa-motorcycle"></i> Livreurs</a></li>
+                        <li  ><a style="color: black" href="{% url 'liste_localite' %}"><i style="margin-right: 10px;" class="fa fa-map-signs"></i> Zones</a></li>
+                 {% endblock %}
+{% block main_bloc %}
+<form style="border: solid 2px gold;padding: 10px;background-color: #ffffb3" id="create_useruform" class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 creation_form" method="post" action="{% url 'editer_user' idUtilisateur %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" class="form-control" name="nom" value="{{ nom }}">
+            <p class="input_error">{{ errer_nom }}</p>
+        </div>
+        <div class="form-group">
+            <label>Prenom</label>
+            <input type="text" class="form-control" name="prenom" value="{{ prenom }}">
+            <p class="input_error">{{ errer_prenom }}</p>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" name="email" value="{{ email }}" placeholder="yavouckolye@gmail.com">
+            <p class="input_error">{{ error_email }}</p>
+        </div>
+        <div class="form-group">
+            <label>Numero</label>
+            <input type="text" class="form-control" name="numero" value="{{ numero }}" placeholder="779399425">
+            <p class="input_error">{{ error_numero }}</p>
+        </div>
+        <div class="form-group">
+            <label>Login</label>
+            <input type="text" class="form-control" name="login" value="{{ login }}" >
+            <p class="input_error">{{ error_login }}</p>
+        </div>
+        {% if request.user.is_superuser %}
+            <div class="form-group">
+                <label>Droit</label>
+                <input type="number" class="form-control" name="droit" value="{{ droit }}" min="0">
+                <p class="input_error">{{ error_droit }}</p>
+            </div>
+        {% endif %}
+        <div class="form-group">
+            {% if request.user.is_superuser == 1 %}
+                 <a style="background-color: darkgray;color: black;" class="btn btn-danger col-md-5" href="{% url 'liste_users' %}">Annuler</a>
+                {% else %}
+                 <a style="background-color: darkgray;color: black;" class="btn btn-danger col-md-5" href="{% url 'profil_user' request.user.username %}">Annuler</a>
+            {% endif %}
+
+           <button class="btn btn-primary col-md-5 col-md-offset-2" style="background-color: gold;color: black;" type="submit">Enregister</button>
+        </div>
+    </form>
+{% endblock %}
+
+
